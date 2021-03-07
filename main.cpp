@@ -51,7 +51,7 @@ int main()
 
             }
         }
-    } else {
+    } else { // human vs human
         while (!gameOver) {
             cout << endl;
             for (int i = 0; i < moveCount-1; i++) {
