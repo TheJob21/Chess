@@ -1,5 +1,4 @@
 #include "Queen.h"
-#include "utility.h"
 
 Queen::Queen(int x, int y, char col) {
     posx = x;

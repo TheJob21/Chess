@@ -1,5 +1,4 @@
 #include "King.h"
-#include "utility.h"
 
 King::King(int x, int y, char col) {
     posx = x;

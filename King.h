@@ -1,9 +1,6 @@
 #ifndef KING_H
 #define KING_H
 #include "Piece.h"
-#include <iostream>
-#include <string>
-using namespace std;
 
 class King:public Piece {
     public:

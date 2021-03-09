@@ -1,5 +1,4 @@
 #include "Bishop.h"
-#include "utility.h"
 
 Bishop::Bishop(int x, int y, char col) {
     posx = x;

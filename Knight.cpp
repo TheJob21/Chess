@@ -1,5 +1,4 @@
 #include "Knight.h"
-#include "utility.h"
 
 Knight::Knight(int x, int y, char col) {
     posx = x;

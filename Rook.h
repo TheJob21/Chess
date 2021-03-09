@@ -2,9 +2,6 @@
 #define ROOK_H
 
 #include "Piece.h"
-#include <string>
-#include <iostream>
-using namespace std;
 
 class Rook:public Piece {
     public:

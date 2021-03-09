@@ -1,5 +1,4 @@
 #include "Pawn.h"
-#include "utility.h"
 
 Pawn::Pawn(int x, int y, char col) {
     posx = x;

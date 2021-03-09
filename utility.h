@@ -8,4 +8,9 @@ using namespace std;
 
 Piece* findPiece(int, int, string (*)[8], Piece**, char);
 void update(string (*)[8], Piece**);
+int letterToNum(char);
+int charToNum(char);
+char numToLetter(int);
+char numToChar(int);
+
 #endif

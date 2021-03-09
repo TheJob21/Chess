@@ -115,7 +115,7 @@ Piece* findPiece(int x, int y, string (*board)[8], Piece** pieces, char col) {
                     }
                 } 
             } else if (board[x][y][1] == 'Q') { // Queen
-                if (pieces[12]->posx == x && pieces[13]->posy == y) {
+                if (pieces[12]->posx == x && pieces[12]->posy == y) {
                     return pieces[12];
                 }
                 else {
@@ -136,8 +136,56 @@ Piece* findPiece(int x, int y, string (*board)[8], Piece** pieces, char col) {
 
 void update(string (*board)[8], Piece** pieces) {
     for (int i = 0; i < 32; i++) {
+        pieces[i]->attackers.clear();
+        pieces[i]->attacking.clear();
+        pieces[i]->defenders.clear();
+        pieces[i]->defending.clear();
+    }
+    pieces[14]->inCheck = false;
+    pieces[15]->inCheck = false;
+    for (int i = 0; i < 32; i++) {
         if (pieces[i]->posx != 8) { 
             pieces[i]->update(board, pieces);
         }
     }
+}
+
+int letterToNum(char c) {
+    if (c == 'a') return 0;
+    if (c == 'b') return 1;
+    if (c == 'c') return 2;
+    if (c == 'd') return 3;
+    if (c == 'e') return 4;
+    if (c == 'f') return 5;
+    if (c == 'g') return 6;
+    if (c == 'h') return 7;
+    return 8;
+}
+
+char numToLetter(int i) {
+    if (i == 0) return 'a';
+    if (i == 1) return 'b';
+    if (i == 2) return 'c';
+    if (i == 3) return 'd';
+    if (i == 4) return 'e';
+    if (i == 5) return 'f';
+    if (i == 6) return 'g';
+    if (i == 7) return 'h';
+    return 'i';
+}
+
+int charToNum(char c) {
+    if (c == '1') return 0;
+    if (c == '2') return 1;
+    if (c == '3') return 2;
+    if (c == '4') return 3;
+    if (c == '5') return 4;
+    if (c == '6') return 5;
+    if (c == '7') return 6;
+    if (c == '8') return 7;
+    return 8;
+}
+
+char numToChar(int i) {
+    return '0' + (i+1);
 }

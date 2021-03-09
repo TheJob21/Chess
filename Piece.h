@@ -19,6 +19,7 @@ class Piece {
         virtual bool captureIsValid(int x, int y, string (*board)[8]) = 0;
         virtual void move(int x, int y, string (*board)[8], Piece**) = 0;
         virtual void update(string (*board)[8], Piece** pieces) = 0;
+        void print();
     };
 
 #endif

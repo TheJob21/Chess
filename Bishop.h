@@ -1,9 +1,6 @@
 #ifndef BISHOP_H
 #define BISHOP_H
 #include "Piece.h"
-#include <iostream>
-#include <string>
-using namespace std;
 
 class Bishop:public Piece {
     public:
