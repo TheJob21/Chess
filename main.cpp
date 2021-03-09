@@ -849,13 +849,11 @@ bool badCheck(string (*board)[8], Piece** pieces, char col) {
 bool check(string (*board)[8], Piece** pieces, char col) {
     if (col == 'W') {
         if (pieces[15]->inCheck) { // Black is in check
-            cout << "Error (main.cpp 852): That move puts or leaves you in check.\n";
             return true;
         }
         return false;
     } else {
         if (pieces[14]->inCheck) { // You put yourself in check
-            cout << "Error (main.cpp 858): That move puts or leaves you in check.\n";
             return true;
         }
         return false;
@@ -863,7 +861,52 @@ bool check(string (*board)[8], Piece** pieces, char col) {
 }
 
 bool checkmate(string (*board)[8], Piece** pieces, char col) {
-    return false;
+    int king;
+    if (col == 'W') {
+        king = 15;
+    } else {
+        king = 14;
+    }
+    if (pieces[king]->attackers.size() == 2) { // double check
+        if (true) { // Check for valid king moves or captures
+            return true;
+        } else { // Checkmate
+            return false;
+        } 
+    } else { // regular check
+        if (true) { // Check for blocks
+            if (pieces[king]->attackers[0]->pieceType == 'R') { // Rook attacker
+                if (pieces[king]->attackers[0]->posx == pieces[king]->posx) { // Rook is on same rank
+                    if (pieces[king]->attackers[0]->posx < pieces[king]->posx) { // Rook is in '1' direction of king
+                        for (int i = 0; i < pieces[king]->posx-pieces[king]->attackers[0]->posx; i++) {
+                            return true;
+                        }
+                    } else { // Rook is in '8' direction of king
+                        return true;
+                    }
+                } else { // Rook is on same file
+                    if (pieces[king]->attackers[0]->posy < pieces[king]->posy) { // Rook is in 'a' direction of king
+                        return true;
+                    } else { // Rook is in 'h' direction of king
+                        return true;
+                    }
+                }
+            } else if (pieces[king]->attackers[0]->pieceType == 'N') { // Knight attacker
+                return true;
+            } else if (pieces[king]->attackers[0]->pieceType == 'B') { // Bishop attacker
+                return true;
+            } else { // Queen attacker
+                return true;
+            } 
+            return false;
+        } else if (true) { // Check for ally pieces that can capture the attacker
+            return false;
+        } else if (true) { // Check for king moves or captures
+            return false;
+        } else { // Checkmate
+            return true;
+        }
+    }
 }
 
 string validateKnightMove(string) {
