@@ -39,7 +39,7 @@ void Queen::update(string (*board)[8], Piece** pieces) {
         }
         x--;
     }
-    x = posx+1, y = posy;
+    x = posx+1;
     while (x <= 7) { // 8 direction
         if (board[x][y] != "") {
             temp = findPiece(x, y, board, pieces, board[x][y][0]);
@@ -69,7 +69,7 @@ void Queen::update(string (*board)[8], Piece** pieces) {
         }
         y--;
     }
-    x = posx, y = posy+1;
+    y = posy+1;
     while (y <= 7) {
         if (board[x][y] != "") { // h direction
             temp = findPiece(x, y, board, pieces, board[x][y][0]);

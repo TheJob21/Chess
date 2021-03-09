@@ -22,15 +22,110 @@ void King::move(int x, int y, string (*board)[8], Piece**) {
 }
 
 void King::update(string (*board)[8], Piece** pieces) {
-    // Piece* temp;
-    // int x = posx-1, y = posy;
-    // temp = findPiece(x, y, board, pieces, board[x][y][0]);
-    // if (temp->color == color) {
-    //     temp->defenders.push_back(this);
-    //     defending.push_back(temp);
-    // } else {
-    //     temp->attackers.push_back(this);
-    //     attacking.push_back(temp); 
-    // }
+    Piece* temp;
+    int x = posx-1, y = posy;
+    if (!(x < 0)) {
+        if (board[x][y] != "") { // back a rank
+            temp = findPiece(x, y, board, pieces, board[x][y][0]);
+            if (temp->color == color) { // friendly piece found
+                temp->defenders.push_back(this);
+                defending.push_back(temp);
+            } else { // enemy piece found
+                temp->attackers.push_back(this);
+                attacking.push_back(temp); 
+            }
+        }
+        y = posy-1;
+        if (!(y < 0)) {
+            if (board[x][y] != "") { // back a rank and file
+                temp = findPiece(x, y, board, pieces, board[x][y][0]);
+                if (temp->color == color) { // friendly piece found
+                    temp->defenders.push_back(this);
+                    defending.push_back(temp);
+                } else { // enemy piece found
+                    temp->attackers.push_back(this);
+                    attacking.push_back(temp); 
+                }
+            }
+        }
+        y = posy+1;
+        if (!(y > 7)) {
+            if (board[x][y] != "") { // back a rank, forward a file
+                temp = findPiece(x, y, board, pieces, board[x][y][0]);
+                if (temp->color == color) { // friendly piece found
+                    temp->defenders.push_back(this);
+                    defending.push_back(temp);
+                } else { // enemy piece found
+                    temp->attackers.push_back(this);
+                    attacking.push_back(temp); 
+                }
+            }
+        }
+    }
+    x = posx, y = posy+1;
+    if (!(y > 7)) {
+        if (board[x][y] != "") { // forward a file
+            temp = findPiece(x, y, board, pieces, board[x][y][0]);
+            if (temp->color == color) { // friendly piece found
+                temp->defenders.push_back(this);
+                defending.push_back(temp);
+            } else { // enemy piece found
+                temp->attackers.push_back(this);
+                attacking.push_back(temp); 
+            }
+        }
+    }
+    y = posy-1;
+    if (!(y < 0)) {
+        if (board[x][y] != "") { // back a file
+            temp = findPiece(x, y, board, pieces, board[x][y][0]);
+            if (temp->color == color) { // friendly piece found
+                temp->defenders.push_back(this);
+                defending.push_back(temp);
+            } else { // enemy piece found
+                temp->attackers.push_back(this);
+                attacking.push_back(temp); 
+            }
+        }
+    }
+    x = posx+1, y = posy;
+    if (!(x > 7)) {
+        if (board[x][y] != "") { // forward a rank
+            temp = findPiece(x, y, board, pieces, board[x][y][0]);
+            if (temp->color == color) { // friendly piece found
+                temp->defenders.push_back(this);
+                defending.push_back(temp);
+            } else { // enemy piece found
+                temp->attackers.push_back(this);
+                attacking.push_back(temp); 
+            }
+        }
+        y = posy-1;
+        if (!(y < 0)) {
+            if (board[x][y] != "") { // forward a rank, back a file
+                temp = findPiece(x, y, board, pieces, board[x][y][0]);
+                if (temp->color == color) { // friendly piece found
+                    temp->defenders.push_back(this);
+                    defending.push_back(temp);
+                } else { // enemy piece found
+                    temp->attackers.push_back(this);
+                    attacking.push_back(temp); 
+                }
+            }
+        }
+        y = posy+1;
+        if (!(y > 7)) {
+            if (board[x][y] != "") { // forward a rank and a file
+                temp = findPiece(x, y, board, pieces, board[x][y][0]);
+                if (temp->color == color) { // friendly piece found
+                    temp->defenders.push_back(this);
+                    defending.push_back(temp);
+                } else { // enemy piece found
+                    temp->attackers.push_back(this);
+                    attacking.push_back(temp); 
+                }
+            }
+        }
+    }
 }
 

@@ -7,4 +7,5 @@
 using namespace std;
 
 Piece* findPiece(int, int, string (*)[8], Piece**, char);
+void update(string (*)[8], Piece**);
 #endif

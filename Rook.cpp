@@ -51,12 +51,12 @@ bool Rook::captureIsValid(int x, int y, string (*board)[8]) {
             return false;
         } else if (y < posy) {
             for (int i = posy-1; i > y; i--) {
-                cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
+                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
                 if (board[x][i] != "") {
                     return false;
                 }
             }
-            cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
+            //cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
             if (board[x][y] == "" || board[x][y][0] == color) {
                 cout << "Error(Rook.cpp 62): No capturable piece found\n";
                 return false;
@@ -64,12 +64,12 @@ bool Rook::captureIsValid(int x, int y, string (*board)[8]) {
             return true;
         } else {
             for (int i = posy+1; i < y; i++) {
-                cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
+                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
                 if (board[x][i] != "") {
                     return false;
                 }
             }
-            cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
+            //cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
             if (board[x][y] == "" || board[x][y][0] == color) {
                 cout << "Error(Rook.cpp 75): No capturable piece found\n";
                 return false;
@@ -79,12 +79,12 @@ bool Rook::captureIsValid(int x, int y, string (*board)[8]) {
     } else if (y == posy) {
         if (x < posx) {
             for (int i = posx-1; i > x; i--) {
-                cout << "tile[" << i << "][" << y << "]=" << board[i][y] << endl;
+                //cout << "tile[" << i << "][" << y << "]=" << board[i][y] << endl;
                 if (board[i][y] != "") {
                     return false;
                 }
             }
-            cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
+            //cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
             if (board[x][y] == "" || board[x][y][0] == color) {
                 cout << "Error(Rook.cpp 90): No capturable piece found\n";
                 return false;
@@ -92,12 +92,12 @@ bool Rook::captureIsValid(int x, int y, string (*board)[8]) {
             return true;
         } else {
             for (int i = posx+1; i < x; i++) {
-                cout << "tile[" << i << "][" << y << "]=" << board[i][y] << endl;
+                //cout << "tile[" << i << "][" << y << "]=" << board[i][y] << endl;
                 if (board[i][y] != "") {
                     return false;
                 }
             }
-            cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
+            //cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
             if (board[x][y] == "" || board[x][y][0] == color) {
                 cout << "Error(Rook.cpp 103): No capturable piece found\n";
                 return false;
@@ -135,12 +135,10 @@ void Rook::move(int x, int y, string (*board)[8], Piece **pieces) {
                 if (pieces[2]->posx == x && pieces[2]->posy == y) {
                     pieces[2]->posx = 8;
                     pieces[2]->posy = 8;
-                }
-                else if (pieces[3]->posx == x && pieces[3]->posy == y) {
+                } else if (pieces[3]->posx == x && pieces[3]->posy == y) {
                     pieces[3]->posx = 8;
                     pieces[3]->posy = 8;
-                }
-                else {
+                } else {
                     for (int i = 0; i < 8; i++) {
                         if (pieces[i+24]->posx == x && pieces[i+24]->posy == y) {
                             pieces[i+24]->posx = 8;
@@ -153,12 +151,10 @@ void Rook::move(int x, int y, string (*board)[8], Piece **pieces) {
                 if (pieces[6]->posx == x && pieces[6]->posy == y) {
                     pieces[6]->posx = 8;
                     pieces[6]->posy = 8;
-                }
-                else if (pieces[7]->posx == x && pieces[7]->posy == y) {
+                } else if (pieces[7]->posx == x && pieces[7]->posy == y) {
                     pieces[7]->posx = 8;
                     pieces[7]->posy = 8;
-                }
-                else {
+                } else {
                     for (int i = 0; i < 8; i++) {
                         if (pieces[i+24]->posx == x && pieces[i+24]->posy == y) {
                             pieces[i+24]->posx = 8;
@@ -189,8 +185,7 @@ void Rook::move(int x, int y, string (*board)[8], Piece **pieces) {
                 if (pieces[13]->posx == x && pieces[13]->posy == y) {
                     pieces[13]->posx = 8;
                     pieces[13]->posy = 8;
-                }
-                else {
+                } else {
                     for (int i = 0; i < 8; i++) {
                         if (pieces[i+24]->posx == x && pieces[i+24]->posy == y) {
                             pieces[i+24]->posx = 8;

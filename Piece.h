@@ -1,6 +1,7 @@
 #ifndef PIECE_H
 #define PIECE_H
 
+#include <iostream>
 #include <vector>
 #include <string>
 using namespace std;

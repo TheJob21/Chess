@@ -1,7 +1,7 @@
 #include "utility.h"
 
 Piece* findPiece(int x, int y, string (*board)[8], Piece** pieces, char col) {
-    if (col == 'W') {
+    if (col == 'B') { // Black
         if (board[x][y][1] == 'P') { // Pawn
             for (int i = 24; i < 32; i++) {
                 if (pieces[i]->posx == x && pieces[i]->posy == y) {
@@ -50,7 +50,7 @@ Piece* findPiece(int x, int y, string (*board)[8], Piece** pieces, char col) {
                     }
                 }
             } 
-        } else { // Queen
+        } else if (board[x][y][1] == 'Q') { // Queen
             if (pieces[13]->posx == x && pieces[13]->posy == y) {
                 return pieces[13];
             }
@@ -61,8 +61,10 @@ Piece* findPiece(int x, int y, string (*board)[8], Piece** pieces, char col) {
                     }
                 }
             } 
+        } else { // King
+            return pieces[15];
         }
-    } else { // Black
+    } else { // White
         if (board[x][y] != "") {
             if (board[x][y][1] == 'P') { // Pawn
                 for (int i = 16; i < 24; i++) {
@@ -112,7 +114,7 @@ Piece* findPiece(int x, int y, string (*board)[8], Piece** pieces, char col) {
                         }
                     }
                 } 
-            } else { // Queen
+            } else if (board[x][y][1] == 'Q') { // Queen
                 if (pieces[12]->posx == x && pieces[13]->posy == y) {
                     return pieces[12];
                 }
@@ -123,9 +125,19 @@ Piece* findPiece(int x, int y, string (*board)[8], Piece** pieces, char col) {
                         }
                     }
                 } 
+            } else { // King
+                return pieces[14];
             }
         }
     }
-    cout << "Error(Pawn.cpp 153): No piece found on that tile.\n";
+    cout << "Error(utility.cpp 129): No piece found on that tile.\n";
     return pieces[0]; // Never meant to run
+}
+
+void update(string (*board)[8], Piece** pieces) {
+    for (int i = 0; i < 32; i++) {
+        if (pieces[i]->posx != 8) { 
+            pieces[i]->update(board, pieces);
+        }
+    }
 }
