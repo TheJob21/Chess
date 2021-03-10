@@ -23,7 +23,7 @@ void setBoard(string (*)[8], Piece**);
 void copyBoard(string (*)[8], string (*)[8], Piece**, Piece**);
 char blackOrWhite(char);
 char computerOrHuman(char);
-bool validateRookMove(string, string (*)[8], string (*)[8], Piece**, Piece**, char, bool);
+bool validateRookMove(string, string (*)[8], string (*)[8], string (*)[8], Piece**, Piece**, Piece**, char, bool);
 string validateKnightMove(string);
 string validateBishopMove(string);
 string validateQueenMove(string);
@@ -34,7 +34,7 @@ int charToNum(char);
 void updateAtkDef(string (*)[8], Piece**);
 bool check(string (*)[8], Piece**, char);
 bool badCheck(string (*)[8], Piece**, char);
-bool checkmate(string (*)[8], Piece**, char);
+bool checkmate(string (*)[8], string (*)[8], Piece**, Piece**, char);
 void printBoard(string (*)[8]);
 
 int main()
@@ -46,8 +46,10 @@ int main()
     int moveCount = 1;
     string (*board)[8] = new string[8][8]; 
     string (*boardPoss)[8] = new string[8][8]; 
+    string (*boardPoss2)[8] = new string[8][8]; 
     Piece **pieces = new Piece*[32];
     Piece **piecesPoss = new Piece*[32];
+    Piece **piecesPoss2 = new Piece*[32];
     setBoard(board, pieces);
     setBoard(boardPoss, piecesPoss);
     coh = computerOrHuman(coh);
@@ -78,7 +80,7 @@ int main()
                     cout << "Please enter a correct move ";
                     cin >> move;        
                 } else if (move[0] == 'R') { // Rook move
-                    if (!validateRookMove(move, board, boardPoss, pieces, piecesPoss, 'W', gameOver)) {
+                    if (!validateRookMove(move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver)) {
                         cin >> move;
                     } else {
                         isValid = true;
@@ -110,7 +112,7 @@ int main()
                     cout << "Please enter a correct move ";
                     cin >> move;        
                 } else if (move[0] == 'R') {
-                    if (!validateRookMove(move, board, boardPoss, pieces, piecesPoss, 'B', gameOver)) {
+                    if (!validateRookMove(move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver)) {
                         cin >> move;
                     } else {
                         isValid = true;
@@ -166,7 +168,7 @@ char computerOrHuman(char coh){
     return 'h';
 }
 
-bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], Piece** pieces, Piece** piecesPoss, char col, bool gameOver) {
+bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], string (*boardPoss2)[8], Piece** pieces, Piece** piecesPoss, Piece** piecesPoss2, char col, bool gameOver) {
     vector<Piece*> rook;
     int i, pawns;
     if (col == 'W') {
@@ -273,7 +275,8 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], P
                             rook[j]->print();
                             return false;
                         }
-                        if (checkmate(boardPoss, piecesPoss, col)) {
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                             if (move[3] == '#') {
                                 gameOver = true;
                                 return true;
@@ -463,7 +466,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], P
                                 rook[j]->print();
                                 return false;
                             }
-                            if (checkmate(boardPoss, piecesPoss, col)) {
+                            if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                 if (move[4] == '#') {
                                     gameOver = true;
                                     return true;
@@ -519,7 +522,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], P
                                     rook[j]->print();
                                     return false;
                                 }
-                                if (checkmate(boardPoss, piecesPoss, col)) {
+                                if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                     if (move[4] == '#') {
                                         gameOver = true;
                                         return true;
@@ -577,7 +580,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], P
                                     rook[j]->print();
                                     return false;
                                 }
-                                if (checkmate(boardPoss, piecesPoss, col)) {
+                                if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                     if (move[4] == '#') {
                                         gameOver = true;
                                         return true;
@@ -736,7 +739,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], P
                                         rook[j]->print();
                                         return false;
                                     }
-                                    if (checkmate(boardPoss, piecesPoss, col)) {
+                                    if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                         if (move[4] == '#') {
                                             gameOver = true;
                                             return true;
@@ -794,7 +797,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], P
                                         rook[j]->print();
                                         return false;
                                     }
-                                    if (checkmate(boardPoss, piecesPoss, col)) {
+                                    if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                         if (move[5] == '#') {
                                             gameOver = true;
                                             return true;
@@ -860,8 +863,8 @@ bool check(string (*board)[8], Piece** pieces, char col) {
     }
 }
 
-bool checkmate(string (*board)[8], Piece** pieces, char col) {
-    int king;
+bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** pieces1, char col) {
+    int king, x, y;
     if (col == 'W') {
         king = 15;
     } else {
@@ -876,20 +879,88 @@ bool checkmate(string (*board)[8], Piece** pieces, char col) {
     } else { // regular check
         if (true) { // Check for blocks
             if (pieces[king]->attackers[0]->pieceType == 'R') { // Rook attacker
-                if (pieces[king]->attackers[0]->posx == pieces[king]->posx) { // Rook is on same rank
-                    if (pieces[king]->attackers[0]->posx < pieces[king]->posx) { // Rook is in '1' direction of king
-                        for (int i = 0; i < pieces[king]->posx-pieces[king]->attackers[0]->posx; i++) {
-                            return true;
+                x = pieces[king]->attackers[0]->posx;
+                y = pieces[king]->attackers[0]->posy;
+                if (x == pieces[king]->posx) { // Rook is on same rank
+                    if (y < pieces[king]->posy) { // Rook is in '1' direction of king
+                        while (y < pieces[king]->posy) {
+                            for (int i = 0; i < 32; i++) {
+                                if (pieces[i]->color == 'W') {
+                                    for (int j = 0; j < pieces[i]->coveredTiles.size(); j++) {
+                                        if (pieces[i]->coveredTiles[j][0] == x && pieces[i]->coveredTiles[j][1] == y) {
+                                            pieces[i]->move(x,y, board1, pieces1);
+                                            update(board1, pieces1);
+                                            if (!badCheck(board1, pieces1, col)) {
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            y++;
                         }
+                        return true;
                     } else { // Rook is in '8' direction of king
+                        while (y > pieces[king]->posy) {
+                            for (int i = 0; i < 32; i++) {
+                                if (pieces[i]->color == 'W') {
+                                    for (int j = 0; j < pieces[i]->coveredTiles.size(); j++) {
+                                        if (pieces[i]->coveredTiles[j][0] == x && pieces[i]->coveredTiles[j][1] == y) {
+                                            pieces1[i]->move(x,y, board1, pieces1);
+                                            update(board1, pieces1);
+                                            if (!badCheck(board1, pieces1, col)) {
+                                                copyBoard(board, board1, pieces, pieces1);
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            y--;
+                        }
                         return true;
                     }
                 } else { // Rook is on same file
-                    if (pieces[king]->attackers[0]->posy < pieces[king]->posy) { // Rook is in 'a' direction of king
+                    if (pieces[king]->attackers[0]->posx < pieces[king]->posx) { // Rook is in 'a' direction of king
+                        while (x < pieces[king]->posx) {
+                            for (int i = 0; i < 32; i++) {
+                                if (pieces[i]->color == 'W') {
+                                    for (int j = 0; j < pieces[i]->coveredTiles.size(); j++) {
+                                        if (pieces[i]->coveredTiles[j][0] == x && pieces[i]->coveredTiles[j][1] == y) {
+                                            pieces1[i]->move(x,y, board1, pieces1);
+                                            update(board1, pieces1);
+                                            if (!badCheck(board1, pieces1, col)) {
+                                                copyBoard(board, board1, pieces, pieces1);
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            x++;
+                        }
                         return true;
                     } else { // Rook is in 'h' direction of king
+                        while (x > pieces[king]->posx) { // Rook is in 'a' direction of king
+                            for (int i = 0; i < 32; i++) {
+                                if (pieces[i]->color == 'W') {
+                                    for (int j = 0; j < pieces[i]->coveredTiles.size(); j++) {
+                                        if (pieces[i]->coveredTiles[j][0] == x && pieces[i]->coveredTiles[j][1] == y) {
+                                            pieces1[i]->move(x,y, board1, pieces1);
+                                            update(board1, pieces1);
+                                            if (!badCheck(board1, pieces1, col)) {
+                                                copyBoard(board, board1, pieces, pieces1);
+                                                return false;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            x--;
+                        }
                         return true;
                     }
+                    return false;
                 }
             } else if (pieces[king]->attackers[0]->pieceType == 'N') { // Knight attacker
                 return true;

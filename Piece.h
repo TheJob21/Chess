@@ -11,6 +11,7 @@ class Piece {
         int posx, posy, value;
         bool inCheck = false;
         vector<Piece*> attackers, defenders, attacking, defending;
+        vector<int[2]> coveredTiles;
         char pieceType, color;
         Piece();
         ~Piece();
