@@ -36,6 +36,8 @@ bool check(string (*)[8], Piece**, char);
 bool badCheck(string (*)[8], Piece**, char);
 bool checkmate(string (*)[8], string (*)[8], Piece**, Piece**, char);
 void printBoard(string (*)[8]);
+bool checkForBlock(int, int, string (*)[8], string (*)[8], Piece**, Piece**, char);
+bool checkValidKingMove(int, string (*)[8], string (*)[8], Piece**, Piece**, char);
 
 int main()
 {
@@ -871,113 +873,131 @@ bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
         king = 14;
     }
     if (pieces[king]->attackers.size() == 2) { // double check
-        if (true) { // Check for valid king moves or captures
-            return true;
-        } else { // Checkmate
+        if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) { // Check for valid king moves or captures
             return false;
+        } else { // Checkmate
+            return true;
         } 
     } else { // regular check
-        if (true) { // Check for blocks
-            if (pieces[king]->attackers[0]->pieceType == 'R') { // Rook attacker
-                x = pieces[king]->attackers[0]->posx;
-                y = pieces[king]->attackers[0]->posy;
-                if (x == pieces[king]->posx) { // Rook is on same rank
-                    if (y < pieces[king]->posy) { // Rook is in '1' direction of king
-                        while (y < pieces[king]->posy) {
-                            for (int i = 0; i < 32; i++) {
-                                if (pieces[i]->color == 'W') {
-                                    for (int j = 0; j < pieces[i]->coveredTiles.size(); j++) {
-                                        if (pieces[i]->coveredTiles[j][0] == x && pieces[i]->coveredTiles[j][1] == y) {
-                                            pieces[i]->move(x,y, board1, pieces1);
-                                            update(board1, pieces1);
-                                            if (!badCheck(board1, pieces1, col)) {
-                                                return false;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            y++;
-                        }
-                        return true;
-                    } else { // Rook is in '8' direction of king
-                        while (y > pieces[king]->posy) {
-                            for (int i = 0; i < 32; i++) {
-                                if (pieces[i]->color == 'W') {
-                                    for (int j = 0; j < pieces[i]->coveredTiles.size(); j++) {
-                                        if (pieces[i]->coveredTiles[j][0] == x && pieces[i]->coveredTiles[j][1] == y) {
-                                            pieces1[i]->move(x,y, board1, pieces1);
-                                            update(board1, pieces1);
-                                            if (!badCheck(board1, pieces1, col)) {
-                                                copyBoard(board, board1, pieces, pieces1);
-                                                return false;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            y--;
-                        }
-                        return true;
-                    }
-                } else { // Rook is on same file
-                    if (pieces[king]->attackers[0]->posx < pieces[king]->posx) { // Rook is in 'a' direction of king
-                        while (x < pieces[king]->posx) {
-                            for (int i = 0; i < 32; i++) {
-                                if (pieces[i]->color == 'W') {
-                                    for (int j = 0; j < pieces[i]->coveredTiles.size(); j++) {
-                                        if (pieces[i]->coveredTiles[j][0] == x && pieces[i]->coveredTiles[j][1] == y) {
-                                            pieces1[i]->move(x,y, board1, pieces1);
-                                            update(board1, pieces1);
-                                            if (!badCheck(board1, pieces1, col)) {
-                                                copyBoard(board, board1, pieces, pieces1);
-                                                return false;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            x++;
-                        }
-                        return true;
-                    } else { // Rook is in 'h' direction of king
-                        while (x > pieces[king]->posx) { // Rook is in 'a' direction of king
-                            for (int i = 0; i < 32; i++) {
-                                if (pieces[i]->color == 'W') {
-                                    for (int j = 0; j < pieces[i]->coveredTiles.size(); j++) {
-                                        if (pieces[i]->coveredTiles[j][0] == x && pieces[i]->coveredTiles[j][1] == y) {
-                                            pieces1[i]->move(x,y, board1, pieces1);
-                                            update(board1, pieces1);
-                                            if (!badCheck(board1, pieces1, col)) {
-                                                copyBoard(board, board1, pieces, pieces1);
-                                                return false;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            x--;
-                        }
-                        return true;
-                    }
-                    return false;
-                }
-            } else if (pieces[king]->attackers[0]->pieceType == 'N') { // Knight attacker
-                return true;
-            } else if (pieces[king]->attackers[0]->pieceType == 'B') { // Bishop attacker
-                return true;
-            } else { // Queen attacker
-                return true;
-            } 
-            return false;
-        } else if (true) { // Check for ally pieces that can capture the attacker
-            return false;
-        } else if (true) { // Check for king moves or captures
-            return false;
-        } else { // Checkmate
+        if (pieces[king]->attackers[0]->pieceType == 'P') {
             return true;
+            // Fill in
+        } else if (pieces[king]->attackers[0]->pieceType == 'R') { // Rook attacker
+            x = pieces[king]->attackers[0]->posx;
+            y = pieces[king]->attackers[0]->posy;
+            if (x == pieces[king]->posx) { // Rook is on same rank
+                if (y < pieces[king]->posy) { // Rook is in '1' direction of king
+                    while (y < pieces[king]->posy) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        y++;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                } else { // Rook is in '8' direction of king
+                    while (y > pieces[king]->posy) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        y--;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                }
+            } else { // Rook is on same file
+                if (pieces[king]->attackers[0]->posx < pieces[king]->posx) { // Rook is in 'a' direction of king
+                    while (x < pieces[king]->posx) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x++;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                } else { // Rook is in 'h' direction of king
+                    while (x > pieces[king]->posx) { // Rook is in 'a' direction of king
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x--;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        } else if (pieces[king]->attackers[0]->pieceType == 'N') { // Knight attacker
+            // Fill in
+            return true;
+        } else if (pieces[king]->attackers[0]->pieceType == 'B') { // Bishop attacker
+            // Fill in
+            return true;
+        } else { // Queen attacker
+            // Fill in
+            return true;
+        } 
+        return false;
+    }
+}
+
+bool checkForBlock(int x, int y, string (*board)[8], string (*board1)[8], Piece** pieces, Piece** pieces1, char col) {
+    for (int i = 0; i < 32; i++) {
+        if (pieces1[i]->color != col) {
+            for (int j = 0; j < pieces1[i]->coveredTiles.size(); j++) {
+                if (pieces1[i]->coveredTiles[j][0] == x && pieces1[i]->coveredTiles[j][1] == y) {
+                    pieces1[i]->move(x,y, board1, pieces1);
+                    update(board1, pieces1);
+                    if (!badCheck(board1, pieces1, col)) {
+                        copyBoard(board, board1, pieces, pieces1);
+                        return true;
+                    }
+                    copyBoard(board, board1, pieces, pieces1);
+                }
+            }
+        } 
+    }
+    return false;
+}
+
+bool checkValidKingMove(int king, string (*board)[8], string (*board1)[8], Piece** pieces, Piece** pieces1, char col) {
+    for (int i = pieces1[king]->posx-1; i <= pieces1[king]->posx+1; i++) {
+        for (int j = pieces1[king]->posy-1; j <= pieces1[king]->posy+1; j++) {
+            if (i == pieces1[king]->posx && j == pieces1[king]->posy) {
+                continue;
+            } else {
+                if (i >=0 && i <= 7 && j >=0 && j <= 7) {
+                    if (board1[i][j] != "") {
+                        if (board1[i][j][0] != pieces1[king]->color) {
+                            pieces1[king]->move(i, j, board1, pieces1);
+                            update(board1, pieces1);
+                            if (!badCheck(board1, pieces1, col)) {
+                                copyBoard(board, board1, pieces, pieces1);
+                                return true;
+                            }
+                            copyBoard(board, board1, pieces, pieces1);
+                        }
+                    } else {
+                        pieces1[king]->move(i, j, board1, pieces1);
+                        update(board1, pieces1);
+                        if (!badCheck(board1, pieces1, col)) {
+                            copyBoard(board, board1, pieces, pieces1);
+                            return true;
+                        }
+                        copyBoard(board, board1, pieces, pieces1);
+                    }
+                }
+            }
         }
     }
+    return false;
 }
 
 string validateKnightMove(string) {
