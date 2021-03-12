@@ -24,7 +24,7 @@ void setBoard(string (*)[8], Piece**);
 void copyBoard(string (*)[8], string (*)[8], Piece**, Piece**);
 char blackOrWhite(char);
 char computerOrHuman(char);
-bool validateRookMove(string, string (*)[8], string (*)[8], string (*)[8], Piece**, Piece**, Piece**, char, bool);
+bool validateRookMove(string, string (*)[8], string (*)[8], string (*)[8], Piece**, Piece**, Piece**, char, bool &);
 string validateKnightMove(string);
 string validateBishopMove(string);
 string validateQueenMove(string);
@@ -57,7 +57,9 @@ int main()
     setBoard(boardPoss, piecesPoss);
     setBoard(boardPoss2, piecesPoss2);
     coh = computerOrHuman(coh);
-    col = blackOrWhite(col);
+    if (coh == 'c') {
+        col = blackOrWhite(col);
+    }
 
     // Game Loop
     if (coh == 'c') {
@@ -108,6 +110,9 @@ int main()
             }
             printBoard(board);
             moves[moveCount-1][0] = move;
+            if (gameOver) {
+                break;
+            }
             cout << moveCount << ". " << move << ", ";
             cin >> move;
             bool isValid = false;
@@ -172,7 +177,7 @@ char computerOrHuman(char coh){
     return 'h';
 }
 
-bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], string (*boardPoss2)[8], Piece** pieces, Piece** piecesPoss, Piece** piecesPoss2, char col, bool gameOver) {
+bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], string (*boardPoss2)[8], Piece** pieces, Piece** piecesPoss, Piece** piecesPoss2, char col, bool &gameOver) {
     vector<Piece*> rook;
     int i, pawns;
     if (col == 'W') {
@@ -225,17 +230,15 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                     rook[j]->move(x,y, boardPoss, piecesPoss);
                     update(boardPoss, piecesPoss);
                     if (badCheck(boardPoss, piecesPoss, col)) {
-                        cout << "Error (main.cpp 222): You cannot put yourself in check.\n";
+                        cout << "Error (main.cpp 228): That move puts or leaves you in check.\n";
                         copyBoard(board, boardPoss, pieces, piecesPoss);
                         update(boardPoss, piecesPoss);
-                        rook[j]->print();
                         return false;
                     }
                     if (check(boardPoss, piecesPoss, col)) {
                         cout << "Error (main.cpp 229): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
                         copyBoard(board, boardPoss, pieces, piecesPoss);
                         update(boardPoss, piecesPoss);
-                        rook[j]->print();
                         return false;
                     }
                     copyBoard(boardPoss, board, piecesPoss, pieces);
@@ -263,44 +266,38 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 return false;
                             }
                         }
-                        cout << "265\n";
                         rook[j]->move(x,y, boardPoss, piecesPoss);
                         update(boardPoss, piecesPoss);
-                        cout << "268\n";
                         if (badCheck(boardPoss, piecesPoss, col)) {
-                            cout << "Error (main.cpp 263): You cannot put yourself in check.\n";
+                            cout << "Error (main.cpp 271): That move puts or leaves you in check.\n";
                             copyBoard(board, boardPoss, pieces, piecesPoss);
                             update(boardPoss, piecesPoss);
-                            rook[j]->print();
                             return false;
                         }
-                        cout << "276\n";
                         if (!check(boardPoss, piecesPoss, col)) {
-                            cout << "Error (main.cpp 270): That move is not check, remove the  '+' or '#'\n";
+                            cout << "Error (main.cpp 278): That move is not check, remove the  '+' or '#'\n";
                             copyBoard(board, boardPoss, pieces, piecesPoss);
                             update(boardPoss, piecesPoss);
-                            rook[j]->print();
                             return false;
                         }
-                        cout << "284\n";
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(boardPoss2, piecesPoss2);
-                        cout << "286\n";
                         if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                             if (move[3] == '#') {
+                                cout << "Checkmate!\n";
+                                copyBoard(boardPoss, board, piecesPoss, pieces);
+                                update(board, pieces);
                                 gameOver = true;
                                 return true;
                             } else {
-                                cout << "Error (main.cpp 281): That move is checkmate, please use '#' at the end.\n";
+                                cout << "Error (main.cpp 294): That move is checkmate, please use '#' at the end.\n";
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
                                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(boardPoss2, piecesPoss2);
-                                //rook[j]->print();
                                 return false;
                             }
                         }
-                        cout << "299\n";
                         copyBoard(boardPoss, board, piecesPoss, pieces);
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(board, pieces);
@@ -309,21 +306,21 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                         return true;
                     }
                 }
-                cout << "Error (main.cpp 293): Move is invalid.\n";
+                cout << "Error (main.cpp 312): Move is invalid.\n";
                 return false;
             }
         } else if (move[1] == 'x') { // Move is a capture
             y = letterToNum(move[2]);
             x = charToNum(move[3]);
             if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
-                cout << "Error (main.cpp 300): Please choose a square on the board.\n";
+                cout << "Error (main.cpp 319): Please choose a square on the board.\n";
                 return false;
             } else {
                 for (int j = 0; j < rook.size(); j++) {
                     if (rook[j]->captureIsValid(x, y, boardPoss)) { // Check if move is valid
                         for (int i = j+1; i < rook.size(); i++) {
                             if (rook[i]->captureIsValid(x, y, boardPoss)){ // Check other piece can't move to the same squre
-                                cout << "Error (main.cpp 307): Multiple rooks can move to the same position\n";
+                                cout << "Error (main.cpp 327): Multiple rooks can move to the same position\n";
                                 cout << "Please specify which rook you'd like to move (i.e. Rae4 or R3e4)\n";
                                 return false;
                             }
@@ -331,17 +328,15 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                         rook[j]->move(x,y, boardPoss, piecesPoss);
                         update(boardPoss, piecesPoss);
                         if (badCheck(boardPoss, piecesPoss, col)) {
-                            cout << "Error (main.cpp 315): You cannot put yourself in check.\n";
+                            cout << "Error (main.cpp 334): That move puts or leaves you in check.\n";
                             copyBoard(board, boardPoss, pieces, piecesPoss);
                             update(boardPoss, piecesPoss);
-                            rook[j]->print();
                             return false;
                         }
                         if (check(boardPoss, piecesPoss, col)) {
-                            cout << "Error (main.cpp 322): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
+                            cout << "Error (main.cpp 340): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
                             copyBoard(board, boardPoss, pieces, piecesPoss);
                             update(boardPoss, piecesPoss);
-                            rook[j]->print();
                             return false;
                         }
                         copyBoard(boardPoss, board, piecesPoss, pieces);
@@ -351,7 +346,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                         return true;
                     }
                 }
-                cout << "Error (main.cpp 333): Move was invalid.\n";
+                cout << "Error (main.cpp 354): Move was invalid.\n";
                 return false;
             }
         } else if (letterToNum(move[1]) != 8) { // Specify rook by file
@@ -359,7 +354,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
             y = letterToNum(move[2]);
             x = charToNum(move[3]);
             if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
-                cout << "Error (main.cpp 341): Please choose a square on the board.\n";
+                cout << "Error (main.cpp 362): Please choose a square on the board.\n";
                 return false;
             } else {
                 for (int j = 0; j < rook.size(); j++) {
@@ -377,29 +372,26 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             rook[j]->move(x,y, boardPoss, piecesPoss);
                             update(boardPoss, piecesPoss);
                             if (badCheck(boardPoss, piecesPoss, col)) {
-                                cout << "Error (main.cpp 359): You cannot put yourself in check.\n";
+                                cout << "Error (main.cpp 380): That move puts or leaves you in check.\n";
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
-                                //rook[j]->print();
                                 return false;
                             }
                             if (check(boardPoss, piecesPoss, col)) {
                                 cout << "Error (main.cpp 366): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
-                                //rook[j]->print();
                                 return false;
                             }
                             copyBoard(boardPoss, board, piecesPoss, pieces);
                             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                             update(board, pieces);
                             update(boardPoss2, piecesPoss2);
-                            //rook[j]->print();
                             return true;
                         }
                     }
                 }
-                cout << "Error (main.cpp 379): You do not have any rook on the specified file that can move there.\n";
+                cout << "Error (main.cpp 402): You do not have any rook on the specified file that can move there.\n";
                 return false;
             }
         } else if (charToNum(move[1]) != 8) { // Specify rook by rank
@@ -407,7 +399,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
             y = letterToNum(move[2]);
             x = charToNum(move[3]);
             if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
-                cout << "Error (main.cpp 387): Please choose a square on the board.\n";
+                cout << "Error (main.cpp 410): Please choose a square on the board.\n";
                 return false;
             } else {
                 for (int j = 0; j < rook.size(); j++) {
@@ -416,7 +408,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             for (int i = j+1; i < rook.size(); i++) {
                                 if (rook[i]->posx == rank) { // Check if specified file checks out
                                     if (rook[i]->moveIsValid(x, y, board)){ // Check other piece can't move to the same squre
-                                        cout << "Error (main.cpp 396): Multiple rooks can move to the same position\n";
+                                        cout << "Error (main.cpp 419): Multiple rooks can move to the same position\n";
                                         cout << "Please specify which rook you'd like to move (i.e. Rae4 or R3e4)\n";
                                         return false;
                                     }
@@ -425,33 +417,30 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             rook[j]->move(x,y, boardPoss, piecesPoss);
                             update(boardPoss, piecesPoss);
                             if (badCheck(boardPoss, piecesPoss, col)) {
-                                cout << "Error (main.cpp 405): You cannot put yourself in check.\n";
+                                cout << "Error (main.cpp 428): That move puts or leaves you in check.\n";
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
-                                rook[j]->print();
                                 return false;
                             }
                             if (check(boardPoss, piecesPoss, col)) {
-                                cout << "Error (main.cpp 412): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
+                                cout << "Error (main.cpp 435): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
-                                rook[j]->print();
                                 return false;
                             }
                             copyBoard(boardPoss, board, piecesPoss, pieces);
                             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                             update(board, pieces);
                             update(boardPoss2, piecesPoss2);
-                            rook[j]->print();
                             return true;
                         }
                     }
                 }
-                cout << "Error (main.cpp 425): You do not have any rook on the specified rank that can move there.\n";
+                cout << "Error (main.cpp 450): You do not have any rook on the specified rank that can move there.\n";
                 return false;
             }       
         } else {
-            cout << "Error (main.cpp 429): Make a valid move.\n";
+            cout << "Error (main.cpp 454): Make a valid move.\n";
             return false;
         }
     } else if (move.size() == 5) {
@@ -460,7 +449,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                 y = letterToNum(move[2]);
                 x = charToNum(move[3]);
                 if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
-                    cout << "Error (main.cpp 438): Please choose a square on the board.\n";
+                    cout << "Error (main.cpp 463): Please choose a square on the board.\n";
                     return false;
                 } else {
                     for (int j = 0; j < rook.size(); j++) {
@@ -475,23 +464,24 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             rook[j]->move(x,y, boardPoss, piecesPoss);
                             update(boardPoss, piecesPoss);
                             if (badCheck(boardPoss, piecesPoss, col)) {
-                                cout << "Error (main.cpp 453): You cannot put yourself in check.\n";
+                                cout << "Error (main.cpp 478): That move puts or leaves you in check.\n";
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
-                                rook[j]->print();
                                 return false;
                             }
                             if (!check(boardPoss, piecesPoss, col)) {
                                 cout << "Error (main.cpp 460): That move is not check, remove the '+' or '#'\n";
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
-                                rook[j]->print();
                                 return false;
                             }
                             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                             update(boardPoss2, piecesPoss2);
                             if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                 if (move[4] == '#') {
+                                    cout << "Checkmate!\n";
+                                    copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    update(board, pieces);
                                     gameOver = true;
                                     return true;
                                 } else {
@@ -500,7 +490,6 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     update(boardPoss, piecesPoss);
                                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                     update(boardPoss2, piecesPoss2);
-                                    rook[j]->print();
                                     return false;
                                 }
                             }
@@ -537,23 +526,24 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 rook[j]->move(x,y, boardPoss, piecesPoss);
                                 update(boardPoss, piecesPoss);
                                 if (badCheck(boardPoss, piecesPoss, col)) {
-                                    cout << "Error (main.cpp 509): You cannot put yourself in check.\n";
+                                    cout << "Error (main.cpp 837): That move puts or leaves you in check.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    rook[j]->print();
                                     return false;
                                 }
                                 if (!check(boardPoss, piecesPoss, col)) {
                                     cout << "Error (main.cpp 516): That move is not check, remove the '+' or '#'\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    //rook[j]->print();
                                     return false;
                                 }
                                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(boardPoss2, piecesPoss2);
                                 if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                     if (move[4] == '#') {
+                                        cout << "Checkmate!\n";
+                                        copyBoard(boardPoss, board, piecesPoss, pieces);
+                                        update(board, pieces);gameOver = true;
                                         gameOver = true;
                                         return true;
                                     } else {
@@ -562,7 +552,6 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                         update(boardPoss, piecesPoss);
                                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                         update(boardPoss2, piecesPoss2);
-                                        //rook[j]->print();
                                         return false;
                                     }
                                 }
@@ -570,7 +559,6 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(board, pieces);
                                 update(boardPoss2, piecesPoss2);
-                                //rook[j]->print();
                                 return true;
                             }
                         }
@@ -601,23 +589,24 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 rook[j]->move(x,y, boardPoss, piecesPoss);
                                 update(boardPoss, piecesPoss);
                                 if (badCheck(boardPoss, piecesPoss, col)) {
-                                    cout << "Error (main.cpp 567): You cannot put yourself in check.\n";
+                                    cout << "Error (main.cpp 837): That move puts or leaves you in check.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    rook[j]->print();
                                     return false;
                                 }
                                 if (!check(boardPoss, piecesPoss, col)) {
                                     cout << "Error (main.cpp 516): That move is not check, remove the '+' or '#'\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    rook[j]->print();
                                     return false;
                                 }
                                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(boardPoss2, piecesPoss2);
                                 if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                     if (move[4] == '#') {
+                                        cout << "Checkmate!\n";
+                                        copyBoard(boardPoss, board, piecesPoss, pieces);
+                                        update(board, pieces);gameOver = true;
                                         gameOver = true;
                                         return true;
                                     } else {
@@ -626,7 +615,6 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                         update(boardPoss, piecesPoss);
                                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                         update(boardPoss2, piecesPoss2);
-                                        //rook[j]->print();
                                         return false;
                                     }
                                 }
@@ -634,7 +622,6 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(board, pieces);
                                 update(boardPoss2, piecesPoss2);
-                                //rook[j]->print();
                                 return true;
                             }
                         }
@@ -669,24 +656,21 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 rook[j]->move(x,y, boardPoss, piecesPoss);
                                 update(boardPoss, piecesPoss);
                                 if (badCheck(boardPoss, piecesPoss, col)) {
-                                    cout << "Error (main.cpp 629): You cannot put yourself in check.\n";
+                                    cout << "Error (main.cpp 672): That move puts or leaves you in check.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    //rook[j]->print();
                                     return false;
                                 }
                                 if (check(boardPoss, piecesPoss, col)) {
-                                    cout << "Error (main.cpp 636): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
+                                    cout << "Error (main.cpp 678): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    //rook[j]->print();
                                     return false;
                                 }
                                 copyBoard(boardPoss, board, piecesPoss, pieces);
                                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(board, pieces);
                                 update(boardPoss2, piecesPoss2);
-                                //rook[j]->print();
                                 return true;
                             }
                         }
@@ -699,7 +683,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                 y = letterToNum(move[3]);
                 x = charToNum(move[4]);
                 if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
-                    cout << "Error (main.cpp 657): Please choose a square on the board.\n";
+                    cout << "Error (main.cpp 702): Please choose a square on the board.\n";
                     return false;
                 } else {
                     for (int j = 0; j < rook.size(); j++) {
@@ -708,7 +692,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 for (int i = j+1; i < rook.size(); i++) {
                                     if (rook[i]->posy == file) { // Check if specified file checks out
                                         if (rook[i]->captureIsValid(x, y, board)){ // Check other piece can't move to the same squre
-                                            cout << "Error (main.cpp 666): Multiple rooks can move to the same position\n";
+                                            cout << "Error (main.cpp 711): Multiple rooks can move to the same position\n";
                                             cout << "Please specify which rook you'd like to move (i.e. Rae4 or R3e4)\n";
                                             return false;
                                         }
@@ -717,24 +701,21 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 rook[j]->move(x,y, boardPoss, piecesPoss);
                                 update(boardPoss, piecesPoss);
                                 if (badCheck(boardPoss, piecesPoss, col)) {
-                                    cout << "Error (main.cpp 675): You cannot put yourself in check.\n";
+                                    cout << "Error (main.cpp 720): You cannot put yourself in check.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    // rook[j]->print();
                                     return false;
                                 }
                                 if (check(boardPoss, piecesPoss, col)) {
-                                    cout << "Error (main.cpp 682): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
+                                    cout << "Error (main.cpp 726): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    // rook[j]->print();
                                     return false;
                                 }
                                 copyBoard(boardPoss, board, piecesPoss, pieces);
                                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(board, pieces);
                                 update(boardPoss2, piecesPoss2);
-                                // rook[j]->print();
                                 return true;
                             }
                         }
@@ -761,7 +742,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     for (int i = j+1; i < rook.size(); i++) {
                                         if (rook[i]->posy == file) { // Check if specified file checks out
                                             if (rook[i]->captureIsValid(x, y, board)){ // Check other piece can't move to the same squre
-                                                cout << "Error (main.cpp 717): Multiple rooks can move to the same position\n";
+                                                cout << "Error (main.cpp 764): Multiple rooks can move to the same position\n";
                                                 cout << "Please specify which rook you'd like to move (i.e. Rae4 or R3e4)\n";
                                                 return false;
                                             }
@@ -770,7 +751,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     rook[j]->move(x,y, boardPoss, piecesPoss);
                                     update(boardPoss, piecesPoss);
                                     if (badCheck(boardPoss, piecesPoss, col)) {
-                                        cout << "Error (main.cpp 726): You cannot put yourself in check.\n";
+                                        cout << "Error (main.cpp 773): That move puts or leaves you in check.\n";
                                         copyBoard(board, boardPoss, pieces, piecesPoss);
                                         update(boardPoss, piecesPoss);
                                         rook[j]->print();
@@ -787,6 +768,9 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     update(boardPoss2, piecesPoss2);
                                     if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                         if (move[4] == '#') {
+                                            cout << "Checkmate!\n";
+                                            copyBoard(boardPoss, board, piecesPoss, pieces);
+                                            update(board, pieces);gameOver = true;
                                             gameOver = true;
                                             return true;
                                         } else {
@@ -795,7 +779,6 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                             update(boardPoss, piecesPoss);
                                             copyBoard(board, boardPoss2, pieces, piecesPoss2);
                                             update(boardPoss2, piecesPoss2);
-                                            // rook[j]->print();
                                             return false;
                                         }
                                     }
@@ -803,7 +786,6 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                     update(board, pieces);
                                     update(boardPoss2, piecesPoss2);
-                                    // rook[j]->print();
                                     return true;
                                 }
                             }
@@ -834,28 +816,28 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     rook[j]->move(x,y, boardPoss, piecesPoss);
                                     update(boardPoss, piecesPoss);
                                     if (badCheck(boardPoss, piecesPoss, col)) {
-                                        cout << "Error (main.cpp 784): You cannot put yourself in check.\n";
+                                        cout << "Error (main.cpp 837): That move puts or leaves you in check.\n";
                                         copyBoard(board, boardPoss, pieces, piecesPoss);
                                         update(boardPoss, piecesPoss);
-                                        rook[j]->print();
                                         return false;
                                     }
                                     if (!check(boardPoss, piecesPoss, col)) {
                                         cout << "Error (main.cpp 791): That move is not check, remove the '+' or '#'\n";
                                         copyBoard(board, boardPoss, pieces, piecesPoss);
                                         update(boardPoss, piecesPoss);
-                                        rook[j]->print();
                                         return false;
                                     }
                                     if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                         if (move[5] == '#') {
+                                            cout << "Checkmate!\n";
+                                            copyBoard(boardPoss, board, piecesPoss, pieces);
+                                            update(board, pieces);gameOver = true;
                                             gameOver = true;
                                             return true;
                                         } else {
                                             cout << "Error (main.cpp 802): That move is checkmate, please use '#' at the end.\n";
                                             copyBoard(board, boardPoss, pieces, piecesPoss);
                                             update(boardPoss, piecesPoss);
-                                            // rook[j]->print();
                                             return false;
                                         }
                                     }
@@ -888,13 +870,11 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
 bool badCheck(string (*board)[8], Piece** pieces, char col) {
     if (col == 'W') {
         if (pieces[14]->inCheck) { // You put yourself in check
-            cout << "Error (main.cpp 836): That move puts or leaves you in check.\n";
             return true;
         }
         return false;
     } else {
         if (pieces[15]->inCheck) { // You put yourself in check
-            cout << "Error (main.cpp 842): That move puts or leaves you in check.\n";
             return true;
         }
         return false;
@@ -929,7 +909,6 @@ bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
             return true;
         } 
     } else { // regular check
-        cout << "889\n";
         if (pieces[king]->attackers[0]->pieceType == 'P') { // Pawn attacker
             x = pieces[king]->attackers[0]->posx;
             y = pieces[king]->attackers[0]->posy;
@@ -941,7 +920,6 @@ bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
             }
             return true;
         } else if (pieces[king]->attackers[0]->pieceType == 'R') { // Rook attacker
-            cout << "901\n";
             x = pieces[king]->attackers[0]->posx;
             y = pieces[king]->attackers[0]->posy;
             if (x == pieces[king]->posx) { // Rook is on same rank
@@ -969,17 +947,13 @@ bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
                     return true;
                 }
             } else { // Rook is on same file
-                cout << "929\n";
                 if (x < pieces[king]->posx) { // Rook is in '1' direction of king
-                    cout << "931\n";
                     while (x < pieces[king]->posx) {
-                        cout << "tile: " << x << ", " << y << endl;
                         if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                             return false;
                         }
                         x++;
                     }
-                    cout << "Shouldn't have made it here. 938\n";
                     if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
                         return false;
                     }
@@ -1172,15 +1146,10 @@ bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
 }
 
 bool checkForBlock(int x, int y, string (*board)[8], string (*board1)[8], Piece** pieces, Piece** pieces1, char col) {
-    cout << "Checking tile: " << x << ", " << y << endl;
     for (int i = 0; i < 32; i++) {
-        cout << "piece " << i << " (1134)\n";
-        if (pieces1[i]->color != col) {
-            cout << "1136\n";
+        if (pieces1[i]->color != col || i == 14 || i == 15) {
             for (int j = 0; j < pieces1[i]->coveredTiles.size(); j++) {
-                cout << "tile: " << pieces1[i]->coveredTiles[j].a[0] << ", " << pieces1[i]->coveredTiles[j].a[1] << endl;
                 if (pieces1[i]->coveredTiles[j].a[0] == x && pieces1[i]->coveredTiles[j].a[1] == y) {
-                    cout << "A Piece can block\n";
                     pieces1[i]->move(x,y, board1, pieces1);
                     update(board1, pieces1);
                     if (!badCheck(board1, pieces1, pieces[i]->color)) {
@@ -1215,7 +1184,7 @@ bool checkValidKingMove(int king, string (*board)[8], string (*board1)[8], Piece
                     } else {
                         pieces1[king]->move(i, j, board1, pieces1);
                         update(board1, pieces1);
-                        if (!badCheck(board1, pieces1, col)) {
+                        if (!badCheck(board1, pieces1, pieces1[king]->color)) {
                             copyBoard(board, board1, pieces, pieces1);
                             return true;
                         }
@@ -1261,36 +1230,36 @@ void copyBoard(string (*b1)[8], string (*b2)[8], Piece** p1, Piece** p2) {
 
 void setBoard(string (*board)[8], Piece** pieces) {
     board[0][0] = "WR";
-    board[0][1] = "WN";
-    board[0][2] = "WB";
-    board[0][3] = "WQ";
+    // board[0][1] = "WN";
+    // board[0][2] = "WB";
+    // board[0][3] = "WQ";
     board[0][4] = "WK";
-    board[0][5] = "WB";
-    board[0][6] = "WN";
+    // board[0][5] = "WB";
+    // board[0][6] = "WN";
     board[0][7] = "WR";
     // board[1][0] = "WP";
-    board[1][1] = "WP";
-    board[1][2] = "WP";
-    board[1][3] = "WP";
+    // board[1][1] = "WP";
+    // board[1][2] = "WP";
+    // board[1][3] = "WP";
     // board[1][4] = "WP";
-    board[1][5] = "WP";
-    board[1][6] = "WP";
+    // board[1][5] = "WP";
+    // board[1][6] = "WP";
     // board[1][7] = "WP";
-    board[7][0] = "BR";
-    board[7][1] = "BN";
-    board[7][2] = "BB";
-    board[7][3] = "BQ";
+    // board[7][0] = "BR";
+    // board[7][1] = "BN";
+    // board[7][2] = "BB";
+    // board[7][3] = "BQ";
     board[7][4] = "BK";
-    board[7][5] = "BB";
-    board[7][6] = "BN";
+    // board[7][5] = "BB";
+    // board[7][6] = "BN";
     board[7][7] = "BR";
     // board[6][0] = "BP";
-    board[6][1] = "BP";
-    board[6][2] = "BP";
-    board[6][3] = "BP";
+    // board[6][1] = "BP";
+    // board[6][2] = "BP";
+    // board[6][3] = "BP";
     // board[6][4] = "BP";
-    board[6][5] = "BP";
-    board[6][6] = "BP";
+    // board[6][5] = "BP";
+    // board[6][6] = "BP";
     // board[6][7] = "BP";
     pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
     pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(7,6,'B');
