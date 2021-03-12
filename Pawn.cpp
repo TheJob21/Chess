@@ -16,8 +16,16 @@ bool Pawn::captureIsValid(int x, int y, string (*board)[8]) {
     return true;
 }
 
-void Pawn::move(int x, int y, string (*board)[8], Piece**) {
-    return;
+void Pawn::move(int x, int y, string (*board)[8], Piece** pieces) {
+    board[posx][posy] = "";
+    posx = x;
+    posy = y;
+    capture(x, y, color, board, pieces);
+    if (color == 'W') { // Move White
+        board[x][y] = "WP";
+    } else { // Move Black
+        board[x][y] = "BP";
+    }
 }
 
 void Pawn::update(string (*board)[8], Piece** pieces) {

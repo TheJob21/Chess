@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
 #include "Piece.h"
@@ -54,6 +55,7 @@ int main()
     Piece **piecesPoss2 = new Piece*[32];
     setBoard(board, pieces);
     setBoard(boardPoss, piecesPoss);
+    setBoard(boardPoss2, piecesPoss2);
     coh = computerOrHuman(coh);
     col = blackOrWhite(col);
 
@@ -261,8 +263,10 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 return false;
                             }
                         }
+                        cout << "265\n";
                         rook[j]->move(x,y, boardPoss, piecesPoss);
                         update(boardPoss, piecesPoss);
+                        cout << "268\n";
                         if (badCheck(boardPoss, piecesPoss, col)) {
                             cout << "Error (main.cpp 263): You cannot put yourself in check.\n";
                             copyBoard(board, boardPoss, pieces, piecesPoss);
@@ -270,6 +274,7 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             rook[j]->print();
                             return false;
                         }
+                        cout << "276\n";
                         if (!check(boardPoss, piecesPoss, col)) {
                             cout << "Error (main.cpp 270): That move is not check, remove the  '+' or '#'\n";
                             copyBoard(board, boardPoss, pieces, piecesPoss);
@@ -277,7 +282,10 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             rook[j]->print();
                             return false;
                         }
+                        cout << "284\n";
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(boardPoss2, piecesPoss2);
+                        cout << "286\n";
                         if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                             if (move[3] == '#') {
                                 gameOver = true;
@@ -286,12 +294,18 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 cout << "Error (main.cpp 281): That move is checkmate, please use '#' at the end.\n";
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
-                                rook[j]->print();
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                update(boardPoss2, piecesPoss2);
+                                //rook[j]->print();
                                 return false;
                             }
                         }
+                        cout << "299\n";
                         copyBoard(boardPoss, board, piecesPoss, pieces);
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(board, pieces);
+                        update(boardPoss2, piecesPoss2);
+                        cout << "302\n";
                         return true;
                     }
                 }
@@ -331,7 +345,9 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             return false;
                         }
                         copyBoard(boardPoss, board, piecesPoss, pieces);
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(board, pieces);
+                        update(boardPoss2, piecesPoss2);
                         return true;
                     }
                 }
@@ -364,19 +380,21 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 cout << "Error (main.cpp 359): You cannot put yourself in check.\n";
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
-                                rook[j]->print();
+                                //rook[j]->print();
                                 return false;
                             }
                             if (check(boardPoss, piecesPoss, col)) {
                                 cout << "Error (main.cpp 366): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
-                                rook[j]->print();
+                                //rook[j]->print();
                                 return false;
                             }
                             copyBoard(boardPoss, board, piecesPoss, pieces);
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                             update(board, pieces);
-                            rook[j]->print();
+                            update(boardPoss2, piecesPoss2);
+                            //rook[j]->print();
                             return true;
                         }
                     }
@@ -421,7 +439,9 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 return false;
                             }
                             copyBoard(boardPoss, board, piecesPoss, pieces);
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                             update(board, pieces);
+                            update(boardPoss2, piecesPoss2);
                             rook[j]->print();
                             return true;
                         }
@@ -468,6 +488,8 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 rook[j]->print();
                                 return false;
                             }
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                            update(boardPoss2, piecesPoss2);
                             if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                 if (move[4] == '#') {
                                     gameOver = true;
@@ -476,12 +498,16 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     cout << "Error (main.cpp 471): That move is checkmate, please use '#' at the end.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
+                                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                    update(boardPoss2, piecesPoss2);
                                     rook[j]->print();
                                     return false;
                                 }
                             }
                             copyBoard(boardPoss, board, piecesPoss, pieces);
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                             update(board, pieces);
+                            update(boardPoss2, piecesPoss2);
                             return true;
                         }
                     }
@@ -521,9 +547,11 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     cout << "Error (main.cpp 516): That move is not check, remove the '+' or '#'\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    rook[j]->print();
+                                    //rook[j]->print();
                                     return false;
                                 }
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                update(boardPoss2, piecesPoss2);
                                 if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                     if (move[4] == '#') {
                                         gameOver = true;
@@ -532,13 +560,17 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                         cout << "Error (main.cpp 527): That move is checkmate, please use '#' at the end.\n";
                                         copyBoard(board, boardPoss, pieces, piecesPoss);
                                         update(boardPoss, piecesPoss);
-                                        rook[j]->print();
+                                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                        update(boardPoss2, piecesPoss2);
+                                        //rook[j]->print();
                                         return false;
                                     }
                                 }
                                 copyBoard(boardPoss, board, piecesPoss, pieces);
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(board, pieces);
-                                rook[j]->print();
+                                update(boardPoss2, piecesPoss2);
+                                //rook[j]->print();
                                 return true;
                             }
                         }
@@ -582,6 +614,8 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     rook[j]->print();
                                     return false;
                                 }
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                update(boardPoss2, piecesPoss2);
                                 if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                     if (move[4] == '#') {
                                         gameOver = true;
@@ -590,13 +624,17 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                         cout << "Error (main.cpp 527): That move is checkmate, please use '#' at the end.\n";
                                         copyBoard(board, boardPoss, pieces, piecesPoss);
                                         update(boardPoss, piecesPoss);
-                                        rook[j]->print();
+                                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                        update(boardPoss2, piecesPoss2);
+                                        //rook[j]->print();
                                         return false;
                                     }
                                 }
                                 copyBoard(boardPoss, board, piecesPoss, pieces);
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(board, pieces);
-                                rook[j]->print();
+                                update(boardPoss2, piecesPoss2);
+                                //rook[j]->print();
                                 return true;
                             }
                         }
@@ -634,19 +672,21 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     cout << "Error (main.cpp 629): You cannot put yourself in check.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    rook[j]->print();
+                                    //rook[j]->print();
                                     return false;
                                 }
                                 if (check(boardPoss, piecesPoss, col)) {
                                     cout << "Error (main.cpp 636): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    rook[j]->print();
+                                    //rook[j]->print();
                                     return false;
                                 }
                                 copyBoard(boardPoss, board, piecesPoss, pieces);
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(board, pieces);
-                                rook[j]->print();
+                                update(boardPoss2, piecesPoss2);
+                                //rook[j]->print();
                                 return true;
                             }
                         }
@@ -680,19 +720,21 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     cout << "Error (main.cpp 675): You cannot put yourself in check.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    rook[j]->print();
+                                    // rook[j]->print();
                                     return false;
                                 }
                                 if (check(boardPoss, piecesPoss, col)) {
                                     cout << "Error (main.cpp 682): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(boardPoss, piecesPoss);
-                                    rook[j]->print();
+                                    // rook[j]->print();
                                     return false;
                                 }
                                 copyBoard(boardPoss, board, piecesPoss, pieces);
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(board, pieces);
-                                rook[j]->print();
+                                update(boardPoss2, piecesPoss2);
+                                // rook[j]->print();
                                 return true;
                             }
                         }
@@ -741,6 +783,8 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                         rook[j]->print();
                                         return false;
                                     }
+                                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                    update(boardPoss2, piecesPoss2);
                                     if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                         if (move[4] == '#') {
                                             gameOver = true;
@@ -749,13 +793,17 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                             cout << "Error (main.cpp 744): That move is checkmate, please use '#' at the end.\n";
                                             copyBoard(board, boardPoss, pieces, piecesPoss);
                                             update(boardPoss, piecesPoss);
-                                            rook[j]->print();
+                                            copyBoard(board, boardPoss2, pieces, piecesPoss2);
+                                            update(boardPoss2, piecesPoss2);
+                                            // rook[j]->print();
                                             return false;
                                         }
                                     }
                                     copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                     update(board, pieces);
-                                    rook[j]->print();
+                                    update(boardPoss2, piecesPoss2);
+                                    // rook[j]->print();
                                     return true;
                                 }
                             }
@@ -807,13 +855,15 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                             cout << "Error (main.cpp 802): That move is checkmate, please use '#' at the end.\n";
                                             copyBoard(board, boardPoss, pieces, piecesPoss);
                                             update(boardPoss, piecesPoss);
-                                            rook[j]->print();
+                                            // rook[j]->print();
                                             return false;
                                         }
                                     }
                                     copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                     update(board, pieces);
-                                    rook[j]->print();
+                                    update(boardPoss2, piecesPoss2);
+                                    // rook[j]->print();
                                     return true;
                                 }
                             }
@@ -879,14 +929,23 @@ bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
             return true;
         } 
     } else { // regular check
-        if (pieces[king]->attackers[0]->pieceType == 'P') {
+        cout << "889\n";
+        if (pieces[king]->attackers[0]->pieceType == 'P') { // Pawn attacker
+            x = pieces[king]->attackers[0]->posx;
+            y = pieces[king]->attackers[0]->posy;
+            if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                return false;
+            }
+            if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                return false;
+            }
             return true;
-            // Fill in
         } else if (pieces[king]->attackers[0]->pieceType == 'R') { // Rook attacker
+            cout << "901\n";
             x = pieces[king]->attackers[0]->posx;
             y = pieces[king]->attackers[0]->posy;
             if (x == pieces[king]->posx) { // Rook is on same rank
-                if (y < pieces[king]->posy) { // Rook is in '1' direction of king
+                if (y < pieces[king]->posy) { // Rook is in 'a' direction of king
                     while (y < pieces[king]->posy) {
                         if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                             return false;
@@ -897,7 +956,7 @@ bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
                         return false;
                     }
                     return true;
-                } else { // Rook is in '8' direction of king
+                } else { // Rook is in 'h' direction of king
                     while (y > pieces[king]->posy) {
                         if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                             return false;
@@ -910,19 +969,23 @@ bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
                     return true;
                 }
             } else { // Rook is on same file
-                if (pieces[king]->attackers[0]->posx < pieces[king]->posx) { // Rook is in 'a' direction of king
+                cout << "929\n";
+                if (x < pieces[king]->posx) { // Rook is in '1' direction of king
+                    cout << "931\n";
                     while (x < pieces[king]->posx) {
+                        cout << "tile: " << x << ", " << y << endl;
                         if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                             return false;
                         }
                         x++;
                     }
+                    cout << "Shouldn't have made it here. 938\n";
                     if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
                         return false;
                     }
                     return true;
-                } else { // Rook is in 'h' direction of king
-                    while (x > pieces[king]->posx) { // Rook is in 'a' direction of king
+                } else { // Rook is in '8' direction of king
+                    while (x > pieces[king]->posx) { 
                         if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                             return false;
                         }
@@ -935,27 +998,192 @@ bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
                 }
             }
         } else if (pieces[king]->attackers[0]->pieceType == 'N') { // Knight attacker
-            // Fill in
+            x = pieces[king]->attackers[0]->posx;
+            y = pieces[king]->attackers[0]->posy;
+            if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                return false;
+            }
+            if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                return false;
+            }
             return true;
         } else if (pieces[king]->attackers[0]->pieceType == 'B') { // Bishop attacker
-            // Fill in
-            return true;
+            x = pieces[king]->attackers[0]->posx;
+            y = pieces[king]->attackers[0]->posy;
+            if (x > pieces[king]->posx) {
+                if (y > pieces[king]->posy) { // Bishop is in 'h8' direction of king
+                    while (y > pieces[king]->posy) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x--;
+                        y--;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                } else { // Bishop is in 'a8' direction of king
+                    while (y < pieces[king]->posy) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x--;
+                        y++;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                }
+            } else { 
+                if (y < pieces[king]->posy) { // Bishop is in 'a1' direction of king
+                    while (y < pieces[king]->posy) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x++;
+                        y++;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                } else { // Rook is in 'h1' direction of king
+                    while (y > pieces[king]->posx) { 
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x++;
+                        y--;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
         } else { // Queen attacker
-            // Fill in
-            return true;
-        } 
-        return false;
+            x = pieces[king]->attackers[0]->posx;
+            y = pieces[king]->attackers[0]->posy;
+            if (x == pieces[king]->posx) { // Queen is on same rank
+                if (y < pieces[king]->posy) { // Queen is in 'a' direction of king
+                    while (y < pieces[king]->posy) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        y++;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                } else { // Queen is in 'h' direction of king
+                    while (y > pieces[king]->posy) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        y--;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                }
+            } else if (y == pieces[king]->posy) { // Queen is on same file
+                if (x < pieces[king]->posx) { // Queen is in '1' direction of king
+                    while (x < pieces[king]->posx) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x++;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                } else { // Queen is in '8' direction of king
+                    while (x > pieces[king]->posx) { 
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x--;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                }
+            } else if (x > pieces[king]->posx) {
+                if (y > pieces[king]->posy) { // Queen is in 'h8' direction of king
+                    while (y > pieces[king]->posy) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x--;
+                        y--;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                } else { // Queen is in 'a8' direction of king
+                    while (y < pieces[king]->posy) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x--;
+                        y++;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                }
+            } else { 
+                if (y < pieces[king]->posy) { // Queen is in 'a1' direction of king
+                    while (y < pieces[king]->posy) {
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x++;
+                        y++;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                } else { // Queen is in 'h1' direction of king
+                    while (y > pieces[king]->posx) { 
+                        if (checkForBlock(x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                            return false;
+                        }
+                        x++;
+                        y--;
+                    }
+                    if (checkValidKingMove(king, board, board1, pieces, pieces1, col)) {
+                        return false;
+                    }
+                    return true;
+                }
+            }
+        }
     }
 }
 
 bool checkForBlock(int x, int y, string (*board)[8], string (*board1)[8], Piece** pieces, Piece** pieces1, char col) {
+    cout << "Checking tile: " << x << ", " << y << endl;
     for (int i = 0; i < 32; i++) {
+        cout << "piece " << i << " (1134)\n";
         if (pieces1[i]->color != col) {
+            cout << "1136\n";
             for (int j = 0; j < pieces1[i]->coveredTiles.size(); j++) {
-                if (pieces1[i]->coveredTiles[j][0] == x && pieces1[i]->coveredTiles[j][1] == y) {
+                cout << "tile: " << pieces1[i]->coveredTiles[j].a[0] << ", " << pieces1[i]->coveredTiles[j].a[1] << endl;
+                if (pieces1[i]->coveredTiles[j].a[0] == x && pieces1[i]->coveredTiles[j].a[1] == y) {
+                    cout << "A Piece can block\n";
                     pieces1[i]->move(x,y, board1, pieces1);
                     update(board1, pieces1);
-                    if (!badCheck(board1, pieces1, col)) {
+                    if (!badCheck(board1, pieces1, pieces[i]->color)) {
                         copyBoard(board, board1, pieces, pieces1);
                         return true;
                     }
@@ -978,7 +1206,7 @@ bool checkValidKingMove(int king, string (*board)[8], string (*board1)[8], Piece
                         if (board1[i][j][0] != pieces1[king]->color) {
                             pieces1[king]->move(i, j, board1, pieces1);
                             update(board1, pieces1);
-                            if (!badCheck(board1, pieces1, col)) {
+                            if (!badCheck(board1, pieces1, pieces1[king]->color)) {
                                 copyBoard(board, board1, pieces, pieces1);
                                 return true;
                             }

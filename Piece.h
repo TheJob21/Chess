@@ -6,12 +6,16 @@
 #include <string>
 using namespace std;
 
+struct Int2 {
+  int a[2];
+};
+
 class Piece {
     public:
         int posx, posy, value;
         bool inCheck = false;
         vector<Piece*> attackers, defenders, attacking, defending;
-        vector<int[2]> coveredTiles;
+        vector<Int2> coveredTiles;
         char pieceType, color;
         Piece();
         ~Piece();

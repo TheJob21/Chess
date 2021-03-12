@@ -12,5 +12,6 @@ int letterToNum(char);
 int charToNum(char);
 char numToLetter(int);
 char numToChar(int);
+void capture(int, int, char, string (*)[8], Piece**);
 
 #endif
