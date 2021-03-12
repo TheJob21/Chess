@@ -35,6 +35,7 @@ int charToNum(char);
 void updateAtkDef(string (*)[8], Piece**);
 bool check(string (*)[8], Piece**, char);
 bool badCheck(string (*)[8], Piece**, char);
+bool stalemate(string (*)[8], string (*)[8], Piece**, Piece**, char);
 bool checkmate(string (*)[8], string (*)[8], Piece**, Piece**, char);
 void printBoard(string (*)[8]);
 bool checkForBlock(int, int, string (*)[8], string (*)[8], Piece**, Piece**, char);
@@ -54,8 +55,11 @@ int main()
     Piece **piecesPoss = new Piece*[32];
     Piece **piecesPoss2 = new Piece*[32];
     setBoard(board, pieces);
+    update(board, pieces);
     setBoard(boardPoss, piecesPoss);
+    update(boardPoss, piecesPoss);
     setBoard(boardPoss2, piecesPoss2);
+    update(boardPoss2, piecesPoss2);
     coh = computerOrHuman(coh);
     if (coh == 'c') {
         col = blackOrWhite(col);
@@ -241,6 +245,13 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                         update(boardPoss, piecesPoss);
                         return false;
                     }
+                    if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                        copyBoard(boardPoss, board, piecesPoss, pieces);
+                        update(board, pieces);
+                        cout << "Stalemate!\n";
+                        gameOver = true;
+                        return true;
+                    }
                     copyBoard(boardPoss, board, piecesPoss, pieces);
                     update(board, pieces);
                     return true;
@@ -302,7 +313,6 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(board, pieces);
                         update(boardPoss2, piecesPoss2);
-                        cout << "302\n";
                         return true;
                     }
                 }
@@ -338,6 +348,13 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             copyBoard(board, boardPoss, pieces, piecesPoss);
                             update(boardPoss, piecesPoss);
                             return false;
+                        }
+                        if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                            copyBoard(boardPoss, board, piecesPoss, pieces);
+                            update(board, pieces);
+                            cout << "Stalemate!\n";
+                            gameOver = true;
+                            return true;
                         }
                         copyBoard(boardPoss, board, piecesPoss, pieces);
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -383,6 +400,13 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 update(boardPoss, piecesPoss);
                                 return false;
                             }
+                            if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                                copyBoard(boardPoss, board, piecesPoss, pieces);
+                                update(board, pieces);
+                                cout << "Stalemate!\n";
+                                gameOver = true;
+                                return true;
+                            }
                             copyBoard(boardPoss, board, piecesPoss, pieces);
                             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                             update(board, pieces);
@@ -427,6 +451,13 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 copyBoard(board, boardPoss, pieces, piecesPoss);
                                 update(boardPoss, piecesPoss);
                                 return false;
+                            }
+                            if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                                copyBoard(boardPoss, board, piecesPoss, pieces);
+                                update(board, pieces);
+                                cout << "Stalemate!\n";
+                                gameOver = true;
+                                return true;
                             }
                             copyBoard(boardPoss, board, piecesPoss, pieces);
                             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -667,6 +698,13 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     update(boardPoss, piecesPoss);
                                     return false;
                                 }
+                                if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                                    copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    update(board, pieces);
+                                    cout << "Stalemate!\n";
+                                    gameOver = true;
+                                    return true;
+                                }
                                 copyBoard(boardPoss, board, piecesPoss, pieces);
                                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(board, pieces);
@@ -712,6 +750,13 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     update(boardPoss, piecesPoss);
                                     return false;
                                 }
+                                if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                                    copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    update(board, pieces);
+                                    cout << "Stalemate!\n";
+                                    gameOver = true;
+                                    return true;
+                                }
                                 copyBoard(boardPoss, board, piecesPoss, pieces);
                                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(board, pieces);
@@ -754,14 +799,12 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                         cout << "Error (main.cpp 773): That move puts or leaves you in check.\n";
                                         copyBoard(board, boardPoss, pieces, piecesPoss);
                                         update(boardPoss, piecesPoss);
-                                        rook[j]->print();
                                         return false;
                                     }
                                     if (!check(boardPoss, piecesPoss, col)) {
                                         cout << "Error (main.cpp 733): That move is not check, remove the '+' or '#'\n";
                                         copyBoard(board, boardPoss, pieces, piecesPoss);
                                         update(boardPoss, piecesPoss);
-                                        rook[j]->print();
                                         return false;
                                     }
                                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -845,7 +888,6 @@ bool validateRookMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                     update(board, pieces);
                                     update(boardPoss2, piecesPoss2);
-                                    // rook[j]->print();
                                     return true;
                                 }
                             }
@@ -893,6 +935,50 @@ bool check(string (*board)[8], Piece** pieces, char col) {
         }
         return false;
     }
+}
+
+bool stalemate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** pieces1, char col) {
+    copyBoard(board, board1, pieces, pieces1);
+    update(board1, pieces1);
+    char color;
+    if (col == 'W') {
+        color = 'B';
+    } else {
+        color = 'W';
+    }
+    cout << color << endl;
+    for (int i = 0; i < 32; i++) {
+        if (pieces1[i]->color == color) {
+            for (int j = 0; j < pieces1[i]->coveredTiles.size(); j++) {
+                if (board1[pieces1[i]->coveredTiles[j].a[0]][pieces1[i]->coveredTiles[j].a[1]] != "") {
+                    if (board1[pieces[i]->coveredTiles[j].a[0]][pieces1[i]->coveredTiles[j].a[1]][0] != color) {
+                        pieces[i]->move(pieces1[i]->coveredTiles[j].a[0], pieces1[i]->coveredTiles[j].a[1], board1, pieces1);
+                        update(board1, pieces1);
+                        if (!badCheck(board1, pieces1, color)) {
+                            copyBoard(board1, board, pieces1, pieces);
+                            update(board1, pieces1);
+                            return false;
+                        }
+                        copyBoard(board, board1, pieces, pieces1);
+                        update(board1, pieces1);
+                    }
+
+                } else {
+                    pieces1[i]->move(pieces1[i]->coveredTiles[j].a[0], pieces1[i]->coveredTiles[j].a[1], board1, pieces1);
+                    update(board1, pieces1);
+                    if (!badCheck(board1, pieces1, color)) {
+                        copyBoard(board, board1, pieces, pieces1);
+                        update(board1, pieces1);
+                        return false;
+                    }
+                    copyBoard(board, board1, pieces, pieces1);
+                    update(board1, pieces1);
+                }
+                
+            }
+        }
+    }
+    return true;
 }
 
 bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** pieces1, char col) {
@@ -1257,19 +1343,35 @@ void setBoard(string (*board)[8], Piece** pieces) {
     // board[6][1] = "BP";
     // board[6][2] = "BP";
     // board[6][3] = "BP";
-    // board[6][4] = "BP";
+    board[6][4] = "BP";
     // board[6][5] = "BP";
     // board[6][6] = "BP";
     // board[6][7] = "BP";
-    pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
-    pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(7,6,'B');
-    pieces[8] = new Bishop(0,2,'W'), pieces[9] = new Bishop(0,5,'W'), pieces[10] = new Bishop(7,2,'B'), pieces[11] = new Bishop(7,5,'B');
-    pieces[12] = new Queen(0,3,'W'), pieces[13] = new Queen(7,3,'B');
+    // pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
+    // pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(7,6,'B');
+    // pieces[8] = new Bishop(0,2,'W'), pieces[9] = new Bishop(0,5,'W'), pieces[10] = new Bishop(7,2,'B'), pieces[11] = new Bishop(7,5,'B');
+    // pieces[12] = new Queen(0,3,'W'), pieces[13] = new Queen(7,3,'B');
+    // pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
+    // for (int i=0; i<8; i++) {
+    //     pieces[i+16] = new Pawn(1,i,'W');
+    //     pieces[i+24] = new Pawn(6,i,'B');
+    // }
+    pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(8,8,'B'), pieces[3] = new Rook(7,7,'B');
+    pieces[4] = new Knight(8,8,'W'), pieces[5] = new Knight(8,8,'W'), pieces[6] = new Knight(8,8,'B'), pieces[7] = new Knight(8,8,'B');
+    pieces[8] = new Bishop(8,8,'W'), pieces[9] = new Bishop(8,8,'W'), pieces[10] = new Bishop(8,8,'B'), pieces[11] = new Bishop(8,8,'B');
+    pieces[12] = new Queen(8,8,'W'), pieces[13] = new Queen(8,8,'B');
     pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
-    for (int i=0; i<8; i++) {
-        pieces[i+16] = new Pawn(1,i,'W');
-        pieces[i+24] = new Pawn(6,i,'B');
+    for (int i=0; i<4; i++) {
+        pieces[i+16] = new Pawn(1,8,'W');
+        pieces[i+24] = new Pawn(6,8,'B');
     }
+    pieces[20] = new Pawn(1,4,'W');
+    pieces[28] = new Pawn(6,4,'B');
+    for (int i=5; i<8; i++) {
+        pieces[i+16] = new Pawn(8,8,'W');
+        pieces[i+24] = new Pawn(8,8,'B');
+    }
+
 }
 
 void printBoard(string (*board)[8]) {
