@@ -9,11 +9,139 @@ Bishop::Bishop(int x, int y, char col) {
 }
 
 bool Bishop::moveIsValid(int x, int y, string (*board)[8]) {
-    return true;
+    if (x > posx) {
+        int j = posx+1;
+        if (y < posy) {
+            if (x-posx != fabs(y-posy)) {
+                return false;
+            }
+            for (int i = posy-1; i >= y; i--) {
+                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
+                if (board[j][i] != "") {
+                    return false;
+                }
+                j++;
+            }
+            return true;
+        } else {
+            if (x-posx != y-posy) {
+                return false;
+            }
+            for (int i = posy+1; i <= y; i++) {
+                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
+                if (board[j][i] != "") {
+                    return false;
+                }
+                j++;
+            }
+            return true;
+        }
+    } else if (x < posx) {
+        int j = posx-1;
+        if (y < posy) {
+            if (x-posx != y-posy) {
+                return false;
+            }
+            for (int i = posy-1; i >= y; i--) {
+                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
+                if (board[j][i] != "") {
+                    return false;
+                }
+                j--;
+            }
+            return true;
+        } else {
+            if (fabs(x-posx) != y-posy) {
+                return false;
+            }
+            for (int i = posy+1; i <= y; i++) {
+                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
+                if (board[j][i] != "") {
+                    return false;
+                }
+                j--;
+            }
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 
 bool Bishop::captureIsValid(int x, int y, string (*board)[8]) {
-    return true;
+    if (x > posx) {
+        int j = posx+1;
+        if (y < posy) {
+            if (x-posx != fabs(y-posy)) {
+                return false;
+            }
+            for (int i = posy-1; i > y; i--) {
+                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
+                if (board[j][i] != "") {
+                    return false;
+                }
+                j++;
+            }
+            if (board[x][y] == "" || board[x][y][0] == color) {
+                cout << "Error(Rook.cpp 62): No capturable piece found\n";
+                return false;
+            }
+            return true;
+        } else {
+            if (x-posx != y-posy) {
+                return false;
+            }
+            for (int i = posy+1; i < y; i++) {
+                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
+                if (board[j][i] != "") {
+                    return false;
+                }
+                j++;
+            }
+            if (board[x][y] == "" || board[x][y][0] == color) {
+                cout << "Error(Rook.cpp 62): No capturable piece found\n";
+                return false;
+            }
+            return true;
+        }
+    } else if (x < posx) {
+        int j = posx-1;
+        if (y < posy) {
+            if (x-posx != y-posy) {
+                return false;
+            }
+            for (int i = posy-1; i > y; i--) {
+                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
+                if (board[j][i] != "") {
+                    return false;
+                }
+                j--;
+            }
+            if (board[x][y] == "" || board[x][y][0] == color) {
+                cout << "Error(Rook.cpp 62): No capturable piece found\n";
+                return false;
+            }
+            return true;
+        } else {
+            if (fabs(x-posx) != y-posy) {
+                return false;
+            }
+            for (int i = posy+1; i < y; i++) {
+                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
+                if (board[j][i] != "") {
+                    return false;
+                }
+                j--;
+            }
+            if (board[x][y] == "" || board[x][y][0] == color) {
+                cout << "Error(Rook.cpp 62): No capturable piece found\n";
+                return false;
+            }
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 
 void Bishop::move(int x, int y, string (*board)[8], Piece** pieces) {

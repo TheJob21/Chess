@@ -8,7 +8,6 @@ bool Rook::moveIsValid(int x, int y, string (*board)[8]) {
             return false;
         } else if (y < posy) {
             for (int i = posy-1; i >= y; i--) {
-                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
                 if (board[x][i] != "") {
                     return false;
                 }
@@ -16,7 +15,6 @@ bool Rook::moveIsValid(int x, int y, string (*board)[8]) {
             return true;
         } else {
             for (int i = posy+1; i <= y; i++) {
-                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
                 if (board[x][i] != "") {
                     return false;
                 }
@@ -26,7 +24,6 @@ bool Rook::moveIsValid(int x, int y, string (*board)[8]) {
     } else if (y == posy) {
         if (x < posx) {
             for (int i = posx-1; i >= x; i--) {
-                //cout << "tile[" << i << "][" << y << "]=" << board[i][y] << endl;
                 if (board[i][y] != "") {
                     return false;
                 }
@@ -34,7 +31,6 @@ bool Rook::moveIsValid(int x, int y, string (*board)[8]) {
             return true;
         } else {
             for (int i = posx+1; i <= x; i++) {
-                //cout << "tile[" << i << "][" << y << "]=" << board[i][y] << endl;
                 if (board[i][y] != "") {
                     return false;
                 }
