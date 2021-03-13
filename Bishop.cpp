@@ -83,7 +83,7 @@ bool Bishop::captureIsValid(int x, int y, string (*board)[8]) {
                 j++;
             }
             if (board[x][y] == "" || board[x][y][0] == color) {
-                cout << "Error(Rook.cpp 62): No capturable piece found\n";
+                cout << "Error(Bishop.cpp 86): No capturable piece found\n";
                 return false;
             }
             return true;
@@ -99,7 +99,7 @@ bool Bishop::captureIsValid(int x, int y, string (*board)[8]) {
                 j++;
             }
             if (board[x][y] == "" || board[x][y][0] == color) {
-                cout << "Error(Rook.cpp 62): No capturable piece found\n";
+                cout << "Error(Bishop.cpp 102): No capturable piece found\n";
                 return false;
             }
             return true;
@@ -118,7 +118,7 @@ bool Bishop::captureIsValid(int x, int y, string (*board)[8]) {
                 j--;
             }
             if (board[x][y] == "" || board[x][y][0] == color) {
-                cout << "Error(Rook.cpp 62): No capturable piece found\n";
+                cout << "Error(Bishop.cpp 121): No capturable piece found\n";
                 return false;
             }
             return true;
@@ -134,7 +134,7 @@ bool Bishop::captureIsValid(int x, int y, string (*board)[8]) {
                 j--;
             }
             if (board[x][y] == "" || board[x][y][0] == color) {
-                cout << "Error(Rook.cpp 62): No capturable piece found\n";
+                cout << "Error(Bishop.cpp 137): No capturable piece found\n";
                 return false;
             }
             return true;
@@ -161,21 +161,7 @@ void Bishop::update(string (*board)[8], Piece** pieces) {
     int x = posx-1, y = posy-1;
     Int2 tile;
     while (x >= 0 && y >= 0) { // a1 direction
-        tile.a[0] = x;
-        tile.a[1] = y;
-        coveredTiles.push_back(tile);
-        if (board[x][y] != "") {
-            temp = findPiece(x, y, board, pieces, board[x][y][0]);
-            if (temp->color == color) {
-                temp->defenders.push_back(this);
-                defending.push_back(temp);
-            } else {
-                if (temp->pieceType == 'K') {
-                    temp->inCheck = true;
-                }
-                temp->attackers.push_back(this);
-                attacking.push_back(temp); 
-            }
+        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
             break;
         }
         x--;
@@ -183,21 +169,7 @@ void Bishop::update(string (*board)[8], Piece** pieces) {
     }
     x = posx+1, y = posy-1;
     while (x <= 7 && y >= 0) { // a8 direction
-        tile.a[0] = x;
-        tile.a[1] = y;
-        coveredTiles.push_back(tile);
-        if (board[x][y] != "") {
-            temp = findPiece(x, y, board, pieces, board[x][y][0]);
-            if (temp->color == color) {
-                temp->defenders.push_back(this);
-                defending.push_back(temp);
-            } else {
-                if (temp->pieceType == 'K') {
-                    temp->inCheck = true;
-                }
-                temp->attackers.push_back(this);
-                attacking.push_back(temp); 
-            }
+        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
             break;
         }
         x++;
@@ -205,21 +177,7 @@ void Bishop::update(string (*board)[8], Piece** pieces) {
     }
     x = posx-1, y = posy+1;
     while (x >= 0 && y <= 7) { // h1 direction
-        tile.a[0] = x;
-        tile.a[1] = y;
-        coveredTiles.push_back(tile);
-        if (board[x][y] != "") {
-            temp = findPiece(x, y, board, pieces, board[x][y][0]);
-            if (temp->color == color) {
-                temp->defenders.push_back(this);
-                defending.push_back(temp);
-            } else {
-                if (temp->pieceType == 'K') {
-                    temp->inCheck = true;
-                }
-                temp->attackers.push_back(this);
-                attacking.push_back(temp); 
-            }
+        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
             break;
         }
         x--;
@@ -227,21 +185,7 @@ void Bishop::update(string (*board)[8], Piece** pieces) {
     }
     x = posx+1, y = posy+1;
     while (x <= 7 && y <= 7) { // h8 direction
-        tile.a[0] = x;
-        tile.a[1] = y;
-        coveredTiles.push_back(tile);
-        if (board[x][y] != "") {
-            temp = findPiece(x, y, board, pieces, board[x][y][0]);
-            if (temp->color == color) {
-                temp->defenders.push_back(this);
-                defending.push_back(temp);
-            } else {
-                if (temp->pieceType == 'K') {
-                    temp->inCheck = true;
-                }
-                temp->attackers.push_back(this);
-                attacking.push_back(temp); 
-            }
+        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
             break;
         }
         x++;

@@ -52,3 +52,24 @@ void Piece::print() {
         cout << numToLetter(defenders[i]->posy) << numToChar(defenders[i]->posx) << endl;
     }
 }
+
+bool Piece::addCoveredTile(int x, int y, Piece* temp, Int2 tile, string(*board)[8], Piece** pieces) {
+    tile.a[0] = x;
+    tile.a[1] = y;
+    coveredTiles.push_back(tile);
+    if (board[x][y] != "") {
+        temp = findPiece(x, y, board, pieces, board[x][y][0]);
+        if (temp->color == color) {
+            temp->defenders.push_back(this);
+            defending.push_back(temp);
+        } else {
+            if (temp->pieceType == 'K') {
+                temp->inCheck = true;
+            }
+            temp->attackers.push_back(this);
+            attacking.push_back(temp); 
+        }
+        return true;
+    }
+    return false;
+}

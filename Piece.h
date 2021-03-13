@@ -25,6 +25,7 @@ class Piece {
         virtual bool captureIsValid(int x, int y, string (*board)[8]) = 0;
         virtual void move(int x, int y, string (*board)[8], Piece**) = 0;
         virtual void update(string (*board)[8], Piece** pieces) = 0;
+        bool addCoveredTile(int x, int y, Piece* temp, Int2 tile, string(*board)[8], Piece** pieces);
         void print();
     };
 
