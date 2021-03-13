@@ -4,13 +4,13 @@
 using namespace std;
 
 #include "Piece.h"
+#include "utility.h"
 #include "Rook.h"
 #include "Knight.h"
 #include "Bishop.h"
 #include "Queen.h"
 #include "King.h"
 #include "Pawn.h"
-#include "utility.h"
 #include "Piece.cpp"
 #include "Rook.cpp"
 #include "Knight.cpp"
