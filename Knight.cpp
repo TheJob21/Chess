@@ -9,11 +9,27 @@ Knight::Knight(int x, int y, char col) {
 }
 
 bool Knight::moveIsValid(int x, int y, string (*board)[8]) {
-    return true;
+    for (int i = 0; i < coveredTiles.size(); i++) {
+        if (coveredTiles[i].a[0] == x && coveredTiles[i].a[1] == y) {
+            if (board[x][y] == "") {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 bool Knight::captureIsValid(int x, int y, string (*board)[8]) {
-    return true;
+    for (int i = 0; i < coveredTiles.size(); i++) {
+        if (coveredTiles[i].a[0] == x && coveredTiles[i].a[1] == y) {
+            if (board[x][y] != "") {
+                if (color != board[x][y][0]) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 void Knight::move(int x, int y, string (*board)[8], Piece** pieces) {
@@ -22,9 +38,9 @@ void Knight::move(int x, int y, string (*board)[8], Piece** pieces) {
     posy = y;
     capture(x, y, color, board, pieces);
     if (color == 'W') { // Move White
-        board[x][y] = "WB";
+        board[x][y] = "WN";
     } else { // Move Black
-        board[x][y] = "BB";
+        board[x][y] = "BN";
     }
 }
 

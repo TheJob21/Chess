@@ -1328,12 +1328,12 @@ void copyBoard(string (*b1)[8], string (*b2)[8], Piece** p1, Piece** p2) {
 
 void setBoard(string (*board)[8], Piece** pieces) {
     board[0][0] = "WR";
-    // board[0][1] = "WN";
+    board[0][1] = "WN";
     board[0][2] = "WB";
     // board[0][3] = "WQ";
     board[0][4] = "WK";
     board[0][5] = "WB";
-    // board[0][6] = "WN";
+    board[0][6] = "WN";
     board[0][7] = "WR";
     // board[1][0] = "WP";
     // board[1][1] = "WP";
@@ -1343,13 +1343,13 @@ void setBoard(string (*board)[8], Piece** pieces) {
     // board[1][5] = "WP";
     // board[1][6] = "WP";
     // board[1][7] = "WP";
-    // board[7][0] = "BR";
-    // board[7][1] = "BN";
+    board[7][0] = "BR";
+    board[7][1] = "BN";
     board[7][2] = "BB";
     // board[7][3] = "BQ";
     board[7][4] = "BK";
     board[7][5] = "BB";
-    // board[7][6] = "BN";
+    board[7][6] = "BN";
     board[7][7] = "BR";
     // board[6][0] = "BP";
     // board[6][1] = "BP";
@@ -1368,8 +1368,8 @@ void setBoard(string (*board)[8], Piece** pieces) {
     //     pieces[i+16] = new Pawn(1,i,'W');
     //     pieces[i+24] = new Pawn(6,i,'B');
     // }
-    pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(8,8,'B'), pieces[3] = new Rook(7,7,'B');
-    pieces[4] = new Knight(8,8,'W'), pieces[5] = new Knight(8,8,'W'), pieces[6] = new Knight(8,8,'B'), pieces[7] = new Knight(8,8,'B');
+    pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
+    pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(7,6,'B');
     pieces[8] = new Bishop(0,2,'W'), pieces[9] = new Bishop(0,5,'W'), pieces[10] = new Bishop(7,2,'B'), pieces[11] = new Bishop(7,5,'B');
     pieces[12] = new Queen(8,8,'W'), pieces[13] = new Queen(8,8,'B');
     pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
