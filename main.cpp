@@ -24,8 +24,7 @@ void setBoard(string (*)[8], Piece**);
 void copyBoard(string (*)[8], string (*)[8], Piece**, Piece**);
 char blackOrWhite(char);
 char computerOrHuman(char);
-string validateKingMove(string);
-string validatePawnMove(string);
+bool validatePawnMove(string, string (*)[8], string (*)[8], string (*)[8], Piece**, Piece**, Piece** , char, bool &);
 int letterToNum(char);
 int charToNum(char);
 void updateAtkDef(string (*)[8], Piece**);
@@ -87,7 +86,11 @@ int main()
                     cout << "Please enter a correct move ";
                     cin >> move;        
                 } else if (move[0] == 'a' || move[0] == 'b' || move[0] == 'c' || move[0] == 'd' || move[0] == 'e' || move[0] == 'f' || move[0] == 'g' || move[0] == 'h') { // Pawn move
-
+                    if (!validatePawnMove(move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver)) {
+                        cin >> move;
+                    } else {
+                        isValid = true;
+                    }
                 } else if (move[0] == '0') { // Castling
 
                 } else {
@@ -111,7 +114,11 @@ int main()
                     cout << "Please enter a correct move ";
                     cin >> move;        
                 } else if (move[0] == 'a' || move[0] == 'b' || move[0] == 'c' || move[0] == 'd' || move[0] == 'e' || move[0] == 'f' || move[0] == 'g' || move[0] == 'h') { // Pawn move
-
+                    if (!validatePawnMove(move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver)) {
+                        cin >> move;
+                    } else {
+                        isValid = true;
+                    }
                 } else if (move[0] == '0') { // Castling
 
                 } else {
@@ -277,7 +284,6 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                         gameOver = true;
                         return true;
                     }
-                    pieces[j]->print();
                     copyBoard(boardPoss, board, piecesPoss, pieces);
                     update(board, pieces);
                     return true;
@@ -797,7 +803,7 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
             }
         }
     } else if (move.size() == 6) {
-        if (move[5] == '+' || move[4] == '#') { // Specify, Capture, and Check/mate
+        if (move[5] == '+' || move[5] == '#') { // Specify, Capture, and Check/mate
             if (move[2] == 'x') {
                 if (letterToNum(move[1]) != 8) { // Capture, check, and specify by file
                     int file = letterToNum(move[1]);
@@ -1308,12 +1314,499 @@ bool checkValidKingMove(int king, string (*board)[8], string (*board1)[8], Piece
     return false;
 }
 
-string validateKingMove(string) {
-    return "";
-}
-
-string validatePawnMove(string) {
-    return "";
+bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], string (*boardPoss2)[8], Piece** pieces, Piece** piecesPoss, Piece** piecesPoss2, char col, bool &gameOver) {
+    vector<Piece*> piece;
+    int i, pawns;
+    if (col == 'W') {
+        i = 16;
+    } else {
+        i = 24;
+    }
+    pawns = i + 8;
+    while (i < pawns) {
+        if (piecesPoss[i]->pieceType == 'P') { // Check for pawns promoted to pieces
+            if (piecesPoss[i]->posx != 8) { // Check if piece is captured
+                piece.push_back(piecesPoss[i]);
+            }
+        }
+        i++;
+    }
+    if (piece.size() <= 0) {
+        cout << "Error (main.cpp 1328): You do not have any uncaptured pieces of type " << move[0] << ".\n";
+        return false;
+    }
+    int x, y;
+    if (move.size() == 2) { // Normal move
+        y = letterToNum(move[0]);
+        x = charToNum(move[1]);
+        if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
+            cout << "Error (main.cpp 1336): Please choose a square on the board.\n";
+            return false;
+        } else {
+            for (int j = 0; j < piece.size(); j++) {
+                if (piece[j]->moveIsValid(x, y, board)) { // Check if move is valid
+                    piece[j]->move(x,y, boardPoss, piecesPoss);
+                    update(boardPoss, piecesPoss);
+                    if (badCheck(boardPoss, piecesPoss, col)) {
+                        cout << "Error (main.cpp 1344): That move puts or leaves you in check.\n";
+                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                        update(boardPoss, piecesPoss);
+                        return false;
+                    }
+                    if (check(boardPoss, piecesPoss, col)) {
+                        cout << "Error (main.cpp 1350): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
+                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                        update(boardPoss, piecesPoss);
+                        return false;
+                    }
+                    if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                        copyBoard(boardPoss, board, piecesPoss, pieces);
+                        update(board, pieces);
+                        cout << "Stalemate!\n";
+                        gameOver = true;
+                        return true;
+                    }
+                    copyBoard(boardPoss, board, piecesPoss, pieces);
+                    update(board, pieces);
+                    return true;
+                }
+            }
+            cout << "Error (main.cpp 1367): Move was invalid.\n";
+            return false;
+        }
+    } else if (move.size() == 3) {
+        if (move[2] == '+' || move[2] == '#') { // Move is Check or Mate
+            y = letterToNum(move[0]);
+            x = charToNum(move[1]);
+            if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
+                cout << "Error (main.cpp 1374): Please choose a square on the board.\n";
+                return false;
+            } else {
+                for (int j = 0; j < piece.size(); j++) {
+                    if (piece[j]->moveIsValid(x, y, boardPoss)) { // Check if move is valid
+                        piece[j]->move(x,y, boardPoss, piecesPoss);
+                        update(boardPoss, piecesPoss);
+                        if (badCheck(boardPoss, piecesPoss, col)) {
+                            cout << "Error (main.cpp 1382): That move puts or leaves you in check.\n";
+                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                            update(boardPoss, piecesPoss);
+                            return false;
+                        }
+                        if (!check(boardPoss, piecesPoss, col)) {
+                            cout << "Error (main.cpp 1388): That move is not check, remove the  '+' or '#'\n";
+                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                            update(boardPoss, piecesPoss);
+                            return false;
+                        }
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(boardPoss2, piecesPoss2);
+                        if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                            if (move[3] == '#') {
+                                cout << "Checkmate!\n";
+                                copyBoard(boardPoss, board, piecesPoss, pieces);
+                                update(board, pieces);
+                                gameOver = true;
+                                return true;
+                            } else {
+                                cout << "Error (main.cpp 1403): That move is checkmate, please use '#' at the end.\n";
+                                copyBoard(board, boardPoss, pieces, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                update(boardPoss2, piecesPoss2);
+                                return false;
+                            }
+                        }
+                        copyBoard(boardPoss, board, piecesPoss, pieces);
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(board, pieces);
+                        update(boardPoss2, piecesPoss2);
+                        return true;
+                    }
+                }
+                cout << "Error (main.cpp 1418): Move is invalid.\n";
+                return false;
+            }
+        } else if (move[2] == 'Q' || move[2] == 'N' || move[2] == 'R' || move[2] == 'B') { // Pawn Promotion
+            y = letterToNum(move[0]);
+            x = charToNum(move[1]);
+            if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
+                cout << "Error (main.cpp 1425): Please choose a square on the board.\n";
+                return false;
+            } else if (col == 'W' && x != 7) {
+                cout << "Error (main.cpp 1428): You cannot promote until you reach the other end of the board.\n";
+                return false;
+            } else if ((col == 'B' && x != 0)) {
+                cout << "Error (main.cpp 1431): You cannot promote until you reach the other end of the board.\n";
+                return false;
+            } else {
+                for (int j = 0; j < piece.size(); j++) {
+                    if (piece[j]->moveIsValid(x, y, boardPoss)) { // Check if move is valid
+                        piece[j]->move(x,y, boardPoss, piecesPoss);
+                        if (move[2] == 'Q') { // Promote pawn
+                            piece[j] = new Queen(x, y, col);
+                        } else if (move[2] == 'N') {
+                            piece[j] = new Knight(x, y, col);
+                        } else if (move[2] == 'R') {
+                            piece[j] = new Rook(x, y, col);
+                        } else {
+                            piece[j] = new Bishop(x, y, col);
+                        }
+                        update(boardPoss, piecesPoss);
+                        if (badCheck(boardPoss, piecesPoss, col)) {
+                            cout << "Error (main.cpp 1433): That move puts or leaves you in check.\n";
+                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                            update(boardPoss, piecesPoss);
+                            return false;
+                        }
+                        if (check(boardPoss, piecesPoss, col)) {
+                            cout << "Error (main.cpp 1453): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
+                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                            update(boardPoss, piecesPoss);
+                            return false;
+                        }
+                        if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                            copyBoard(boardPoss, board, piecesPoss, pieces);
+                            update(board, pieces);
+                            cout << "Stalemate!\n";
+                            gameOver = true;
+                            return true;
+                        }
+                        copyBoard(boardPoss, board, piecesPoss, pieces);
+                        update(board, pieces);
+                        return true;
+                    }
+                }
+                cout << "Error (main.cpp 1470): Move is invalid.\n";
+                return false;
+            }
+        } else {
+            cout << "Error (main.cpp 1474): Make a valid move.\n";
+            return false;
+        }
+    } else if (move.size() == 4) {
+        if (letterToNum(move[0]) != 8) { // Specified by file
+            if (move[1] == 'x') { // Specify and capture
+                int file = letterToNum(move[1]);
+                y = letterToNum(move[2]);
+                x = charToNum(move[3]);
+                if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
+                    cout << "Error (main.cpp 1484): Please choose a square on the board.\n";
+                    return false;
+                } else {
+                    for (int j = 0; j < piece.size(); j++) {
+                        if (piece[j]->posy == file) { // Check if specified file checks out
+                            if (piece[j]->captureIsValid(x, y, boardPoss)) { // Check if move is valid
+                                piece[j]->move(x,y, boardPoss, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                if (badCheck(boardPoss, piecesPoss, col)) {
+                                    cout << "Error (main.cpp 1493): That move puts or leaves you in check.\n";
+                                    copyBoard(board, boardPoss, pieces, piecesPoss);
+                                    update(boardPoss, piecesPoss);
+                                    return false;
+                                }
+                                if (check(boardPoss, piecesPoss, col)) {
+                                cout << "Error (main.cpp 1499): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
+                                copyBoard(board, boardPoss, pieces, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                return false;
+                            }
+                            if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                                copyBoard(boardPoss, board, piecesPoss, pieces);
+                                update(board, pieces);
+                                cout << "Stalemate!\n";
+                                gameOver = true;
+                                return true;
+                            }
+                            copyBoard(boardPoss, board, piecesPoss, pieces);
+                            update(board, pieces);
+                            return true;
+                            }
+                        }
+                    }
+                    cout << "Error (main.cpp 541): You do not have any pawn on the specified file that can move there.\n";
+                    return false;
+                }
+            }
+        } else if (move[3] == '+' || move[3] == '#') { // Check/mate
+            if (move[2] == 'Q' || move[2] == 'N' || move[2] == 'R' || move[2] == 'B') { // Pawn Promotion
+                y = letterToNum(move[0]);
+                x = charToNum(move[1]);
+                if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
+                    cout << "Error (main.cpp 1526): Please choose a square on the board.\n";
+                    return false;
+                } else if (col == 'W' && x != 7) {
+                    cout << "Error (main.cpp 1529): You cannot promote until you reach the other end of the board.\n";
+                    return false;
+                } else if ((col == 'B' && x != 0)) {
+                    cout << "Error (main.cpp 1533): You cannot promote until you reach the other end of the board.\n";
+                    return false;
+                } else {
+                    for (int j = 0; j < piece.size(); j++) {
+                        if (piece[j]->moveIsValid(x, y, boardPoss)) { // Check if move is valid
+                            piece[j]->move(x,y, boardPoss, piecesPoss);
+                            if (move[2] == 'Q') { // Promote pawn
+                                piece[j] = new Queen(x, y, col);
+                            } else if (move[2] == 'N') {
+                                piece[j] = new Knight(x, y, col);
+                            } else if (move[2] == 'R') {
+                                piece[j] = new Rook(x, y, col);
+                            } else {
+                                piece[j] = new Bishop(x, y, col);
+                            } 
+                            update(boardPoss, piecesPoss);
+                            if (badCheck(boardPoss, piecesPoss, col)) {
+                                cout << "Error (main.cpp 1534): That move puts or leaves you in check.\n";
+                                copyBoard(board, boardPoss, pieces, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                return false;
+                            }
+                            if (!check(boardPoss, piecesPoss, col)) { // Ensure Check
+                                cout << "Error (main.cpp 1554): That move is not check, remove the  '+' or '#'\n";
+                                copyBoard(board, boardPoss, pieces, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                return false;
+                            }
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                            update(boardPoss2, piecesPoss2);
+                            if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                                if (move[3] == '#') {
+                                    cout << "Checkmate!\n";
+                                    copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    update(board, pieces);
+                                    gameOver = true;
+                                    return true;
+                                } else {
+                                    cout << "Error (main.cpp 1403): That move is checkmate, please use '#' at the end.\n";
+                                    copyBoard(board, boardPoss, pieces, piecesPoss);
+                                    update(boardPoss, piecesPoss);
+                                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                    update(boardPoss2, piecesPoss2);
+                                    return false;
+                                }
+                            }
+                            copyBoard(boardPoss, board, piecesPoss, pieces);
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                            update(board, pieces);
+                            update(boardPoss2, piecesPoss2);
+                            return true;
+                        }
+                    }
+                    cout << "Error (main.cpp 1579): Move is invalid.\n";
+                    return false;
+                }
+            } else {
+                cout << "Error (main.cpp 1583): Select a legitimate piece for promotion (i.e. 'e8Q+' or 'd1N#').\n";
+                return false;
+            }
+        }
+    } else if (move.size() == 5) {
+        if (move[4] == '+' || move[4] == '#') { // Specify, Capture, and Check/mate
+            if (move[1] == 'x') {
+                if (letterToNum(move[0]) != 8) { // Capture, check, and specify by file
+                    int file = letterToNum(move[0]);
+                    y = letterToNum(move[2]);
+                    x = charToNum(move[3]);
+                    if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
+                        cout << "Error (main.cpp 1607): Please choose a square on the board.\n";
+                        return false;
+                    } else {
+                        for (int j = 0; j < piece.size(); j++) {
+                            if (piece[j]->posy == file) { // Check if specified file checks out
+                                if (piece[j]->captureIsValid(x, y, board)) { // Check if move is valid
+                                    piece[j]->move(x,y, boardPoss, piecesPoss);
+                                    update(boardPoss, piecesPoss);
+                                    if (badCheck(boardPoss, piecesPoss, col)) {
+                                        cout << "Error (main.cpp 1617): That move puts or leaves you in check.\n";
+                                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                                        update(boardPoss, piecesPoss);
+                                        return false;
+                                    }
+                                    if (!check(boardPoss, piecesPoss, col)) {
+                                        cout << "Error (main.cpp 1623): That move is not check, remove the '+' or '#'\n";
+                                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                                        update(boardPoss, piecesPoss);
+                                        return false;
+                                    }
+                                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                    update(boardPoss2, piecesPoss2);
+                                    if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                                        if (move[4] == '#') {
+                                            cout << "Checkmate!\n";
+                                            copyBoard(boardPoss, board, piecesPoss, pieces);
+                                            update(board, pieces);gameOver = true;
+                                            gameOver = true;
+                                            return true;
+                                        } else {
+                                            cout << "Error (main.cpp 1638): That move is checkmate, please use '#' at the end.\n";
+                                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                                            update(boardPoss, piecesPoss);
+                                            copyBoard(board, boardPoss2, pieces, piecesPoss2);
+                                            update(boardPoss2, piecesPoss2);
+                                            return false;
+                                        }
+                                    }
+                                    copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                    update(board, pieces);
+                                    update(boardPoss2, piecesPoss2);
+                                    return true;
+                                }
+                            }
+                        }
+                        cout << "Error (main.cpp 1656): You do not have any piece of type '" << move[0] << "' on the specified file that can move there.\n";
+                        return false;
+                    }
+                } 
+            }
+            cout << "Error (main.cpp 1653): Please make a valid move";
+            return false;
+        } else if (move[4] == 'Q' || move[4] == 'N' || move[4] == 'R' || move[4] == 'B') { // Specify, Capture, and Promotion
+            if (move[1] == 'x') {
+                if (letterToNum(move[0]) != 8) { // Capture, promote, and specify by file
+                    int file = letterToNum(move[0]);
+                    y = letterToNum(move[2]);
+                    x = charToNum(move[3]);
+                    if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
+                        cout << "Error (main.cpp 1670): Please choose a square on the board.\n";
+                        return false;
+                    } else if (col == 'W' && x != 7) {
+                        cout << "Error (main.cpp 1673): You cannot promote until you reach the other end of the board.\n";
+                        return false;
+                    } else if ((col == 'B' && x != 0)) {
+                        cout << "Error (main.cpp 1676): You cannot promote until you reach the other end of the board.\n";
+                        return false;
+                    } else {
+                        for (int j = 0; j < piece.size(); j++) {
+                            if (piece[j]->posy == file) { // Check if specified file checks out
+                                if (piece[j]->captureIsValid(x, y, board)) { // Check if move is valid
+                                    piece[j]->move(x,y, boardPoss, piecesPoss);
+                                    if (move[2] == 'Q') { // Promote pawn
+                                        piece[j] = new Queen(x, y, col);
+                                    } else if (move[2] == 'N') {
+                                        piece[j] = new Knight(x, y, col);
+                                    } else if (move[2] == 'R') {
+                                        piece[j] = new Rook(x, y, col);
+                                    } else {
+                                        piece[j] = new Bishop(x, y, col);
+                                    }
+                                    update(boardPoss, piecesPoss);
+                                    if (badCheck(boardPoss, piecesPoss, col)) {
+                                        cout << "Error (main.cpp 773): That move puts or leaves you in check.\n";
+                                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                                        update(boardPoss, piecesPoss);
+                                        return false;
+                                    }
+                                    if (check(boardPoss, piecesPoss, col)) {
+                                        cout << "Error (main.cpp 1453): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
+                                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                                        update(boardPoss, piecesPoss);
+                                        return false;
+                                    }
+                                    if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                                        copyBoard(boardPoss, board, piecesPoss, pieces);
+                                        update(board, pieces);
+                                        cout << "Stalemate!\n";
+                                        gameOver = true;
+                                        return true;
+                                    }
+                                    copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    update(board, pieces);
+                                    return true;
+                                }
+                            }
+                        }
+                        cout << "Error (main.cpp 1710): You do not have any piece of type '" << move[0] << "' on the specified file that can move there.\n";
+                        return false;
+                    }
+                } 
+            }
+            cout << "Error (main.cpp 1715): Please make a valid move";
+            return false;
+        }
+    } else if (move.size() == 6) {
+        if (move[5] == '+' || move[5] == '#') { // Specify, Capture, Promote, and Check/mate
+            if (move[1] == 'x') { // Capture
+                if (letterToNum(move[0]) != 8) { // Specify by file
+                    if (move[4] == 'Q' || move[4] == 'N' || move[4] == 'R' || move[4] == 'B') { // Promotion
+                        int file = letterToNum(move[0]);
+                        y = letterToNum(move[2]);
+                        x = charToNum(move[3]);
+                        if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
+                            cout << "Error (main.cpp 1727): Please choose a square on the board.\n";
+                            return false;
+                        } else if (col == 'W' && x != 7) {
+                            cout << "Error (main.cpp 1730): You cannot promote until you reach the other end of the board.\n";
+                            return false;
+                        } else if ((col == 'B' && x != 0)) {
+                            cout << "Error (main.cpp 1733): You cannot promote until you reach the other end of the board.\n";
+                            return false;
+                        } else {
+                            for (int j = 0; j < piece.size(); j++) {
+                                if (piece[j]->posy == file) { // Check if specified file checks out
+                                    if (piece[j]->captureIsValid(x, y, board)) { // Check if move is valid
+                                        piece[j]->move(x,y, boardPoss, piecesPoss);
+                                        if (move[2] == 'Q') { // Promote pawn
+                                            piece[j] = new Queen(x, y, col);
+                                        } else if (move[2] == 'N') {
+                                            piece[j] = new Knight(x, y, col);
+                                        } else if (move[2] == 'R') {
+                                            piece[j] = new Rook(x, y, col);
+                                        } else {
+                                            piece[j] = new Bishop(x, y, col);
+                                        }
+                                        update(boardPoss, piecesPoss);
+                                        if (badCheck(boardPoss, piecesPoss, col)) {
+                                            cout << "Error (main.cpp 1617): That move puts or leaves you in check.\n";
+                                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                                            update(boardPoss, piecesPoss);
+                                            return false;
+                                        }
+                                        if (!check(boardPoss, piecesPoss, col)) {
+                                            cout << "Error (main.cpp 1623): That move is not check, remove the '+' or '#'\n";
+                                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                                            update(boardPoss, piecesPoss);
+                                            return false;
+                                        }
+                                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                        update(boardPoss2, piecesPoss2);
+                                        if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                                            if (move[4] == '#') {
+                                                cout << "Checkmate!\n";
+                                                copyBoard(boardPoss, board, piecesPoss, pieces);
+                                                update(board, pieces);gameOver = true;
+                                                gameOver = true;
+                                                return true;
+                                            } else {
+                                                cout << "Error (main.cpp 1638): That move is checkmate, please use '#' at the end.\n";
+                                                copyBoard(board, boardPoss, pieces, piecesPoss);
+                                                update(boardPoss, piecesPoss);
+                                                copyBoard(board, boardPoss2, pieces, piecesPoss2);
+                                                update(boardPoss2, piecesPoss2);
+                                                return false;
+                                            }
+                                        }
+                                        copyBoard(boardPoss, board, piecesPoss, pieces);
+                                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                        update(board, pieces);
+                                        update(boardPoss2, piecesPoss2);
+                                        return true;
+                                    }
+                                }
+                            }
+                            cout << "Error (main.cpp 1788): You do not have any piece of type '" << move[0] << "' on the specified file that can move there.\n";
+                            return false;
+                        }
+                    }
+                } 
+            }
+            cout << "Error (main.cpp 1794): Please make a valid move";
+            return false;
+        } 
+    } else {
+        cout << "Error (main.cpp 1798): Please make a valid move";
+        return false;
+    }
+    return false;
 }
 
 void copyBoard(string (*b1)[8], string (*b2)[8], Piece** p1, Piece** p2) {
@@ -1336,14 +1829,7 @@ void setBoard(string (*board)[8], Piece** pieces) {
     board[0][5] = "WB";
     board[0][6] = "WN";
     board[0][7] = "WR";
-    // board[1][0] = "WP";
-    // board[1][1] = "WP";
-    // board[1][2] = "WP";
-    // board[1][3] = "WP";
-    // board[1][4] = "WP";
-    // board[1][5] = "WP";
-    // board[1][6] = "WP";
-    // board[1][7] = "WP";
+    board[1][0] = "WP";
     board[7][0] = "BR";
     board[7][1] = "BN";
     board[7][2] = "BB";
@@ -1352,43 +1838,43 @@ void setBoard(string (*board)[8], Piece** pieces) {
     board[7][5] = "BB";
     board[7][6] = "BN";
     board[7][7] = "BR";
-    // board[6][0] = "BP";
-    // board[6][1] = "BP";
-    // board[6][2] = "BP";
-    // board[6][3] = "BP";
+    board[6][0] = "BP";
+    board[6][1] = "BP";
+    board[6][2] = "BP";
+    board[6][3] = "BP";
     board[6][4] = "BP";
-    // board[6][5] = "BP";
-    // board[6][6] = "BP";
-    // board[6][7] = "BP";
-    // pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
-    // pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(7,6,'B');
-    // pieces[8] = new Bishop(0,2,'W'), pieces[9] = new Bishop(0,5,'W'), pieces[10] = new Bishop(7,2,'B'), pieces[11] = new Bishop(7,5,'B');
-    // pieces[12] = new Queen(0,3,'W'), pieces[13] = new Queen(7,3,'B');
-    // pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
-    // for (int i=0; i<8; i++) {
-    //     pieces[i+16] = new Pawn(1,i,'W');
-    //     pieces[i+24] = new Pawn(6,i,'B');
-    // }
+    board[6][5] = "BP";
+    board[6][6] = "BP";
+    board[6][7] = "BP";
     pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
     pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(7,6,'B');
     pieces[8] = new Bishop(0,2,'W'), pieces[9] = new Bishop(0,5,'W'), pieces[10] = new Bishop(7,2,'B'), pieces[11] = new Bishop(7,5,'B');
     pieces[12] = new Queen(0,3,'W'), pieces[13] = new Queen(7,3,'B');
     pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
-    for (int i=0; i<4; i++) {
-        pieces[i+16] = new Pawn(1,8,'W');
-        pieces[i+24] = new Pawn(6,8,'B');
+    for (int i=0; i<8; i++) {
+        pieces[i+16] = new Pawn(1,i,'W');
+        pieces[i+24] = new Pawn(6,i,'B');
     }
-    pieces[20] = new Pawn(1,4,'W');
-    pieces[28] = new Pawn(6,4,'B');
-    for (int i=5; i<8; i++) {
-        pieces[i+16] = new Pawn(8,8,'W');
-        pieces[i+24] = new Pawn(8,8,'B');
-    }
+    // pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
+    // pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(7,6,'B');
+    // pieces[8] = new Bishop(0,2,'W'), pieces[9] = new Bishop(0,5,'W'), pieces[10] = new Bishop(7,2,'B'), pieces[11] = new Bishop(7,5,'B');
+    // pieces[12] = new Queen(0,3,'W'), pieces[13] = new Queen(7,3,'B');
+    // pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
+    // for (int i=0; i<4; i++) {
+    //     pieces[i+16] = new Pawn(1,8,'W');
+    //     pieces[i+24] = new Pawn(6,8,'B');
+    // }
+    // pieces[20] = new Pawn(1,4,'W');
+    // pieces[28] = new Pawn(6,4,'B');
+    // for (int i=5; i<8; i++) {
+    //     pieces[i+16] = new Pawn(8,8,'W');
+    //     pieces[i+24] = new Pawn(8,8,'B');
+    // }
 
 }
 
 void printBoard(string (*board)[8]) {
-    cout << "  _________________________________________\n";
+    cout << "  ________________________\n";
     for (int i = 7; i >= 0; i--) {
         cout << i+1 << " ";
         for (int j = 0; j < 8; j++) {
