@@ -275,7 +275,7 @@ void capture(int x, int y, char color, string (*board)[8], Piece** pieces) {
                     }
                 } 
             } else { // Capture Queen
-                if (pieces[12]->posx == x && pieces[13]->posy == y) {
+                if (pieces[12]->posx == x && pieces[12]->posy == y) {
                     pieces[12]->posx = 8;
                     pieces[12]->posy = 8;
                 }

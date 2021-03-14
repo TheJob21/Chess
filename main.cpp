@@ -5,6 +5,7 @@ using namespace std;
 
 #include "Piece.h"
 #include "utility.h"
+#include "utility.cpp"
 #include "Rook.h"
 #include "Knight.h"
 #include "Bishop.h"
@@ -18,7 +19,6 @@ using namespace std;
 #include "Queen.cpp"
 #include "King.cpp"
 #include "Pawn.cpp"
-#include "utility.cpp"
 
 void setBoard(string (*)[8], Piece**);
 void copyBoard(string (*)[8], string (*)[8], Piece**, Piece**);
@@ -277,6 +277,7 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                         gameOver = true;
                         return true;
                     }
+                    pieces[j]->print();
                     copyBoard(boardPoss, board, piecesPoss, pieces);
                     update(board, pieces);
                     return true;
@@ -1330,7 +1331,7 @@ void setBoard(string (*board)[8], Piece** pieces) {
     board[0][0] = "WR";
     board[0][1] = "WN";
     board[0][2] = "WB";
-    // board[0][3] = "WQ";
+    board[0][3] = "WQ";
     board[0][4] = "WK";
     board[0][5] = "WB";
     board[0][6] = "WN";
@@ -1346,7 +1347,7 @@ void setBoard(string (*board)[8], Piece** pieces) {
     board[7][0] = "BR";
     board[7][1] = "BN";
     board[7][2] = "BB";
-    // board[7][3] = "BQ";
+    board[7][3] = "BQ";
     board[7][4] = "BK";
     board[7][5] = "BB";
     board[7][6] = "BN";
@@ -1371,7 +1372,7 @@ void setBoard(string (*board)[8], Piece** pieces) {
     pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
     pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(7,6,'B');
     pieces[8] = new Bishop(0,2,'W'), pieces[9] = new Bishop(0,5,'W'), pieces[10] = new Bishop(7,2,'B'), pieces[11] = new Bishop(7,5,'B');
-    pieces[12] = new Queen(8,8,'W'), pieces[13] = new Queen(8,8,'B');
+    pieces[12] = new Queen(0,3,'W'), pieces[13] = new Queen(7,3,'B');
     pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
     for (int i=0; i<4; i++) {
         pieces[i+16] = new Pawn(1,8,'W');
@@ -1392,12 +1393,12 @@ void printBoard(string (*board)[8]) {
         cout << i+1 << " ";
         for (int j = 0; j < 8; j++) {
             if (board[i][j] != "") {
-                cout << "|_" << board[i][j] << "_";
+                cout << "|" << board[i][j] << "";
             } else {
-                cout << "|____";
+                cout << "|__";
             }
         }
         cout << "|\n";
     }
-    cout << "     a    b    c    d    e    f    g    h\n";
+    cout << "   a  b  c  d  e  f  g  h\n";
 }

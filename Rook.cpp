@@ -48,27 +48,23 @@ bool Rook::captureIsValid(int x, int y, string (*board)[8]) {
             return false;
         } else if (y < posy) {
             for (int i = posy-1; i > y; i--) {
-                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
                 if (board[x][i] != "") {
                     return false;
                 }
             }
-            //cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
             if (board[x][y] == "" || board[x][y][0] == color) {
-                cout << "Error(Rook.cpp 62): No capturable piece found\n";
+                cout << "Error(Rook.cpp 56): No capturable piece found\n";
                 return false;
             }
             return true;
         } else {
             for (int i = posy+1; i < y; i++) {
-                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
                 if (board[x][i] != "") {
                     return false;
                 }
             }
-            //cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
             if (board[x][y] == "" || board[x][y][0] == color) {
-                cout << "Error(Rook.cpp 75): No capturable piece found\n";
+                cout << "Error(Rook.cpp 67): No capturable piece found\n";
                 return false;
             }
             return true;
@@ -76,27 +72,23 @@ bool Rook::captureIsValid(int x, int y, string (*board)[8]) {
     } else if (y == posy) {
         if (x < posx) {
             for (int i = posx-1; i > x; i--) {
-                //cout << "tile[" << i << "][" << y << "]=" << board[i][y] << endl;
                 if (board[i][y] != "") {
                     return false;
                 }
             }
-            //cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
             if (board[x][y] == "" || board[x][y][0] == color) {
-                cout << "Error(Rook.cpp 90): No capturable piece found\n";
+                cout << "Error(Rook.cpp 79): No capturable piece found\n";
                 return false;
             }
             return true;
         } else {
             for (int i = posx+1; i < x; i++) {
-                //cout << "tile[" << i << "][" << y << "]=" << board[i][y] << endl;
                 if (board[i][y] != "") {
                     return false;
                 }
             }
-            //cout << "tile[" << x << "][" << y << "]=" << board[x][y] << endl;
             if (board[x][y] == "" || board[x][y][0] == color) {
-                cout << "Error(Rook.cpp 103): No capturable piece found\n";
+                cout << "Error(Rook.cpp 90): No capturable piece found\n";
                 return false;
             }
             return true;

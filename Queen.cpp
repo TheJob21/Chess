@@ -9,11 +9,27 @@ Queen::Queen(int x, int y, char col) {
 }
 
 bool Queen::moveIsValid(int x, int y, string (*board)[8]) {
-    return true;
+    for (int i = 0; i < coveredTiles.size(); i++) {
+        if (coveredTiles[i].a[0] == x && coveredTiles[i].a[1] == y) {
+            if (board[x][y] == "") {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 bool Queen::captureIsValid(int x, int y, string (*board)[8]) {
-    return true;
+    for (int i = 0; i < coveredTiles.size(); i++) {
+        if (coveredTiles[i].a[0] == x && coveredTiles[i].a[1] == y) {
+            if (board[x][y] != "") {
+                if (color != board[x][y][0]) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 void Queen::move(int x, int y, string (*board)[8], Piece** pieces) {

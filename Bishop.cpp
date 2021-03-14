@@ -16,7 +16,6 @@ bool Bishop::moveIsValid(int x, int y, string (*board)[8]) {
                 return false;
             }
             for (int i = posy-1; i >= y; i--) {
-                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
                 if (board[j][i] != "") {
                     return false;
                 }
@@ -28,7 +27,6 @@ bool Bishop::moveIsValid(int x, int y, string (*board)[8]) {
                 return false;
             }
             for (int i = posy+1; i <= y; i++) {
-                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
                 if (board[j][i] != "") {
                     return false;
                 }
@@ -43,7 +41,6 @@ bool Bishop::moveIsValid(int x, int y, string (*board)[8]) {
                 return false;
             }
             for (int i = posy-1; i >= y; i--) {
-                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
                 if (board[j][i] != "") {
                     return false;
                 }
@@ -55,7 +52,6 @@ bool Bishop::moveIsValid(int x, int y, string (*board)[8]) {
                 return false;
             }
             for (int i = posy+1; i <= y; i++) {
-                //cout << "tile[" << x << "][" << i << "]=" << board[x][i] << endl;
                 if (board[j][i] != "") {
                     return false;
                 }
