@@ -73,4 +73,3 @@ void Pawn::update(string (*board)[8], Piece** pieces) {
         }
     }
 }
-

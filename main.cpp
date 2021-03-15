@@ -114,7 +114,7 @@ int main()
                     cout << "Please enter a correct move ";
                     cin >> move;        
                 } else if (move[0] == 'a' || move[0] == 'b' || move[0] == 'c' || move[0] == 'd' || move[0] == 'e' || move[0] == 'f' || move[0] == 'g' || move[0] == 'h') { // Pawn move
-                    if (!validatePawnMove(move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver)) {
+                    if (!validatePawnMove(move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver)) {
                         cin >> move;
                     } else {
                         isValid = true;
@@ -1443,12 +1443,21 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                     if (piece[j]->moveIsValid(x, y, boardPoss)) { // Check if move is valid
                         piece[j]->move(x,y, boardPoss, piecesPoss);
                         if (move[2] == 'Q') { // Promote pawn
+                            if (col == 'W') boardPoss[x][y] = "WQ";
+                            else boardPoss[x][y] = "BQ";
                             piece[j] = new Queen(x, y, col);
+                            
                         } else if (move[2] == 'N') {
+                            if (col == 'W') boardPoss[x][y] = "WN";
+                            else boardPoss[x][y] = "BN";
                             piece[j] = new Knight(x, y, col);
                         } else if (move[2] == 'R') {
+                            if (col == 'W') boardPoss[x][y] = "WR";
+                            else boardPoss[x][y] = "BR";
                             piece[j] = new Rook(x, y, col);
                         } else {
+                            if (col == 'W') boardPoss[x][y] = "WB";
+                            else boardPoss[x][y] = "BB";
                             piece[j] = new Bishop(x, y, col);
                         }
                         update(boardPoss, piecesPoss);
@@ -1486,7 +1495,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
     } else if (move.size() == 4) {
         if (letterToNum(move[0]) != 8) { // Specified by file
             if (move[1] == 'x') { // Specify and capture
-                int file = letterToNum(move[1]);
+                int file = letterToNum(move[0]);
                 y = letterToNum(move[2]);
                 x = charToNum(move[3]);
                 if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
@@ -1545,14 +1554,23 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                         if (piece[j]->moveIsValid(x, y, boardPoss)) { // Check if move is valid
                             piece[j]->move(x,y, boardPoss, piecesPoss);
                             if (move[2] == 'Q') { // Promote pawn
+                                if (col == 'W') boardPoss[x][y] = "WQ";
+                                else boardPoss[x][y] = "BQ";
                                 piece[j] = new Queen(x, y, col);
+                                
                             } else if (move[2] == 'N') {
+                                if (col == 'W') boardPoss[x][y] = "WN";
+                                else boardPoss[x][y] = "BN";
                                 piece[j] = new Knight(x, y, col);
                             } else if (move[2] == 'R') {
+                                if (col == 'W') boardPoss[x][y] = "WR";
+                                else boardPoss[x][y] = "BR";
                                 piece[j] = new Rook(x, y, col);
                             } else {
+                                if (col == 'W') boardPoss[x][y] = "WB";
+                                else boardPoss[x][y] = "BB";
                                 piece[j] = new Bishop(x, y, col);
-                            } 
+                            }
                             update(boardPoss, piecesPoss);
                             if (badCheck(boardPoss, piecesPoss, col)) {
                                 cout << "Error (main.cpp 1534): That move puts or leaves you in check.\n";
@@ -1680,13 +1698,21 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             if (piece[j]->posy == file) { // Check if specified file checks out
                                 if (piece[j]->captureIsValid(x, y, board)) { // Check if move is valid
                                     piece[j]->move(x,y, boardPoss, piecesPoss);
-                                    if (move[2] == 'Q') { // Promote pawn
+                                    if (move[4] == 'Q') { // Promote pawn
+                                        if (col == 'W') boardPoss[x][y] = "WQ";
+                                        else boardPoss[x][y] = "BQ";
                                         piece[j] = new Queen(x, y, col);
-                                    } else if (move[2] == 'N') {
+                                    } else if (move[4] == 'N') {
+                                        if (col == 'W') boardPoss[x][y] = "WN";
+                                        else boardPoss[x][y] = "BN";
                                         piece[j] = new Knight(x, y, col);
-                                    } else if (move[2] == 'R') {
+                                    } else if (move[4] == 'R') {
+                                        if (col == 'W') boardPoss[x][y] = "WR";
+                                        else boardPoss[x][y] = "BR";
                                         piece[j] = new Rook(x, y, col);
                                     } else {
+                                        if (col == 'W') boardPoss[x][y] = "WB";
+                                        else boardPoss[x][y] = "BB";
                                         piece[j] = new Bishop(x, y, col);
                                     }
                                     update(boardPoss, piecesPoss);
@@ -1745,13 +1771,22 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 if (piece[j]->posy == file) { // Check if specified file checks out
                                     if (piece[j]->captureIsValid(x, y, board)) { // Check if move is valid
                                         piece[j]->move(x,y, boardPoss, piecesPoss);
-                                        if (move[2] == 'Q') { // Promote pawn
+                                        if (move[4] == 'Q') { // Promote pawn
+                                            if (col == 'W') boardPoss[x][y] = "WQ";
+                                            else boardPoss[x][y] = "BQ";
                                             piece[j] = new Queen(x, y, col);
-                                        } else if (move[2] == 'N') {
+                                            
+                                        } else if (move[4] == 'N') {
+                                            if (col == 'W') boardPoss[x][y] = "WN";
+                                            else boardPoss[x][y] = "BN";
                                             piece[j] = new Knight(x, y, col);
-                                        } else if (move[2] == 'R') {
+                                        } else if (move[4] == 'R') {
+                                            if (col == 'W') boardPoss[x][y] = "WR";
+                                            else boardPoss[x][y] = "BR";
                                             piece[j] = new Rook(x, y, col);
                                         } else {
+                                            if (col == 'W') boardPoss[x][y] = "WB";
+                                            else boardPoss[x][y] = "BB";
                                             piece[j] = new Bishop(x, y, col);
                                         }
                                         update(boardPoss, piecesPoss);
@@ -1830,6 +1865,13 @@ void setBoard(string (*board)[8], Piece** pieces) {
     board[0][6] = "WN";
     board[0][7] = "WR";
     board[1][0] = "WP";
+    board[1][1] = "WP";
+    board[1][2] = "WP";
+    board[1][3] = "WP";
+    board[1][4] = "WP";
+    board[1][5] = "WP";
+    board[1][6] = "WP";
+    board[1][7] = "WP";
     board[7][0] = "BR";
     board[7][1] = "BN";
     board[7][2] = "BB";
