@@ -6,6 +6,7 @@ Bishop::Bishop(int x, int y, char col) {
     color = col;
     pieceType = 'B';
     value = 3;
+    timesMoved = 0;
 }
 
 bool Bishop::moveIsValid(int x, int y, string (*board)[8]) {
@@ -150,14 +151,13 @@ void Bishop::move(int x, int y, string (*board)[8], Piece** pieces) {
     } else { // Move Black
         board[x][y] = "BB";
     }
+    timesMoved++;
 }
 
 void Bishop::update(string (*board)[8], Piece** pieces) {
-    Piece* temp;
     int x = posx-1, y = posy-1;
-    Int2 tile;
     while (x >= 0 && y >= 0) { // a1 direction
-        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
+        if (addCoveredTile(x, y, board, pieces)) {
             break;
         }
         x--;
@@ -165,7 +165,7 @@ void Bishop::update(string (*board)[8], Piece** pieces) {
     }
     x = posx+1, y = posy-1;
     while (x <= 7 && y >= 0) { // a8 direction
-        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
+        if (addCoveredTile(x, y, board, pieces)) {
             break;
         }
         x++;
@@ -173,7 +173,7 @@ void Bishop::update(string (*board)[8], Piece** pieces) {
     }
     x = posx-1, y = posy+1;
     while (x >= 0 && y <= 7) { // h1 direction
-        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
+        if (addCoveredTile(x, y, board, pieces)) {
             break;
         }
         x--;
@@ -181,11 +181,10 @@ void Bishop::update(string (*board)[8], Piece** pieces) {
     }
     x = posx+1, y = posy+1;
     while (x <= 7 && y <= 7) { // h8 direction
-        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
+        if (addCoveredTile(x, y, board, pieces)) {
             break;
         }
         x++;
         y++;
     }
 }
-

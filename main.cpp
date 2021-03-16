@@ -986,7 +986,7 @@ bool stalemate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
                         pieces[i]->move(pieces1[i]->coveredTiles[j].a[0], pieces1[i]->coveredTiles[j].a[1], board1, pieces1);
                         update(board1, pieces1);
                         if (!badCheck(board1, pieces1, color)) {
-                            copyBoard(board1, board, pieces1, pieces);
+                            copyBoard(board, board1, pieces, pieces1);
                             update(board1, pieces1);
                             return false;
                         }
@@ -1315,6 +1315,7 @@ bool checkValidKingMove(int king, string (*board)[8], string (*board1)[8], Piece
 }
 
 bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], string (*boardPoss2)[8], Piece** pieces, Piece** piecesPoss, Piece** piecesPoss2, char col, bool &gameOver) {
+    cout << "here 1318\n";
     vector<Piece*> piece;
     int i, pawns;
     if (col == 'W') {
@@ -1336,6 +1337,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
         return false;
     }
     int x, y;
+    cout << "here 1340\n";
     if (move.size() == 2) { // Normal move
         y = letterToNum(move[0]);
         x = charToNum(move[1]);
@@ -1368,6 +1370,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                     }
                     copyBoard(boardPoss, board, piecesPoss, pieces);
                     update(board, pieces);
+                    pieces[20]->print();
                     return true;
                 }
             }
@@ -1420,6 +1423,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(board, pieces);
                         update(boardPoss2, piecesPoss2);
+                        pieces[20]->print();
                         return true;
                     }
                 }
@@ -1461,6 +1465,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             piece[j] = new Bishop(x, y, col);
                         }
                         update(boardPoss, piecesPoss);
+                        piece[j]->print();
                         if (badCheck(boardPoss, piecesPoss, col)) {
                             cout << "Error (main.cpp 1433): That move puts or leaves you in check.\n";
                             copyBoard(board, boardPoss, pieces, piecesPoss);
@@ -1482,6 +1487,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                         }
                         copyBoard(boardPoss, board, piecesPoss, pieces);
                         update(board, pieces);
+                        pieces[20]->print();
                         return true;
                     }
                 }
@@ -1493,51 +1499,10 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
             return false;
         }
     } else if (move.size() == 4) {
-        if (letterToNum(move[0]) != 8) { // Specified by file
-            if (move[1] == 'x') { // Specify and capture
-                int file = letterToNum(move[0]);
-                y = letterToNum(move[2]);
-                x = charToNum(move[3]);
-                if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
-                    cout << "Error (main.cpp 1484): Please choose a square on the board.\n";
-                    return false;
-                } else {
-                    for (int j = 0; j < piece.size(); j++) {
-                        if (piece[j]->posy == file) { // Check if specified file checks out
-                            if (piece[j]->captureIsValid(x, y, boardPoss)) { // Check if move is valid
-                                piece[j]->move(x,y, boardPoss, piecesPoss);
-                                update(boardPoss, piecesPoss);
-                                if (badCheck(boardPoss, piecesPoss, col)) {
-                                    cout << "Error (main.cpp 1493): That move puts or leaves you in check.\n";
-                                    copyBoard(board, boardPoss, pieces, piecesPoss);
-                                    update(boardPoss, piecesPoss);
-                                    return false;
-                                }
-                                if (check(boardPoss, piecesPoss, col)) {
-                                cout << "Error (main.cpp 1499): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
-                                copyBoard(board, boardPoss, pieces, piecesPoss);
-                                update(boardPoss, piecesPoss);
-                                return false;
-                            }
-                            if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
-                                copyBoard(boardPoss, board, piecesPoss, pieces);
-                                update(board, pieces);
-                                cout << "Stalemate!\n";
-                                gameOver = true;
-                                return true;
-                            }
-                            copyBoard(boardPoss, board, piecesPoss, pieces);
-                            update(board, pieces);
-                            return true;
-                            }
-                        }
-                    }
-                    cout << "Error (main.cpp 541): You do not have any pawn on the specified file that can move there.\n";
-                    return false;
-                }
-            }
-        } else if (move[3] == '+' || move[3] == '#') { // Check/mate
+        if (move[3] == '+' || move[3] == '#') { // Check/mate
+            cout << "here 1503\n";
             if (move[2] == 'Q' || move[2] == 'N' || move[2] == 'R' || move[2] == 'B') { // Pawn Promotion
+                cout << "here 1505\n";
                 y = letterToNum(move[0]);
                 x = charToNum(move[1]);
                 if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
@@ -1550,14 +1515,24 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                     cout << "Error (main.cpp 1533): You cannot promote until you reach the other end of the board.\n";
                     return false;
                 } else {
+                    cout << "here 1518\n";
                     for (int j = 0; j < piece.size(); j++) {
+                        cout << "here 1520 " << j << "\n";
                         if (piece[j]->moveIsValid(x, y, boardPoss)) { // Check if move is valid
+                            cout << "here 1522\n";
                             piece[j]->move(x,y, boardPoss, piecesPoss);
                             if (move[2] == 'Q') { // Promote pawn
-                                if (col == 'W') boardPoss[x][y] = "WQ";
-                                else boardPoss[x][y] = "BQ";
+                                cout << "Here main.cpp 1562\n";
+                                if (col == 'W') {
+                                    boardPoss[x][y] = "WQ";
+                                }
+                                else {
+                                    boardPoss[x][y] = "BQ";
+                                }
+                                piece[j] = NULL;
+                                cout << "Here main.cpp 1570\n";
                                 piece[j] = new Queen(x, y, col);
-                                
+                                cout << "Here main.cpp 1572\n";
                             } else if (move[2] == 'N') {
                                 if (col == 'W') boardPoss[x][y] = "WN";
                                 else boardPoss[x][y] = "BN";
@@ -1571,6 +1546,8 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                 else boardPoss[x][y] = "BB";
                                 piece[j] = new Bishop(x, y, col);
                             }
+                            piece[j]->print();
+                            piecesPoss[20]->print();
                             update(boardPoss, piecesPoss);
                             if (badCheck(boardPoss, piecesPoss, col)) {
                                 cout << "Error (main.cpp 1534): That move puts or leaves you in check.\n";
@@ -1606,6 +1583,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                             update(board, pieces);
                             update(boardPoss2, piecesPoss2);
+                            pieces[20]->print();
                             return true;
                         }
                     }
@@ -1615,6 +1593,56 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
             } else {
                 cout << "Error (main.cpp 1583): Select a legitimate piece for promotion (i.e. 'e8Q+' or 'd1N#').\n";
                 return false;
+            }
+        } else if (letterToNum(move[0]) != 8) { // Specified by file
+            cout << "here 1598\n";
+            if (move[1] == 'x') { // Specify and capture
+                cout << "here 1600\n";
+                int file = letterToNum(move[0]);
+                y = letterToNum(move[2]);
+                x = charToNum(move[3]);
+                if (x == 8 || y < 0 || y > 7) { // Validate a-h, 1-8
+                    cout << "Error (main.cpp 1484): Please choose a square on the board.\n";
+                    return false;
+                } else {
+                    cout << "here 1608\n";
+                    for (int j = 0; j < piece.size(); j++) {
+                        cout << "here 1610 " << j << ".\n";
+                        if (piece[j]->posy == file) { // Check if specified file checks out
+                            cout << "here 1612\n";
+                            if (piece[j]->captureIsValid(x, y, boardPoss)) { // Check if move is valid
+                                cout << "here 1614\n";
+                                piece[j]->move(x,y, boardPoss, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                if (badCheck(boardPoss, piecesPoss, col)) {
+                                    cout << "Error (main.cpp 1493): That move puts or leaves you in check.\n";
+                                    copyBoard(board, boardPoss, pieces, piecesPoss);
+                                    update(boardPoss, piecesPoss);
+                                    return false;
+                                }
+                                if (check(boardPoss, piecesPoss, col)) {
+                                    cout << "Error (main.cpp 1499): That move is check, please add a '+' to the move, or '#' for checkmate.\n";
+                                    copyBoard(board, boardPoss, pieces, piecesPoss);
+                                    update(boardPoss, piecesPoss);
+                                    return false;
+                                }
+                                if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
+                                    copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    update(board, pieces);
+                                    cout << "Stalemate!\n";
+                                    gameOver = true;
+                                    return true;
+                                }
+                                copyBoard(boardPoss, board, piecesPoss, pieces);
+                                update(board, pieces);
+                                pieces[20]->print();
+                                return true;
+                            }
+                        }
+                    }
+                    cout << "Error (main.cpp 541): You do not have any pawn on the specified file that can move there.\n";
+                    return false;
+                }
             }
         }
     } else if (move.size() == 5) {
@@ -1667,6 +1695,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                     update(board, pieces);
                                     update(boardPoss2, piecesPoss2);
+                                    pieces[20]->print();
                                     return true;
                                 }
                             }
@@ -1716,6 +1745,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                         piece[j] = new Bishop(x, y, col);
                                     }
                                     update(boardPoss, piecesPoss);
+                                    piece[j]->print();
                                     if (badCheck(boardPoss, piecesPoss, col)) {
                                         cout << "Error (main.cpp 773): That move puts or leaves you in check.\n";
                                         copyBoard(board, boardPoss, pieces, piecesPoss);
@@ -1737,6 +1767,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     }
                                     copyBoard(boardPoss, board, piecesPoss, pieces);
                                     update(board, pieces);
+                                    pieces[20]->print();
                                     return true;
                                 }
                             }
@@ -1775,7 +1806,6 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                             if (col == 'W') boardPoss[x][y] = "WQ";
                                             else boardPoss[x][y] = "BQ";
                                             piece[j] = new Queen(x, y, col);
-                                            
                                         } else if (move[4] == 'N') {
                                             if (col == 'W') boardPoss[x][y] = "WN";
                                             else boardPoss[x][y] = "BN";
@@ -1790,6 +1820,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                             piece[j] = new Bishop(x, y, col);
                                         }
                                         update(boardPoss, piecesPoss);
+                                        piece[j]->print();
                                         if (badCheck(boardPoss, piecesPoss, col)) {
                                             cout << "Error (main.cpp 1617): That move puts or leaves you in check.\n";
                                             copyBoard(board, boardPoss, pieces, piecesPoss);
@@ -1824,6 +1855,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                         update(board, pieces);
                                         update(boardPoss2, piecesPoss2);
+                                        pieces[20]->print();
                                         return true;
                                     }
                                 }
@@ -1850,9 +1882,13 @@ void copyBoard(string (*b1)[8], string (*b2)[8], Piece** p1, Piece** p2) {
             b2[i][j] = b1[i][j];
         }
     }
+    p1[20]->print();
+    p2[20]->print();
     for (int i = 0; i < 32; i++) {
         *p2[i] = *p1[i];
     }
+    p1[20]->print();
+    p2[20]->print();
 }
 
 void setBoard(string (*board)[8], Piece** pieces) {

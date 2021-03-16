@@ -129,8 +129,10 @@ Piece* findPiece(int x, int y, string (*board)[8], Piece** pieces, char col) {
                 return pieces[14];
             }
         }
+        cout << "Error (utility.cpp 132): Tile was somehow empty\n";
+        return pieces[0]; // Never meant to run
     }
-    cout << "Error(utility.cpp 129): No piece found on that tile.\n";
+    cout << "Error (utility.cpp 129): Piece was neither black nor white.\n";
     return pieces[0]; // Never meant to run
 }
 

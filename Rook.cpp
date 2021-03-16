@@ -104,6 +104,7 @@ Rook::Rook(int x, int y, char col) {
     color = col;
     pieceType = 'R';
     value = 5;
+    timesMoved = 0;
 }
 
 void Rook::move(int x, int y, string (*board)[8], Piece **pieces) {
@@ -116,35 +117,34 @@ void Rook::move(int x, int y, string (*board)[8], Piece **pieces) {
     } else { // Move Black
         board[x][y] = "BR";
     }
+    timesMoved++;
 }
 
 void Rook::update(string (*board)[8], Piece** pieces) {
-    Piece* temp;
-    Int2 tile;
     int x = posx-1, y = posy;
     while (x >= 0) { // 1 direction
-        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
+        if (addCoveredTile(x, y, board, pieces)) {
             break;
         }
         x--;
     }
     x = posx+1, y = posy;
     while (x <= 7) { // 8 direction
-        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
+        if (addCoveredTile(x, y, board, pieces)) {
             break;
         }
         x++;
     }
     x = posx, y = posy-1;
     while (y >= 0) { // a direction
-        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
+        if (addCoveredTile(x, y, board, pieces)) {
             break;
         }
         y--;
     }
     x = posx, y = posy+1;
     while (y <= 7) { // h direction
-        if (addCoveredTile(x, y, temp, tile, board, pieces)) {
+        if (addCoveredTile(x, y, board, pieces)) {
             break;
         }
         y++;

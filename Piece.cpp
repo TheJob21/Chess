@@ -53,7 +53,9 @@ void Piece::print() {
     }
 }
 
-bool Piece::addCoveredTile(int x, int y, Piece* temp, Int2 tile, string(*board)[8], Piece** pieces) {
+bool Piece::addCoveredTile(int x, int y, string(*board)[8], Piece** pieces) {
+    Piece* temp;
+    Int2 tile;
     tile.a[0] = x;
     tile.a[1] = y;
     coveredTiles.push_back(tile);

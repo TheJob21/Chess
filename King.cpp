@@ -6,6 +6,7 @@ King::King(int x, int y, char col) {
     color = col;
     pieceType = 'K';
     value = 100;
+    timesMoved = 0;
 }
 
 bool King::moveIsValid(int x, int y, string (*board)[8]) {
@@ -42,41 +43,40 @@ void King::move(int x, int y, string (*board)[8], Piece** pieces) {
     } else { // Move Black
         board[x][y] = "BK";
     }
+    timesMoved++;
 }
 
 void King::update(string (*board)[8], Piece** pieces) {
-    Piece* temp;
-    Int2 tile;
     int x = posx-1, y = posy;
     if (x >= 0) {
-        addCoveredTile(x, y, temp, tile, board, pieces);
+        addCoveredTile(x, y, board, pieces);
         y = posy-1;
         if (y >= 0) {
-            addCoveredTile(x, y, temp, tile, board, pieces);
+            addCoveredTile(x, y, board, pieces);
         }
         y = posy+1;
         if (y <= 7) {
-            addCoveredTile(x, y, temp, tile, board, pieces);
+            addCoveredTile(x, y, board, pieces);
         }
     }
     x = posx, y = posy+1;
     if (y <= 7) {
-        addCoveredTile(x, y, temp, tile, board, pieces);
+        addCoveredTile(x, y, board, pieces);
     }
     y = posy-1;
     if (y >= 0) {
-        addCoveredTile(x, y, temp, tile, board, pieces);
+        addCoveredTile(x, y, board, pieces);
     }
     x = posx+1, y = posy;
     if (x <= 7) {
-        addCoveredTile(x, y, temp, tile, board, pieces);
+        addCoveredTile(x, y, board, pieces);
         y = posy-1;
         if (y >= 0) {
-            addCoveredTile(x, y, temp, tile, board, pieces);
+            addCoveredTile(x, y, board, pieces);
         }
         y = posy+1;
         if (y <= 7) {
-            addCoveredTile(x, y, temp, tile, board, pieces);
+            addCoveredTile(x, y, board, pieces);
         }
     }
 }
