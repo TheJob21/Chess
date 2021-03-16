@@ -36,6 +36,7 @@ void printBoard(string (*)[8]);
 bool checkForBlock(int, int, string (*)[8], string (*)[8], Piece**, Piece**, char);
 bool checkValidKingMove(int, string (*)[8], string (*)[8], Piece**, Piece**, char);
 bool validateMove(string, string (*)[8], string (*)[8], string (*)[8], Piece**, Piece**, Piece** , char, bool &);
+bool castle(string, string (*)[8], string (*)[8], string (*)[8], Piece**, Piece**, Piece** , char, bool &);
 
 int main()
 {
@@ -92,7 +93,11 @@ int main()
                         isValid = true;
                     }
                 } else if (move[0] == '0') { // Castling
-
+                    if (!castle(move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver)) {
+                        cin >> move;
+                    } else {
+                        isValid = true;
+                    }
                 } else {
                     if (!validateMove(move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver)) {
                         cin >> move;
@@ -120,7 +125,11 @@ int main()
                         isValid = true;
                     }
                 } else if (move[0] == '0') { // Castling
-
+                    if (!castle(move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver)) {
+                        cin >> move;
+                    } else {
+                        isValid = true;
+                    }
                 } else {
                     if (!validateMove(move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver)) {
                         cin >> move;
@@ -1781,10 +1790,145 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
             return false;
         } 
     } else {
-        cout << "Error (main.cpp 1798): Please make a valid move";
+        cout << "Error (main.cpp 1785): Please make a valid move";
         return false;
     }
     return false;
+}
+
+bool castle(string move, string (*board)[8], string (*boardPoss)[8], string (*boardPoss2)[8], Piece** pieces, Piece** piecesPoss, Piece** piecesPoss2, char col, bool &gameOver) {
+    int king, kr, qr, rkSq;
+    if (col == 'W') {
+        king = 14;
+        kr = 1;
+        qr = 0;
+        rkSq = 0; 
+    } else {
+        king = 15;
+        kr = 3;
+        qr = 2;
+        rkSq = 7;
+    }
+    if (!pieces[king]->inCheck) { // Make sure king isn't in check
+        if (move == "0-0") { // King side Castle
+            cout << "1814\n";
+            if (pieces[kr]->posx != 8) { // Check rook isn't captured
+                cout << "1816\n";
+                if (pieces[kr]->timesMoved < 1 && pieces[king]->timesMoved < 1) { // Make sure king and rook haven't move before
+                    cout << "1818\n";
+                    if (piecesPoss[king]->moveIsValid(rkSq, 5, boardPoss)) {
+                        cout << "1820\n";
+                        piecesPoss[king]->move(rkSq, 5, boardPoss, piecesPoss);
+                        update(boardPoss, piecesPoss);
+                        if (!piecesPoss[king]->inCheck) {
+                            cout << "1824\n";
+                            if (piecesPoss[king]->moveIsValid(rkSq, 6, boardPoss)) {
+                                cout << "1826\n";
+                                piecesPoss[king]->move(rkSq, 6, boardPoss, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                if (!piecesPoss[king]->inCheck) { // Success
+                                    cout << "1830\n";
+                                    piecesPoss[kr]->move(rkSq, 5, boardPoss, piecesPoss);
+                                    update(boardPoss, piecesPoss);
+                                    copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    update(board, pieces);
+                                    return true;
+                                } else {
+                                    copyBoard(board, boardPoss, pieces, piecesPoss);
+                                    update(boardPoss, piecesPoss);
+                                    cout << "Error (main.cpp 1832): You cannot castle into an attacked square.\n";
+                                    return false;
+                                }
+                            } else {
+                                copyBoard(board, boardPoss, pieces, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                cout << "Error (main.cpp 1838): You cannot castle into occupied space.\n";
+                                return false;
+                            }
+                        } else {
+                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                            update(boardPoss, piecesPoss);
+                            cout << "Error (main.cpp 1844): You cannot castle through an attacked square.\n";
+                            return false;
+                        }
+                    } else {
+                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                        update(boardPoss, piecesPoss);
+                        cout << "Error (main.cpp 1850): You cannot castle into occupied space.\n";
+                        return false;
+                    }
+                } else {
+                    cout << "Error (main.cpp 1854): You cannot castle after moving one of the castling pieces.\n";
+                    return false;
+                }
+            } else {
+                cout << "Error (main.cpp 1858): You cannot castle using a captured rook!\n";
+                return false;
+            }
+        } else if (move == "0-0-0") { // Queen side castle
+            if (pieces[qr]->posx != 8) { // Check rook isn't captured
+                if (pieces[qr]->timesMoved < 1 && pieces[king]->timesMoved < 1) { // Make sure king and rook haven't move before
+                    if (piecesPoss[king]->moveIsValid(rkSq, 3, boardPoss)) {
+                        piecesPoss[king]->move(rkSq, 3, boardPoss, piecesPoss);
+                        update(boardPoss, piecesPoss);
+                        if (!piecesPoss[king]->inCheck) {
+                            if (piecesPoss[king]->moveIsValid(rkSq, 2, boardPoss)) {
+                                piecesPoss[king]->move(rkSq, 2, boardPoss, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                if (!piecesPoss[king]->inCheck) {
+                                    if (piecesPoss[qr]->moveIsValid(rkSq, 1, boardPoss)) { // Success
+                                        piecesPoss[qr]->move(rkSq, 3, boardPoss, piecesPoss);
+                                        update(boardPoss, piecesPoss);
+                                        copyBoard(boardPoss, board, piecesPoss, pieces);
+                                        update(board, pieces);
+                                        return true;
+                                        
+                                    } else {
+                                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                                        update(boardPoss, piecesPoss);
+                                        cout << "Error (main.cpp 1882): You cannot castle through an occupied square.\n";
+                                        return false;
+                                    }
+                                } else {
+                                    copyBoard(board, boardPoss, pieces, piecesPoss);
+                                    update(boardPoss, piecesPoss);
+                                    cout << "Error (main.cpp 1888): You cannot castle into an attacked square.\n";
+                                    return false;
+                                }
+                            } else {
+                                copyBoard(board, boardPoss, pieces, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                cout << "Error (main.cpp 1894): You cannot castle into occupied space.\n";
+                                return false;
+                            }
+                        } else {
+                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                            update(boardPoss, piecesPoss);
+                            cout << "Error (main.cpp 1900): You cannot castle through an attacked square.\n";
+                            return false;
+                        }
+                    } else {
+                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                        update(boardPoss, piecesPoss);
+                        cout << "Error (main.cpp 1906): You cannot castle into occupied space.\n";
+                        return false;
+                    }
+                } else {
+                    cout << "Error (main.cpp 1910): You cannot castle after moving one of the castling pieces.\n";
+                    return false;
+                }
+            } else {
+                cout << "Error (main.cpp 1914): You cannot castle using a captured rook!\n";
+                return false;
+            }
+        } else {
+            cout << "Error (main.cpp 1918): Please make a valid move.\n";
+            return false;
+        }
+    } else {
+        cout << "Error (main.cpp 1922): You cannot castle from check.\n";
+        return false;
+    }
 }
 
 void copyBoard(string (*b1)[8], string (*b2)[8], Piece** p1, Piece** p2) {
@@ -1793,13 +1937,9 @@ void copyBoard(string (*b1)[8], string (*b2)[8], Piece** p1, Piece** p2) {
             b2[i][j] = b1[i][j];
         }
     }
-    p1[20]->print();
-    p2[20]->print();
     for (int i = 0; i < 32; i++) {
         *p2[i] = *p1[i];
     }
-    p1[20]->print();
-    p2[20]->print();
 }
 
 void setBoard(string (*board)[8], Piece** pieces) {
@@ -1850,7 +1990,7 @@ void setBoard(string (*board)[8], Piece** pieces) {
     // pieces[12] = new Queen(0,3,'W'), pieces[13] = new Queen(7,3,'B');
     // pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
     // for (int i=0; i<4; i++) {
-    //     pieces[i+16] = new Pawn(1,8,'W');
+    //    pieces[i+16] = new Pawn(1,8,'W');
     //     pieces[i+24] = new Pawn(6,8,'B');
     // }
     // pieces[20] = new Pawn(1,4,'W');
