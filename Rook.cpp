@@ -107,6 +107,15 @@ Rook::Rook(int x, int y, char col) {
     timesMoved = 0;
 }
 
+Rook::Rook(int x, int y, char col, int moved) {
+    posx = x;
+    posy = y;
+    color = col;
+    pieceType = 'R';
+    value = 5;
+    timesMoved = moved;
+}
+
 void Rook::move(int x, int y, string (*board)[8], Piece **pieces) {
     board[posx][posy] = "";
     posx = x;

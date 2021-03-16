@@ -9,6 +9,15 @@ Bishop::Bishop(int x, int y, char col) {
     timesMoved = 0;
 }
 
+Bishop::Bishop(int x, int y, char col, int moved) {
+    posx = x;
+    posy = y;
+    color = col;
+    pieceType = 'B';
+    value = 3;
+    timesMoved = moved;
+}
+
 bool Bishop::moveIsValid(int x, int y, string (*board)[8]) {
     if (x > posx) {
         int j = posx+1;

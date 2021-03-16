@@ -9,6 +9,15 @@ Queen::Queen(int x, int y, char col) {
     timesMoved = 0;
 }
 
+Queen::Queen(int x, int y, char col, int moved) {
+    posx = x;
+    posy = y;
+    color = col;
+    pieceType = 'Q';
+    value = 9;
+    timesMoved = moved;
+}
+
 bool Queen::moveIsValid(int x, int y, string (*board)[8]) {
     for (int i = 0; i < coveredTiles.size(); i++) {
         if (coveredTiles[i].a[0] == x && coveredTiles[i].a[1] == y) {

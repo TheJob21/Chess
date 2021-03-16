@@ -4,10 +4,11 @@
 
 class Bishop:public Piece {
     public:
-        Bishop(int x, int y, char col);
-        bool moveIsValid(int x, int y, string (*board)[8]);
-        bool captureIsValid(int x, int y, string (*board)[8]);
-        void move(int x, int y, string (*board)[8], Piece**);
-        void update(string (*board)[8], Piece** pieces);
+        Bishop(int, int, char);
+        Bishop(int, int, char, int);
+        bool moveIsValid(int, int, string (*)[8]);
+        bool captureIsValid(int, int, string (*)[8]);
+        void move(int, int, string (*)[8], Piece**);
+        void update(string (*)[8], Piece**);
 };
 #endif

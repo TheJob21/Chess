@@ -312,6 +312,44 @@ void update(string (*board)[8], Piece** pieces) {
     }
 }
 
+void promote(char color, char pieceType, int index, string (*board)[8], Piece** pieces) {
+    if (color == 'W') {
+        if (pieceType == 'Q') {
+            pieces[index] = new Queen(pieces[index]->posx, pieces[index]->posy, color, pieces[index]->timesMoved);
+            board[pieces[index]->posx][pieces[index]->posy] = "WQ";
+        } else if (pieceType == 'N') {
+            pieces[index] = new Knight(pieces[index]->posx, pieces[index]->posy, color, pieces[index]->timesMoved);
+            board[pieces[index]->posx][pieces[index]->posy] = "WN";
+        } else if (pieceType == 'R') {
+            pieces[index] = new Rook(pieces[index]->posx, pieces[index]->posy, color, pieces[index]->timesMoved);
+            board[pieces[index]->posx][pieces[index]->posy] = "WR";
+        } else if (pieceType == 'B') {
+            pieces[index] = new Bishop(pieces[index]->posx, pieces[index]->posy, color, pieces[index]->timesMoved);
+            board[pieces[index]->posx][pieces[index]->posy] = "WB";
+        } else if (pieceType == 'P') {
+            pieces[index] = new Pawn(pieces[index]->posx, pieces[index]->posy, color, pieces[index]->timesMoved);
+            board[pieces[index]->posx][pieces[index]->posy] = "WP";
+        }
+    } else {
+        if (pieceType == 'Q') {
+            pieces[index] = new Queen(pieces[index]->posx, pieces[index]->posy, color, pieces[index]->timesMoved);
+            board[pieces[index]->posx][pieces[index]->posy] = "BQ";
+        } else if (pieceType == 'N') {
+            pieces[index] = new Knight(pieces[index]->posx, pieces[index]->posy, color, pieces[index]->timesMoved);
+            board[pieces[index]->posx][pieces[index]->posy] = "BN";
+        } else if (pieceType == 'R') {
+            pieces[index] = new Rook(pieces[index]->posx, pieces[index]->posy, color, pieces[index]->timesMoved);
+            board[pieces[index]->posx][pieces[index]->posy] = "BR";
+        } else if (pieceType == 'B') {
+            pieces[index] = new Bishop(pieces[index]->posx, pieces[index]->posy, color, pieces[index]->timesMoved);
+            board[pieces[index]->posx][pieces[index]->posy] = "BB";
+        } else if (pieceType == 'P') {
+            pieces[index] = new Pawn(pieces[index]->posx, pieces[index]->posy, color, pieces[index]->timesMoved);
+            board[pieces[index]->posx][pieces[index]->posy] = "BP";
+        }
+    }
+}
+
 int letterToNum(char c) {
     if (c == 'a') return 0;
     if (c == 'b') return 1;

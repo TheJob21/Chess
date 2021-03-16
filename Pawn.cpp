@@ -9,6 +9,15 @@ Pawn::Pawn(int x, int y, char col) {
     timesMoved = 0;
 }
 
+Pawn::Pawn(int x, int y, char col, int moved) {
+    posx = x;
+    posy = y;
+    color = col;
+    pieceType = 'P';
+    value = 1;
+    timesMoved = moved;
+}
+
 bool Pawn::moveIsValid(int x, int y, string (*board)[8]) {
     if (timesMoved == 0) {
         if (color == 'W') {

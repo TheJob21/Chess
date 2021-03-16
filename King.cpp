@@ -9,6 +9,15 @@ King::King(int x, int y, char col) {
     timesMoved = 0;
 }
 
+King::King(int x, int y, char col, int moved) {
+    posx = x;
+    posy = y;
+    color = col;
+    pieceType = 'K';
+    value = 100;
+    timesMoved = moved;
+}
+
 bool King::moveIsValid(int x, int y, string (*board)[8]) {
     for (int i = 0; i < coveredTiles.size(); i++) {
         if (coveredTiles[i].a[0] == x && coveredTiles[i].a[1] == y) {
