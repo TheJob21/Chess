@@ -351,6 +351,15 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                 update(boardPoss2, piecesPoss2);
                                 return false;
                             }
+                        } else {
+                            if (move[3] == '#') {
+                                cout << "Error (main.cpp 294): That move is not checkmate, replace the '#' with a '+'\n";
+                                copyBoard(board, boardPoss, pieces, piecesPoss);
+                                update(boardPoss, piecesPoss);
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                update(boardPoss2, piecesPoss2);
+                                return false;
+                            }
                         }
                         copyBoard(boardPoss, board, piecesPoss, pieces);
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -572,6 +581,15 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                     update(boardPoss2, piecesPoss2);
                                     return false;
                                 }
+                            } else {
+                                if (move[3] == '#') {
+                                    cout << "Error (main.cpp 294): That move is not checkmate, replace the '#' with a '+'\n";
+                                    copyBoard(board, boardPoss, pieces, piecesPoss);
+                                    update(boardPoss, piecesPoss);
+                                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                    update(boardPoss2, piecesPoss2);
+                                    return false;
+                                }
                             }
                             copyBoard(boardPoss, board, piecesPoss, pieces);
                             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -628,6 +646,15 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                         return true;
                                     } else {
                                         cout << "Error (main.cpp 527): That move is checkmate, please use '#' at the end.\n";
+                                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                                        update(boardPoss, piecesPoss);
+                                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                        update(boardPoss2, piecesPoss2);
+                                        return false;
+                                    }
+                                } else {
+                                    if (move[3] == '#') {
+                                        cout << "Error (main.cpp 294): That move is not checkmate, replace the '#' with a '+'\n";
                                         copyBoard(board, boardPoss, pieces, piecesPoss);
                                         update(boardPoss, piecesPoss);
                                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -691,6 +718,15 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                         return true;
                                     } else {
                                         cout << "Error (main.cpp 527): That move is checkmate, please use '#' at the end.\n";
+                                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                                        update(boardPoss, piecesPoss);
+                                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                        update(boardPoss2, piecesPoss2);
+                                        return false;
+                                    }
+                                } else {
+                                    if (move[3] == '#') {
+                                        cout << "Error (main.cpp 294): That move is not checkmate, replace the '#' with a '+'\n";
                                         copyBoard(board, boardPoss, pieces, piecesPoss);
                                         update(boardPoss, piecesPoss);
                                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -877,6 +913,15 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                             update(boardPoss2, piecesPoss2);
                                             return false;
                                         }
+                                    } else {
+                                        if (move[3] == '#') {
+                                            cout << "Error (main.cpp 294): That move is not checkmate, replace the '#' with a '+'\n";
+                                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                                            update(boardPoss, piecesPoss);
+                                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                            update(boardPoss2, piecesPoss2);
+                                            return false;
+                                        }
                                     }
                                     copyBoard(boardPoss, board, piecesPoss, pieces);
                                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -936,6 +981,15 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                             cout << "Error (main.cpp 802): That move is checkmate, please use '#' at the end.\n";
                                             copyBoard(board, boardPoss, pieces, piecesPoss);
                                             update(boardPoss, piecesPoss);
+                                            return false;
+                                        }
+                                    } else {
+                                        if (move[3] == '#') {
+                                            cout << "Error (main.cpp 294): That move is not checkmate, replace the '#' with a '+'\n";
+                                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                                            update(boardPoss, piecesPoss);
+                                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                            update(boardPoss2, piecesPoss2);
                                             return false;
                                         }
                                     }
@@ -1286,10 +1340,32 @@ bool checkmate(string (*board)[8], string (*board1)[8], Piece** pieces, Piece** 
 }
 
 bool checkForBlock(int x, int y, string (*board)[8], string (*board1)[8], Piece** pieces, Piece** pieces1, char col) {
+    vector<Piece*> temp;
     for (int i = 0; i < 32; i++) {
-        if (pieces1[i]->color != col || i == 14 || i == 15) {
-            for (int j = 0; j < pieces1[i]->coveredTiles.size(); j++) {
-                if (pieces1[i]->coveredTiles[j].a[0] == x && pieces1[i]->coveredTiles[j].a[1] == y) {
+        if (pieces1[i]->color != col) {
+            if (i == 14 || i == 15) {
+                continue;
+            } else if (pieces1[i]->pieceType == 'P') {
+                temp.push_back(pieces1[i]);
+            } else {
+                for (int j = 0; j < pieces1[i]->coveredTiles.size(); j++) {
+                    if (pieces1[i]->coveredTiles[j].a[0] == x && pieces1[i]->coveredTiles[j].a[1] == y) {
+                        pieces1[i]->move(x,y, board1, pieces1);
+                        update(board1, pieces1);
+                        if (!badCheck(board1, pieces1, pieces[i]->color)) {
+                            copyBoard(board, board1, pieces, pieces1);
+                            return true;
+                        }
+                        copyBoard(board, board1, pieces, pieces1);
+                    }
+                }
+            }
+        } 
+    }
+    for (int i = 0; i < temp.size(); i++) {
+        if (temp[i]->color != col) {
+            for (int j = 0; j < pieces1[i]->moveableTiles.size(); j++) {
+                if (pieces1[i]->moveableTiles[j].a[0] == x && pieces1[i]->moveableTiles[j].a[1] == y) {
                     pieces1[i]->move(x,y, board1, pieces1);
                     update(board1, pieces1);
                     if (!badCheck(board1, pieces1, pieces[i]->color)) {
@@ -1299,7 +1375,7 @@ bool checkForBlock(int x, int y, string (*board)[8], string (*board1)[8], Piece*
                     copyBoard(board, board1, pieces, pieces1);
                 }
             }
-        } 
+        }
     }
     return false;
 }
@@ -1392,9 +1468,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                         return true;
                     }
                     copyBoard(boardPoss, board, piecesPoss, pieces);
-                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(board, pieces);
-                    update(boardPoss2, piecesPoss2);
                     return true;
                 }
             }
@@ -1485,6 +1559,7 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             update(boardPoss, piecesPoss);
                             return false;
                         }
+                        promote(col, move[2], p[j], boardPoss2, piecesPoss2);
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(boardPoss2, piecesPoss2);
                         if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
@@ -1496,7 +1571,6 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             return true;
                         }
                         promote(col, piecesPoss[p[j]]->pieceType, p[j], board, pieces);
-                        promote(col, piecesPoss[p[j]]->pieceType, p[j], boardPoss2, piecesPoss2);
                         copyBoard(boardPoss, board, piecesPoss, pieces);
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(board, pieces);
