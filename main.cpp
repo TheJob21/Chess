@@ -392,6 +392,8 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                             update(boardPoss, piecesPoss);
                             return false;
                         }
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(boardPoss2, piecesPoss2);
                         if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                             copyBoard(boardPoss, board, piecesPoss, pieces);
                             update(board, pieces);
@@ -443,6 +445,8 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                 update(boardPoss, piecesPoss);
                                 return false;
                             }
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                            update(boardPoss2, piecesPoss2);
                             if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                 copyBoard(boardPoss, board, piecesPoss, pieces);
                                 update(board, pieces);
@@ -495,6 +499,8 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                 update(boardPoss, piecesPoss);
                                 return false;
                             }
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                            update(boardPoss2, piecesPoss2);
                             if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                 copyBoard(boardPoss, board, piecesPoss, pieces);
                                 update(board, pieces);
@@ -741,6 +747,8 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                     update(boardPoss, piecesPoss);
                                     return false;
                                 }
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                update(boardPoss2, piecesPoss2);
                                 if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                     copyBoard(boardPoss, board, piecesPoss, pieces);
                                     update(board, pieces);
@@ -793,6 +801,8 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                     update(boardPoss, piecesPoss);
                                     return false;
                                 }
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                update(boardPoss2, piecesPoss2);
                                 if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                     copyBoard(boardPoss, board, piecesPoss, pieces);
                                     update(board, pieces);
@@ -913,6 +923,8 @@ bool validateMove(string move, string (*board)[8], string (*boardPoss)[8], strin
                                         update(boardPoss, piecesPoss);
                                         return false;
                                     }
+                                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                    update(boardPoss2, piecesPoss2);
                                     if (checkmate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                         if (move[5] == '#') {
                                             cout << "Checkmate!\n";
@@ -1370,6 +1382,8 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                         update(boardPoss, piecesPoss);
                         return false;
                     }
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(boardPoss2, piecesPoss2);
                     if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                         copyBoard(boardPoss, board, piecesPoss, pieces);
                         update(board, pieces);
@@ -1471,6 +1485,8 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                             update(boardPoss, piecesPoss);
                             return false;
                         }
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(boardPoss2, piecesPoss2);
                         if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                             promote(col, piecesPoss[p[j]]->pieceType, p[j], board, pieces);
                             copyBoard(boardPoss, board, piecesPoss, pieces);
@@ -1595,6 +1611,8 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                     update(boardPoss, piecesPoss);
                                     return false;
                                 }
+                                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                update(boardPoss2, piecesPoss2);
                                 if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                     copyBoard(boardPoss, board, piecesPoss, pieces);
                                     update(board, pieces);
@@ -1714,6 +1732,8 @@ bool validatePawnMove(string move, string (*board)[8], string (*boardPoss)[8], s
                                         update(boardPoss, piecesPoss);
                                         return false;
                                     }
+                                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                                    update(boardPoss2, piecesPoss2);
                                     if (stalemate(boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                                         promote(col, 'P', piecesPoss[p[j]]->pieceType, boardPoss, piecesPoss);
                                         copyBoard(boardPoss, board, piecesPoss, pieces);
@@ -1976,54 +1996,54 @@ void setBoard(string (*board)[8], Piece** pieces) {
     board[0][5] = "WB";
     board[0][6] = "WN";
     board[0][7] = "WR";
-    // board[1][0] = "WP";
-    // board[1][1] = "WP";
-    // board[1][2] = "WP";
-    // board[1][3] = "WP";
-    board[6][6] = "WP";
-    // board[1][5] = "WP";
-    // board[1][6] = "WP";
-    // board[1][7] = "WP";
+    board[1][0] = "WP";
+    board[1][1] = "WP";
+    board[1][2] = "WP";
+    board[1][3] = "WP";
+    board[1][4] = "WP";
+    board[1][5] = "WP";
+    board[1][6] = "WP";
+    board[1][7] = "WP";
     board[7][0] = "BR";
     board[7][1] = "BN";
     board[7][2] = "BB";
     board[7][3] = "BQ";
     board[7][4] = "BK";
     board[7][5] = "BB";
-    // board[7][6] = "BN";
+    board[7][6] = "BN";
     board[7][7] = "BR";
-    // board[6][0] = "BP";
-    // board[6][1] = "BP";
-    // board[6][2] = "BP";
-    // board[6][3] = "BP";
-    // board[6][4] = "BP";
-    // board[6][5] = "BP";
-    // board[6][6] = "BP";
-    // board[6][7] = "BP";
-    // pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
-    // pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(7,6,'B');
-    // pieces[8] = new Bishop(0,2,'W'), pieces[9] = new Bishop(0,5,'W'), pieces[10] = new Bishop(7,2,'B'), pieces[11] = new Bishop(7,5,'B');
-    // pieces[12] = new Queen(0,3,'W'), pieces[13] = new Queen(7,3,'B');
-    // pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
-    // for (int i=0; i<8; i++) {
-    //     pieces[i+16] = new Pawn(1,i,'W');
-    //     pieces[i+24] = new Pawn(6,i,'B');
-    // }
+    board[6][0] = "BP";
+    board[6][1] = "BP";
+    board[6][2] = "BP";
+    board[6][3] = "BP";
+    board[6][4] = "BP";
+    board[6][5] = "BP";
+    board[6][6] = "BP";
+    board[6][7] = "BP";
     pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
-    pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(8,8,'B');
+    pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(7,6,'B');
     pieces[8] = new Bishop(0,2,'W'), pieces[9] = new Bishop(0,5,'W'), pieces[10] = new Bishop(7,2,'B'), pieces[11] = new Bishop(7,5,'B');
     pieces[12] = new Queen(0,3,'W'), pieces[13] = new Queen(7,3,'B');
     pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
-    for (int i=0; i<4; i++) {
-       pieces[i+16] = new Pawn(8,8,'W');
-        pieces[i+24] = new Pawn(8,8,'B');
+    for (int i=0; i<8; i++) {
+        pieces[i+16] = new Pawn(1,i,'W');
+        pieces[i+24] = new Pawn(6,i,'B');
     }
-    pieces[20] = new Pawn(6,6,'W');
-    pieces[28] = new Pawn(8,8,'B');
-    for (int i=5; i<8; i++) {
-        pieces[i+16] = new Pawn(8,8,'W');
-        pieces[i+24] = new Pawn(8,8,'B');
-    }
+    // pieces[0] = new Rook(0,0,'W'), pieces[1] = new Rook(0,7,'W'), pieces[2] = new Rook(7,0,'B'), pieces[3] = new Rook(7,7,'B');
+    // pieces[4] = new Knight(0,1,'W'), pieces[5] = new Knight(0,6,'W'), pieces[6] = new Knight(7,1,'B'), pieces[7] = new Knight(8,8,'B');
+    // pieces[8] = new Bishop(0,2,'W'), pieces[9] = new Bishop(0,5,'W'), pieces[10] = new Bishop(7,2,'B'), pieces[11] = new Bishop(7,5,'B');
+    // pieces[12] = new Queen(0,3,'W'), pieces[13] = new Queen(7,3,'B');
+    // pieces[14] = new King(0,4,'W'), pieces[15] = new King(7,4,'B');
+    // for (int i=0; i<4; i++) {
+    //    pieces[i+16] = new Pawn(8,8,'W');
+    //     pieces[i+24] = new Pawn(8,8,'B');
+    // }
+    // pieces[20] = new Pawn(6,6,'W');
+    // pieces[28] = new Pawn(8,8,'B');
+    // for (int i=5; i<8; i++) {
+    //     pieces[i+16] = new Pawn(8,8,'W');
+    //     pieces[i+24] = new Pawn(8,8,'B');
+    // }
 
 }
 
