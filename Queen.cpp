@@ -121,4 +121,3 @@ void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
         y++;
     }
 }
-

@@ -93,4 +93,3 @@ void Knight::update(string lastMove, string (*board)[8], Piece** pieces) {
         addCoveredTile(x, y, board, pieces);
     }
 }
-

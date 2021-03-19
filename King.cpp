@@ -93,4 +93,3 @@ void King::update(string lastMove, string (*board)[8], Piece** pieces) {
         }
     }
 }
-
