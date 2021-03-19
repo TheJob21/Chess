@@ -42,6 +42,10 @@ bool Queen::captureIsValid(int x, int y, string (*board)[8]) {
     return false;
 }
 
+bool Queen::captureIsValid2(int x, int y, string lastMove, string (*board)[8], Piece** pieces, bool &enPassant) {
+    return false;
+}
+
 void Queen::move(int x, int y, string (*board)[8], Piece** pieces) {
     board[posx][posy] = "";
     posx = x;
@@ -55,7 +59,7 @@ void Queen::move(int x, int y, string (*board)[8], Piece** pieces) {
     timesMoved++;
 }
 
-void Queen::update(string (*board)[8], Piece** pieces) {
+void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
     int x = posx-1, y = posy;
     while (x >= 0) { // 1 direction
         if (addCoveredTile(x, y, board, pieces)) {

@@ -42,6 +42,10 @@ bool Knight::captureIsValid(int x, int y, string (*board)[8]) {
     return false;
 }
 
+bool Knight::captureIsValid2(int x, int y, string lastMove, string (*board)[8], Piece** pieces, bool &enPassant) {
+    return false;
+}
+
 void Knight::move(int x, int y, string (*board)[8], Piece** pieces) {
     board[posx][posy] = "";
     posx = x;
@@ -55,7 +59,7 @@ void Knight::move(int x, int y, string (*board)[8], Piece** pieces) {
     timesMoved++;
 }
 
-void Knight::update(string (*board)[8], Piece** pieces) {
+void Knight::update(string lastMove, string (*board)[8], Piece** pieces) {
     int x = posx-1, y = posy-2;
     if (x >= 0 && y >= 0) { // a-a1 direction
         addCoveredTile(x, y, board, pieces);

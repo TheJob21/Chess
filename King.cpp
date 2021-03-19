@@ -42,6 +42,10 @@ bool King::captureIsValid(int x, int y, string (*board)[8]) {
     return false;
 }
 
+bool King::captureIsValid2(int x, int y, string lastMove, string (*board)[8], Piece** pieces, bool &enPassant) {
+    return false;
+}
+
 void King::move(int x, int y, string (*board)[8], Piece** pieces) {
     board[posx][posy] = "";
     posx = x;
@@ -55,7 +59,7 @@ void King::move(int x, int y, string (*board)[8], Piece** pieces) {
     timesMoved++;
 }
 
-void King::update(string (*board)[8], Piece** pieces) {
+void King::update(string lastMove, string (*board)[8], Piece** pieces) {
     int x = posx-1, y = posy;
     if (x >= 0) {
         addCoveredTile(x, y, board, pieces);

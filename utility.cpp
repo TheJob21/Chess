@@ -295,7 +295,7 @@ void capture(int x, int y, char color, string (*board)[8], Piece** pieces) {
     }
 }
 
-void update(string (*board)[8], Piece** pieces) {
+void update(string lastMove, string (*board)[8], Piece** pieces) {
     for (int i = 0; i < 32; i++) {
         pieces[i]->attackers.clear();
         pieces[i]->attacking.clear();
@@ -307,7 +307,7 @@ void update(string (*board)[8], Piece** pieces) {
     pieces[15]->inCheck = false;
     for (int i = 0; i < 32; i++) {
         if (pieces[i]->posx != 8) { 
-            pieces[i]->update(board, pieces);
+            pieces[i]->update(lastMove, board, pieces);
         }
     }
 }

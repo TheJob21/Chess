@@ -21,11 +21,12 @@ class Piece {
         Piece();
         ~Piece();
         Piece(int, int, char);
-        virtual bool moveIsValid(int x, int y, string (*board)[8]) = 0;
-        virtual bool captureIsValid(int x, int y, string (*board)[8]) = 0;
-        virtual void move(int x, int y, string (*board)[8], Piece**) = 0;
-        virtual void update(string (*board)[8], Piece** pieces) = 0;
-        bool addCoveredTile(int x, int y, string(*board)[8], Piece** pieces);
+        virtual bool moveIsValid(int, int, string (*)[8]) = 0;
+        virtual bool captureIsValid(int, int, string (*)[8]) = 0;
+        virtual bool captureIsValid2(int, int, string, string (*)[8], Piece**, bool &) = 0;
+        virtual void move(int, int, string (*)[8], Piece**) = 0;
+        virtual void update(string, string (*)[8], Piece**) = 0;
+        bool addCoveredTile(int, int, string(*)[8], Piece**);
         void print();
     };
 
