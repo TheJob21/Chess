@@ -118,6 +118,7 @@ void Pawn::move(int x, int y, string (*board)[8], Piece** pieces) {
 }
 
 void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
+    cout << "Pawn Update\n";
     Piece* temp;
     Int2 tile;
     if (color == 'W') {
@@ -126,9 +127,7 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
         tile.a[1] = y;
         if (x <= 7 && y >= 0) { // a-a1 direction
             addCoveredTile(x, y, board, pieces);
-            if (board[x][y] != "" && board[x][y][0] == 'B') {
-                moveableTiles.push_back(tile);
-            } else if (posx == 4) {
+            if (board[x][y] == "" && posx == 4) { // Check En Passant
                 if (board[posx][y] != "" && board[posx][y][0] != color && board[posx][y][1] == 'P') {
                     temp = findPiece(posx, y, board, pieces, 'B');
                     if (lastMove.size() == 2 && letterToNum(lastMove[0]) == y && charToNum(lastMove[1]) == posx && temp->timesMoved == 1) {
@@ -141,9 +140,7 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
         tile.a[1] = y;
         if (x <= 7 && y <= 7) { // a-a8 direction
             addCoveredTile(x, y, board, pieces);
-            if (board[x][y] != "" && board[x][y][0] == 'B') {
-                moveableTiles.push_back(tile);
-            } else if (posx == 4) {
+            if (board[x][y] == "" && posx == 4) { // Check En Passant
                 if (board[posx][y] != "" && board[posx][y][0] != color && board[posx][y][1] == 'P') {
                     temp = findPiece(posx, y, board, pieces, 'B');
                     if (lastMove.size() == 2 && letterToNum(lastMove[0]) == y && charToNum(lastMove[1]) == posx && temp->timesMoved == 1) {
@@ -180,9 +177,7 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
         tile.a[1] = y;
         if (x >= 0 && y >= 0) { // a-a1 direction
             addCoveredTile(x, y, board, pieces);
-            if (board[x][y] != "" && board[x][y][0] == 'W') {
-                moveableTiles.push_back(tile);
-            } else if (posx == 3) {
+            if (board[x][y] == "" && posx == 3) { // Check En Passant
                 if (board[posx][y] != "" && board[posx][y][0] != color && board[posx][y][1] == 'P') {
                     temp = findPiece(posx, y, board, pieces, 'W');
                     if (lastMove.size() == 2 && letterToNum(lastMove[0]) == y && charToNum(lastMove[1]) == posx && temp->timesMoved == 1) {
@@ -195,9 +190,7 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
         tile.a[1] = y;
         if (x >= 0 && y <= 7) { // a-a8 direction
             addCoveredTile(x, y, board, pieces);
-            if (board[x][y] != "" && board[x][y][0] == 'W') {
-                moveableTiles.push_back(tile);
-            } else if (posx == 3) {
+            if (board[x][y] == "" && posx == 3) { // Check En Passant
                 if (board[posx][y] != "" && board[posx][y][0] != color && board[posx][y][1] == 'P') {
                     temp = findPiece(posx, y, board, pieces, 'W');
                     if (lastMove.size() == 2 && letterToNum(lastMove[0]) == y && charToNum(lastMove[1]) == posx && temp->timesMoved == 1) {

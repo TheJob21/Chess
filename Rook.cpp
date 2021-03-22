@@ -134,6 +134,7 @@ void Rook::move(int x, int y, string (*board)[8], Piece **pieces) {
 }
 
 void Rook::update(string lastMove, string (*board)[8], Piece** pieces) {
+    cout << "Rook Update\n";
     int x = posx-1, y = posy;
     while (x >= 0) { // 1 direction
         if (addCoveredTile(x, y, board, pieces)) {

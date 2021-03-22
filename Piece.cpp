@@ -54,12 +54,13 @@ void Piece::print() {
 }
 
 bool Piece::addCoveredTile(int x, int y, string(*board)[8], Piece** pieces) {
+    cout << "piece.cpp 57\n";
     Piece* temp;
     Int2 tile;
     tile.a[0] = x;
     tile.a[1] = y;
     coveredTiles.push_back(tile);
-    if (board[x][y] != "") {
+    if (board[x][y] != "") {        
         temp = findPiece(x, y, board, pieces, board[x][y][0]);
         if (temp->color == color) {
             temp->defenders.push_back(this);
@@ -68,10 +69,14 @@ bool Piece::addCoveredTile(int x, int y, string(*board)[8], Piece** pieces) {
             if (temp->pieceType == 'K') {
                 temp->inCheck = true;
             }
+            moveableTiles.push_back(tile);
             temp->attackers.push_back(this);
             attacking.push_back(temp); 
         }
         return true;
+    } else if (pieceType == 'P') {
+        return false;
     }
+    moveableTiles.push_back(tile);
     return false;
 }
