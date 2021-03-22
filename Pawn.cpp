@@ -150,18 +150,18 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
             }
         }
         if (timesMoved == 0) {
-            x = posx+2;
+            x = posx+1;
             y = posy;
             tile.a[0] = x;
             tile.a[1] = y;
             if (board[x][y] == "") {
                 moveableTiles.push_back(tile);
-            }
-            x--;
-            tile.a[0] = x;
-            tile.a[1] = y;
-            if (board[x][y] == "") {
-                moveableTiles.push_back(tile);
+                x++;
+                tile.a[0] = x;
+                tile.a[1] = y;
+                if (board[x][y] == "") {
+                    moveableTiles.push_back(tile);
+                }
             }
         } else {
             x = posx+1;
@@ -200,18 +200,18 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
             }
         }
         if (timesMoved == 0) {
-            x = posx-2;
+            x = posx-1;
             y = posy;
             tile.a[0] = x;
             tile.a[1] = y;
             if (board[x][y] == "") {
                 moveableTiles.push_back(tile);
-            }
-            x++;
-            tile.a[0] = x;
-            tile.a[1] = y;
-            if (board[x][y] == "") {
-                moveableTiles.push_back(tile);
+                x--;
+                tile.a[0] = x;
+                tile.a[1] = y;
+                if (board[x][y] == "") {
+                    moveableTiles.push_back(tile);
+                }
             }
         } else {
             x = posx-1;
