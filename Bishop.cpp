@@ -168,7 +168,7 @@ void Bishop::move(int x, int y, string (*board)[8], Piece** pieces) {
 }
 
 void Bishop::update(string lastMove, string (*board)[8], Piece** pieces) {
-    cout << "Bishop Update\n";
+    // cout << "Bishop Update\n";
     int x = posx-1, y = posy-1;
     while (x >= 0 && y >= 0) { // a1 direction
         if (addCoveredTile(x, y, board, pieces)) {

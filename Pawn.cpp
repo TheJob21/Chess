@@ -118,7 +118,7 @@ void Pawn::move(int x, int y, string (*board)[8], Piece** pieces) {
 }
 
 void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
-    cout << "Pawn Update\n";
+    // cout << "Pawn Update\n";
     Piece* temp;
     Int2 tile;
     if (color == 'W') {

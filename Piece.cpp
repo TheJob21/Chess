@@ -54,13 +54,13 @@ void Piece::print() {
 }
 
 bool Piece::addCoveredTile(int x, int y, string(*board)[8], Piece** pieces) {
-    cout << "piece.cpp 57\n";
     Piece* temp;
     Int2 tile;
     tile.a[0] = x;
     tile.a[1] = y;
     coveredTiles.push_back(tile);
     if (board[x][y] != "") {        
+        // cout << x << ", " << y << " " << board[x][y][0] << endl;
         temp = findPiece(x, y, board, pieces, board[x][y][0]);
         if (temp->color == color) {
             temp->defenders.push_back(this);
