@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 using namespace std;
@@ -42,6 +43,7 @@ string generateMove(string, string, string (*)[8], string (*)[8], string (*)[8],
 
 int main()
 {
+    ofstream filestream("GameRecord.out");
     bool gameOver = false, isValid;
     char col, coh;
     string move, lastMove = "";
@@ -107,6 +109,10 @@ int main()
                 printBoard(board);
                 moves[moveCount-1][0] = lastMove = move;
                 if (gameOver) {
+                    for (int i = 0; i < moveCount-1; i++) {
+                        filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    }
+                    filestream << moveCount << ". " << move;
                     break;
                 }
                 bool isValid = false;
@@ -114,14 +120,21 @@ int main()
                 moves[moveCount-1][1] = lastMove = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
                 moveCount++;
                 if (gameOver) {
+                    for (int i = 0; i < moveCount-1; i++) {
+                        filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    }
                     printBoard(board);
                 }
             }
-        } else {
+        } else if (col == 'w') {
             while (!gameOver) {
                 // Computer Turn
                 moves[moveCount-1][0] = lastMove = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
                 if (gameOver) {
+                    for (int i = 0; i < moveCount-1; i++) {
+                        filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    }
+                    filestream << moveCount << ". " << move;
                     break;
                 }
                 printBoard(board);
@@ -160,10 +173,46 @@ int main()
                 }
                 moves[moveCount-1][1] = lastMove = move;
                 if (gameOver) {
+                    for (int i = 0; i < moveCount-1; i++) {
+                        filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    }
                     printBoard(board);
                 }
                 bool isValid = false;
                 moveCount++;
+            }
+        } else { // computer vs computer
+            while (!gameOver) {
+                cout << endl;
+                for (int i = 0; i < moveCount-1; i++) {
+                    cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                }
+                printBoard(board);
+                cout << "Press enter to continue.";
+                getline(cin, move);
+                moves[moveCount-1][0] = lastMove = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
+                if (gameOver) {
+                    for (int i = 0; i < moveCount-1; i++) {
+                        filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    }
+                    filestream << moveCount << ". " << lastMove;
+                    break;
+                }
+                for (int i = 0; i < moveCount-1; i++) {
+                    cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                }
+                cout << moveCount << ". " << lastMove << endl;
+                printBoard(board);
+                cout << "Press enter to continue.";
+                getline(cin, move);
+                moves[moveCount-1][1] = lastMove = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
+                moveCount++;
+                if (gameOver) {
+                    for (int i = 0; i < moveCount-1; i++) {
+                        filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    }
+                    printBoard(board);
+                }
             }
         }
     } else { // human vs human
@@ -203,6 +252,10 @@ int main()
             printBoard(board);
             moves[moveCount-1][0] = lastMove = move;
             if (gameOver) {
+                for (int i = 0; i < moveCount-1; i++) {
+                    filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                }
+                filestream << moveCount << ". " << move;
                 break;
             }
             cout << moveCount << ". " << move << ", ";
@@ -235,6 +288,9 @@ int main()
             moves[moveCount-1][1] = lastMove = move;
             moveCount++;
             if (gameOver) {
+                for (int i = 0; i < moveCount-1; i++) {
+                    filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                }
                 printBoard(board);
             }
         }
@@ -245,13 +301,13 @@ int main()
 }
 
 char blackOrWhite(char col){
-    cout << "Play as white or black? (w or b) ";
-    while (col != 'w' && col != 'b') {
+    cout << "Play as white or black? (w or b) (Or c to watch a computer vs computer match) ";
+    while (col != 'w' && col != 'b' && col != 'c') {
         cin >> col;
-        if (col == 'w' || col == 'b') {
+        if (col == 'w' || col == 'b' || col == 'c') {
             return col;
         } else {
-            cout << "please type 'w' or 'b' "; 
+            cout << "please type 'w' or 'b' or 'c'"; 
         }
     }
     return 'w';
@@ -2321,6 +2377,7 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             }
         } else {
             piecesPoss2[pieceIndex[i]]->move(x, y, boardPoss2, piecesPoss2);
+            cout << piecesPoss2[pieceIndex[i]]->pieceType << numToLetter(y) << numToChar(x) << "\n";
             update(lastMove, boardPoss2, piecesPoss2);
             if (piecesPoss2[pieceIndex[i]]->attackers.size() > piecesPoss2[pieceIndex[i]]->defenders.size()) {
                 int dValue = piecesPoss2[pieceIndex[i]]->value, aValue = 0;
@@ -2344,6 +2401,8 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 iShuffle1.push_back(pieceIndex[i]);
                 continue;
             }
+            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+            update(lastMove, boardPoss2, piecesPoss2);
         } 
         if (piecesPoss[pieceIndex[i]]->timesMoved == 0) {
             if (i == possMoves.size()-1) {
@@ -2382,10 +2441,10 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         possMoves.push_back(shuffle3[i]);
         pieceIndex.push_back(iShuffle3[i]);
     }
-    cout << "Move ranking:\n";
-    for (int i = 0; i < possMoves.size(); i++) {
-        cout << "\t" << i << ". " << possMoves[i] << endl;
-    }
+    // cout << "Move ranking:\n";
+    // for (int i = 0; i < possMoves.size(); i++) {
+    //     cout << "\t" << i << ". " << possMoves[i] << endl;
+    // }
 
     for (int i = 0; i < possMoves.size(); i++) {
         // cout << "Trying move " << possMoves[i] << " #" << i+1 << " of " << possMoves.size() << endl;

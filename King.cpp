@@ -60,7 +60,7 @@ void King::move(int x, int y, string (*board)[8], Piece** pieces) {
 }
 
 void King::update(string lastMove, string (*board)[8], Piece** pieces) {
-    // cout << "King Update\n";
+    // cout << "King Update";
     int x = posx-1, y = posy;
     if (x >= 0) {
         addCoveredTile(x, y, board, pieces);

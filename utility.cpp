@@ -478,6 +478,11 @@ void printBoard(string (*board)[8]) {
     cout << "   a  b  c  d  e  f  g  h\n";
 }
 
+void print(const string str, ostream & output)
+{
+    output << str;
+}
+
 void addMoves(string possMove, int i, Piece** piecesPoss, vector<int> &pieceIndex, vector<string> &possMoves) {
     possMove = piecesPoss[i]->pieceType;
     for (int j = piecesPoss[i]->moveableTiles.size()-1; j >= 0; j--) {

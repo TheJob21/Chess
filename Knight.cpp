@@ -60,7 +60,7 @@ void Knight::move(int x, int y, string (*board)[8], Piece** pieces) {
 }
 
 void Knight::update(string lastMove, string (*board)[8], Piece** pieces) {
-    // cout << "Knight Update\n";
+    // cout << "Knight Update";
     int x = posx-1, y = posy-2;
     if (x >= 0 && y >= 0) { // a-a1 direction
         addCoveredTile(x, y, board, pieces);
@@ -90,7 +90,7 @@ void Knight::update(string lastMove, string (*board)[8], Piece** pieces) {
         addCoveredTile(x, y, board, pieces);
     }
     y = posy-1;
-    if (x >= 0 && y <= 7) { // 1-a1 direction
+    if (x >= 0 && y >= 0) { // 1-a1 direction
         addCoveredTile(x, y, board, pieces);
     }
 }

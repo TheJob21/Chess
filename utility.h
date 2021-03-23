@@ -1,6 +1,7 @@
 #ifndef UTILITY_H
 #define UTILITY_H
 
+#include <fstream>
 #include <iostream>
 #include <string>
 #include "Piece.h"
@@ -24,4 +25,5 @@ void copyBoard(string (*)[8], string (*)[8], Piece**, Piece**);
 void setBoard(string (*)[8], Piece**);
 void printBoard(string (*)[8]);
 void addMoves(string, int, Piece**, vector<int> &, vector<string> &);
+void print(const string, ostream &);
 #endif
