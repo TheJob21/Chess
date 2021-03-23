@@ -2570,9 +2570,13 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                         update(lastMove, boardPoss2, piecesPoss2);
                         priority5.push_back(possMoves[i]);
                         ipriority5.push_back(pieceIndex[i]);
-                        continue;
+                        assigned = true;
+                        break;
                     }
                     aValue = piecesPoss2[pieceIndex[i]]->attackers[j]->value;
+                }
+                if (assigned) {
+                    continue;
                 }
                 for (int j = 0; j < piecesPoss2[pieceIndex[i]]->defenders.size(); j++) {
                     dValue += piecesPoss2[pieceIndex[i]]->defenders[j]->value;
