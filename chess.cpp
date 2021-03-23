@@ -2598,13 +2598,34 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                         continue;
                     }
                 }
-            } else if (piecesPoss2[pieceIndex[i]]->attacking.size() > piecesPoss[pieceIndex[i]]->attacking.size() || piecesPoss2[pieceIndex[i]]->defending.size() > piecesPoss[pieceIndex[i]]->defending.size()) {
+            } else if ((x == 4 && (y == 3 || y == 4)) || (x== 3 && (y == 3 || y == 4))) { // Move is a power square
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
-                priority3.push_back(possMoves[i]);
-                ipriority3.push_back(pieceIndex[i]);
+                priority1.push_back(possMoves[i]);
+                ipriority1.push_back(pieceIndex[i]);
                 continue;
-            } else if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()) {
+            } else if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()) { // Move increases board coverage
+                if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()+4) {
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority1.push_back(possMoves[i]);
+                    ipriority1.push_back(pieceIndex[i]);
+                    continue;
+                } else if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()+2) {
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority2.push_back(possMoves[i]);
+                    ipriority2.push_back(pieceIndex[i]);
+                    continue;
+                } else {
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority3.push_back(possMoves[i]);
+                    ipriority3.push_back(pieceIndex[i]);
+                    continue;
+                }
+                
+            } else if (piecesPoss2[pieceIndex[i]]->attacking.size() > piecesPoss[pieceIndex[i]]->attacking.size() || piecesPoss2[pieceIndex[i]]->defending.size() > piecesPoss[pieceIndex[i]]->defending.size()) {
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
                 priority3.push_back(possMoves[i]);
@@ -2659,23 +2680,17 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             update(lastMove, boardPoss2, piecesPoss2);
         }
         if (piecesPoss[pieceIndex[i]]->timesMoved == 0) {
-            if (piecesPoss[pieceIndex[i]]->pieceType == 'K') {
+            if (piecesPoss[pieceIndex[i]]->pieceType == 'K' || piecesPoss[pieceIndex[i]]->pieceType == 'R') {
                 priority5.push_back(possMoves[i]);
                 ipriority5.push_back(pieceIndex[i]);
-            } else if (piecesPoss[pieceIndex[i]]->pieceType == 'P' || piecesPoss[pieceIndex[i]]->pieceType == 'R' || piecesPoss[pieceIndex[i]]->pieceType == 'Q') {
-                priority1.push_back(possMoves[i]);
-                ipriority1.push_back(pieceIndex[i]);
             } else {
-                priority0.push_back(possMoves[i]);
-                ipriority0.push_back(pieceIndex[i]);
+                priority2.push_back(possMoves[i]);
+                ipriority2.push_back(pieceIndex[i]);
             }
         } else if (piecesPoss[pieceIndex[i]]->timesMoved == 1) {
             if (piecesPoss[pieceIndex[i]]->pieceType == 'K') {
                 priority5.push_back(possMoves[i]);
                 ipriority5.push_back(pieceIndex[i]);
-            } else if (piecesPoss[pieceIndex[i]]->pieceType == 'P') {
-                priority2.push_back(possMoves[i]);
-                ipriority2.push_back(pieceIndex[i]);
             } else {
                 priority3.push_back(possMoves[i]);
                 ipriority3.push_back(pieceIndex[i]);
