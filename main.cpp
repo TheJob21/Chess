@@ -1147,9 +1147,7 @@ bool validatePawnMove(string move, string lastMove, string (*board)[8], string (
             for (int j = 0; j < p.size(); j++) {
                 if (piecesPoss[p[j]]->moveIsValid(x, y, board)) { // Check if move is valid
                     piecesPoss[p[j]]->move(x,y, boardPoss, piecesPoss);
-                    cout << "1149\n";
                     update(lastMove, boardPoss, piecesPoss);
-                    cout << "1151\n";
                     if (badCheck(boardPoss, piecesPoss, col)) {
                         cout << "Error (main.cpp 1450): That move puts or leaves you in check.\n";
                         copyBoard(board, boardPoss, pieces, piecesPoss);
@@ -1164,7 +1162,6 @@ bool validatePawnMove(string move, string lastMove, string (*board)[8], string (
                     }
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    cout << "1166\n";
                     if (stalemate(lastMove, boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                         copyBoard(boardPoss, board, piecesPoss, pieces);
                         update(lastMove, board, pieces);
@@ -1174,11 +1171,8 @@ bool validatePawnMove(string move, string lastMove, string (*board)[8], string (
                     }
                     copyBoard(boardPoss, board, piecesPoss, pieces);
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                    cout << "1176\n";
                     update(lastMove, board, pieces);
-                    cout << "1178\n";
                     update(lastMove, boardPoss2, piecesPoss2);
-                    cout << "1180\n";
                     return true;
                 }
             }
@@ -1294,7 +1288,6 @@ bool validatePawnMove(string move, string lastMove, string (*board)[8], string (
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(lastMove, board, pieces);
                         update(lastMove, boardPoss2, piecesPoss2);
-                        pieces[20]->print();
                         return true;
                     }
                 }
@@ -1376,7 +1369,6 @@ bool validatePawnMove(string move, string lastMove, string (*board)[8], string (
                             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                             update(lastMove, board, pieces);
                             update(lastMove, boardPoss2, piecesPoss2);
-                            pieces[20]->print();
                             return true;
                         }
                     }
@@ -1430,7 +1422,6 @@ bool validatePawnMove(string move, string lastMove, string (*board)[8], string (
                                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                 update(lastMove, board, pieces);
                                 update(lastMove, boardPoss2, piecesPoss2);
-                                pieces[19]->print();
                                 return true;
                             }
                         }
@@ -1503,7 +1494,6 @@ bool validatePawnMove(string move, string lastMove, string (*board)[8], string (
                                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                     update(lastMove, board, pieces);
                                     update(lastMove, boardPoss2, piecesPoss2);
-                                    pieces[20]->print();
                                     return true;
                                 }
                             }
@@ -1567,7 +1557,6 @@ bool validatePawnMove(string move, string lastMove, string (*board)[8], string (
                                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                     update(lastMove, board, pieces);
                                     update(lastMove, boardPoss2, piecesPoss2);
-                                    pieces[20]->print();
                                     return true;
                                 }
                             }
@@ -1655,7 +1644,6 @@ bool validatePawnMove(string move, string lastMove, string (*board)[8], string (
                                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                                         update(lastMove, board, pieces);
                                         update(lastMove, boardPoss2, piecesPoss2);
-                                        pieces[20]->print();
                                         return true;
                                     }
                                 }
