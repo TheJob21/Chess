@@ -217,7 +217,7 @@ void capture(int x, int y, char color, string (*board)[8], Piece** pieces) {
         if (board[x][y] != "") { // Capture
             if (board[x][y][1] == 'P') { // Capture Pawn
                 for (int i = 0; i < 8; i++) {
-                    if (pieces[i+16]->posx == x && pieces[i+24]->posy == y) {
+                    if (pieces[i+16]->posx == x && pieces[i+16]->posy == y) {
                         pieces[i+16]->posx = 8;
                         pieces[i+16]->posy = 8;
                         break;
@@ -234,7 +234,7 @@ void capture(int x, int y, char color, string (*board)[8], Piece** pieces) {
                 }
                 else {
                     for (int i = 0; i < 8; i++) {
-                        if (pieces[i+16]->posx == x && pieces[i+24]->posy == y) {
+                        if (pieces[i+16]->posx == x && pieces[i+16]->posy == y) {
                             pieces[i+16]->posx = 8;
                             pieces[i+16]->posy = 8;
                             break;
@@ -252,7 +252,7 @@ void capture(int x, int y, char color, string (*board)[8], Piece** pieces) {
                 }
                 else {
                     for (int i = 0; i < 8; i++) {
-                        if (pieces[i+16]->posx == x && pieces[i+24]->posy == y) {
+                        if (pieces[i+16]->posx == x && pieces[i+16]->posy == y) {
                             pieces[i+16]->posx = 8;
                             pieces[i+16]->posy = 8;
                             break;
@@ -270,7 +270,7 @@ void capture(int x, int y, char color, string (*board)[8], Piece** pieces) {
                 }
                 else {
                     for (int i = 0; i < 8; i++) {
-                        if (pieces[i+16]->posx == x && pieces[i+24]->posy == y) {
+                        if (pieces[i+16]->posx == x && pieces[i+16]->posy == y) {
                             pieces[i+16]->posx = 8;
                             pieces[i+16]->posy = 8;
                             break;
@@ -284,7 +284,7 @@ void capture(int x, int y, char color, string (*board)[8], Piece** pieces) {
                 }
                 else {
                     for (int i = 0; i < 8; i++) {
-                        if (pieces[i+16]->posx == x && pieces[i+24]->posy == y) {
+                        if (pieces[i+16]->posx == x && pieces[i+16]->posy == y) {
                             pieces[i+16]->posx = 8;
                             pieces[i+16]->posy = 8;
                             break;

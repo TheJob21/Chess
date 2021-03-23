@@ -47,8 +47,9 @@ int main()
     bool gameOver = false, isValid;
     char col, coh;
     string move, lastMove = "";
-    string moves[200][2];
+    string moves[5949][2];
     int moveCount = 1;
+    double _50MoveLimit = 0;
     string (*board)[8] = new string[8][8]; 
     string (*boardPoss)[8] = new string[8][8]; 
     string (*boardPoss2)[8] = new string[8][8]; 
@@ -108,6 +109,16 @@ int main()
                 }
                 printBoard(board);
                 moves[moveCount-1][0] = lastMove = move;
+                _50MoveLimit += 0.5;
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                    _50MoveLimit += 0.5;
+                } else {
+                    _50MoveLimit = 0;
+                }
+                if (_50MoveLimit >= 50) {
+                    gameOver = true;
+                    cout << "50 move limit reached. Stalemate!\n";
+                }
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
@@ -117,8 +128,18 @@ int main()
                 }
                 bool isValid = false;
                 // Computer Turn
-                moves[moveCount-1][1] = lastMove = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
+                moves[moveCount-1][1] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
                 moveCount++;
+                _50MoveLimit += 0.5;
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                    _50MoveLimit += 0.5;
+                } else {
+                    _50MoveLimit = 0;
+                }
+                if (_50MoveLimit >= 50) {
+                    gameOver = true;
+                    cout << "50 move limit reached. Stalemate!\n";
+                }
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
@@ -129,7 +150,17 @@ int main()
         } else if (col == 'w') {
             while (!gameOver) {
                 // Computer Turn
-                moves[moveCount-1][0] = lastMove = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
+                moves[moveCount-1][0] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
+                _50MoveLimit += 0.5;
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                    _50MoveLimit += 0.5;
+                } else {
+                    _50MoveLimit = 0;
+                }
+                if (_50MoveLimit >= 50) {
+                    gameOver = true;
+                    cout << "50 move limit reached. Stalemate!\n";
+                }
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
@@ -172,6 +203,16 @@ int main()
                     }
                 }
                 moves[moveCount-1][1] = lastMove = move;
+                _50MoveLimit += 0.5;
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                    _50MoveLimit += 0.5;
+                } else {
+                    _50MoveLimit = 0;
+                }
+                if (_50MoveLimit >= 50) {
+                    gameOver = true;
+                    cout << "50 move limit reached. Stalemate!\n";
+                }
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
@@ -190,7 +231,17 @@ int main()
                 printBoard(board);
                 // cout << "Press enter to continue.";
                 // getline(cin, move);
-                moves[moveCount-1][0] = lastMove = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
+                moves[moveCount-1][0] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
+                _50MoveLimit += 0.5;
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                    _50MoveLimit += 0.5;
+                } else {
+                    _50MoveLimit = 0;
+                }
+                if (_50MoveLimit >= 50) {
+                    gameOver = true;
+                    cout << "50 move limit reached. Stalemate!\n";
+                }
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
@@ -210,8 +261,17 @@ int main()
                 printBoard(board);
                 // cout << "Press enter to continue.";
                 // getline(cin, move);
-                moves[moveCount-1][1] = lastMove = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
+                moves[moveCount-1][1] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
                 moveCount++;
+                if (move[0] = 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                    _50MoveLimit += 0.5;
+                } else {
+                    _50MoveLimit = 0;
+                }
+                if (_50MoveLimit >= 50) {
+                    gameOver = true;
+                    cout << "50 move limit reached. Stalemate!\n";
+                }
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
@@ -259,6 +319,16 @@ int main()
             }
             printBoard(board);
             moves[moveCount-1][0] = lastMove = move;
+            _50MoveLimit += 0.5;
+            if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                _50MoveLimit += 0.5;
+            } else {
+                _50MoveLimit = 0;
+            }
+            if (_50MoveLimit >= 50) {
+                gameOver = true;
+                cout << "50 move limit reached. Stalemate!\n";
+            }
             if (gameOver) {
                 for (int i = 0; i < moveCount-1; i++) {
                     filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
@@ -295,6 +365,16 @@ int main()
             }
             moves[moveCount-1][1] = lastMove = move;
             moveCount++;
+            _50MoveLimit += 0.5;
+            if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                _50MoveLimit += 0.5;
+            } else {
+                _50MoveLimit = 0;
+            }
+            if (_50MoveLimit >= 50) {
+                gameOver = true;
+                cout << "50 move limit reached. Stalemate!\n";
+            }
             if (gameOver) {
                 for (int i = 0; i < moveCount-1; i++) {
                     filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
@@ -2385,7 +2465,6 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             }
         } else {
             piecesPoss2[pieceIndex[i]]->move(x, y, boardPoss2, piecesPoss2);
-            // cout << piecesPoss2[pieceIndex[i]]->pieceType << numToLetter(y) << numToChar(x) << "\n";
             update(lastMove, boardPoss2, piecesPoss2);
             if (piecesPoss2[pieceIndex[i]]->attackers.size() > piecesPoss2[pieceIndex[i]]->defenders.size()) {
                 int dValue = piecesPoss2[pieceIndex[i]]->value, aValue = 0;
@@ -2449,10 +2528,10 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         possMoves.push_back(shuffle3[i]);
         pieceIndex.push_back(iShuffle3[i]);
     }
-    cout << "Move ranking:\n";
-    for (int i = 0; i < possMoves.size(); i++) {
-        cout << "\t" << i << ". " << possMoves[i] << endl;
-    }
+    // cout << "Move ranking:\n";
+    // for (int i = 0; i < possMoves.size(); i++) {
+    //     cout << "\t" << i << ". " << possMoves[i] << endl;
+    // }
 
     for (int i = 0; i < possMoves.size(); i++) {
         // cout << "Trying move " << possMoves[i] << " #" << i+1 << " of " << possMoves.size() << endl;
@@ -2558,4 +2637,3 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
     gameOver = true;
     return "Stalemate";
 }
-
