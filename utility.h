@@ -23,4 +23,5 @@ void promote(char, char, int, string (*)[8], Piece**);
 void copyBoard(string (*)[8], string (*)[8], Piece**, Piece**);
 void setBoard(string (*)[8], Piece**);
 void printBoard(string (*)[8]);
+void addMoves(string, int, Piece**, vector<int> &, vector<string> &);
 #endif

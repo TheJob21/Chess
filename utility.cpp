@@ -477,3 +477,14 @@ void printBoard(string (*board)[8]) {
     }
     cout << "   a  b  c  d  e  f  g  h\n";
 }
+
+void addMoves(string possMove, int i, Piece** piecesPoss, vector<int> &pieceIndex, vector<string> &possMoves) {
+    possMove = piecesPoss[i]->pieceType;
+    for (int j = piecesPoss[i]->moveableTiles.size()-1; j >= 0; j--) {
+        string tempMove = possMove;
+        tempMove += numToLetter(piecesPoss[i]->moveableTiles[j].a[1]);
+        tempMove += numToChar(piecesPoss[i]->moveableTiles[j].a[0]);
+        pieceIndex.push_back(i);
+        possMoves.push_back(tempMove);
+    }
+}

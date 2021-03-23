@@ -3,9 +3,9 @@
 #include <vector>
 using namespace std;
 
+#include "utility.h"
 #include "bstree.h"
 #include "Piece.h"
-#include "utility.h"
 #include "utility.cpp"
 #include "Rook.h"
 #include "Knight.h"
@@ -2200,347 +2200,175 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
     string possMove;
     if (col == 'W') {
         if (piecesPoss[19]->posx != 8) {
-            possMove = piecesPoss[19]->pieceType;
-            for (int j = 0; j < piecesPoss[19]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[19]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[19]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(19);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 19, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[20]->posx != 8) {
-            possMove = piecesPoss[20]->pieceType;
-            for (int j = 0; j < piecesPoss[20]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[20]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[20]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(20);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 20, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[4]->posx != 8) {
-            possMove = piecesPoss[4]->pieceType;
-            for (int j = 0; j < piecesPoss[4]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[4]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[4]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(4);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 4, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[5]->posx != 8) {
-            possMove = piecesPoss[5]->pieceType;
-            for (int j = 0; j < piecesPoss[5]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[5]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[5]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(5);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 5, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[8]->posx != 8) {
-            possMove = piecesPoss[8]->pieceType;
-            for (int j = 0; j < piecesPoss[8]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[8]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[8]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(8);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 8, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[9]->posx != 8) {
-            possMove = piecesPoss[9]->pieceType;
-            for (int j = 0; j < piecesPoss[9]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[9]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[9]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(9);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 9, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[12]->posx != 8) {
-            possMove = piecesPoss[12]->pieceType;
-            for (int j = 0; j < piecesPoss[12]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[12]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[12]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(12);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 12, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[16]->posx != 8) {
-            possMove = piecesPoss[16]->pieceType;
-            for (int j = 0; j < piecesPoss[16]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[16]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[16]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(16);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 16, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[17]->posx != 8) {
-            possMove = piecesPoss[17]->pieceType;
-            for (int j = 0; j < piecesPoss[17]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[17]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[17]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(17);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 17, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[18]->posx != 8) {
-            possMove = piecesPoss[18]->pieceType;
-            for (int j = 0; j < piecesPoss[18]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[18]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[18]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(18);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 18, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[21]->posx != 8) {
-            possMove = piecesPoss[21]->pieceType;
-            for (int j = 0; j < piecesPoss[21]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[21]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[21]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(21);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 21, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[22]->posx != 8) {
-            possMove = piecesPoss[22]->pieceType;
-            for (int j = 0; j < piecesPoss[22]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[22]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[22]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(22);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 22, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[23]->posx != 8) {
-            possMove = piecesPoss[23]->pieceType;
-            for (int j = 0; j < piecesPoss[23]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[23]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[23]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(23);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 23, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[0]->posx != 8) {
-            possMove = piecesPoss[0]->pieceType;
-            for (int j = 0; j < piecesPoss[0]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[0]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[0]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(0);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 0, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[1]->posx != 8) {
-            possMove = piecesPoss[1]->pieceType;
-            for (int j = 0; j < piecesPoss[1]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[1]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[1]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(1);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 1, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[14]->posx != 8) {
-            possMove = piecesPoss[14]->pieceType;
-            for (int j = 0; j < piecesPoss[14]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[14]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[14]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(14);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 14, piecesPoss, pieceIndex, possMoves);
         }
     } else {
         if (piecesPoss[27]->posx != 8) {
-            possMove = piecesPoss[27]->pieceType;
-            for (int j = 0; j < piecesPoss[27]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[27]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[27]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(27);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 27, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[28]->posx != 8) {
-            possMove = piecesPoss[28]->pieceType;
-            for (int j = 0; j < piecesPoss[28]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[28]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[28]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(28);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 28, piecesPoss, pieceIndex, possMoves);
         }  
         if (piecesPoss[6]->posx != 8) {
-            possMove = piecesPoss[6]->pieceType;
-            for (int j = 0; j < piecesPoss[6]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[6]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[6]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(6);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 6, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[7]->posx != 8) {
-            possMove = piecesPoss[7]->pieceType;
-            for (int j = 0; j < piecesPoss[7]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[7]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[7]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(7);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 7, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[10]->posx != 8) {
-            possMove = piecesPoss[10]->pieceType;
-            for (int j = 0; j < piecesPoss[10]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[10]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[10]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(10);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 10, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[11]->posx != 8) {
-            possMove = piecesPoss[11]->pieceType;
-            for (int j = 0; j < piecesPoss[11]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[11]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[11]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(11);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 11, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[13]->posx != 8) {
-            possMove = piecesPoss[13]->pieceType;
-            for (int j = 0; j < piecesPoss[13]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[13]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[13]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(13);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 13, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[24]->posx != 8) {
-            possMove = piecesPoss[24]->pieceType;
-            for (int j = 0; j < piecesPoss[24]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[24]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[24]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(24);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 24, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[25]->posx != 8) {
-            possMove = piecesPoss[25]->pieceType;
-            for (int j = 0; j < piecesPoss[25]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[25]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[25]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(25);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 25, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[26]->posx != 8) {
-            possMove = piecesPoss[26]->pieceType;
-            for (int j = 0; j < piecesPoss[26]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[26]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[26]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(26);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 26, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[29]->posx != 8) {
-            possMove = piecesPoss[29]->pieceType;
-            for (int j = 0; j < piecesPoss[29]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[29]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[29]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(29);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 29, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[30]->posx != 8) {
-            possMove = piecesPoss[30]->pieceType;
-            for (int j = 0; j < piecesPoss[30]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[30]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[30]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(30);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 30, piecesPoss, pieceIndex, possMoves);
         } 
         if (piecesPoss[31]->posx != 8) {
-            possMove = piecesPoss[31]->pieceType;
-            for (int j = 0; j < piecesPoss[31]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[31]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[31]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(31);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 31, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[2]->posx != 8) {
-            possMove = piecesPoss[2]->pieceType;
-            for (int j = 0; j < piecesPoss[2]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[2]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[2]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(2);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 2, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[3]->posx != 8) {
-            possMove = piecesPoss[3]->pieceType;
-            for (int j = 0; j < piecesPoss[3]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[3]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[3]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(3);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 3, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[15]->posx != 8) {
-            possMove = piecesPoss[15]->pieceType;
-            for (int j = 0; j < piecesPoss[15]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[15]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[15]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(15);
-                possMoves.push_back(tempMove);
-            }
+            addMoves(possMove, 15, piecesPoss, pieceIndex, possMoves);
         }
     }
-    for (int i = 0; i < 32; i++) {
-        if (piecesPoss[i]->color == col && piecesPoss[i]->posx != 8) {
-            possMove = piecesPoss[i]->pieceType;
-            for (int j = 0; j < piecesPoss[i]->moveableTiles.size(); j++) {
-                string tempMove = possMove;
-                tempMove += numToLetter(piecesPoss[i]->moveableTiles[j].a[1]);
-                tempMove += numToChar(piecesPoss[i]->moveableTiles[j].a[0]);
-                pieceIndex.push_back(i);
-                possMoves.push_back(tempMove);
-            }
-        }
-    }
+
     for (int i = 0; i < possMoves.size(); i++) {
+        int x, y;
+        Piece* temp;
+        if (possMoves[i].size() == 3) {
+            x = charToNum(possMoves[i][2]), y = letterToNum(possMoves[i][1]);
+        } else {
+            x = charToNum(possMoves[i][1]), y = letterToNum(possMoves[i][0]);
+        }
+        if (boardPoss[x][y] != "") {
+            temp = findPiece(x, y, boardPoss, piecesPoss, boardPoss[x][y][0]);
+            if (temp->defenders.size() == 0) {
+                shuffle0.push_back(possMoves[i]);
+                iShuffle0.push_back(pieceIndex[i]);
+                continue;
+            } else if (temp->attackers.size() > temp->defenders.size()) {
+                int dValue = temp->value, aValue = 0;
+                if (dValue <= piecesPoss[pieceIndex[i]]->value) {
+                    shuffle3.push_back(possMoves[i]);
+                    iShuffle3.push_back(pieceIndex[i]);
+                    continue;
+                }
+                for (int j = 0; j < temp->attackers.size(); j++) {
+                    aValue += temp->attackers[j]->value;
+                }
+                for (int j = 0; j < temp->defenders.size(); j++) {
+                    dValue += temp->defenders[j]->value;
+                }
+                if (dValue > aValue) {
+                    shuffle0.push_back(possMoves[i]);
+                    iShuffle0.push_back(pieceIndex[i]);
+                    continue;
+                }
+            }
+        } else {
+            piecesPoss2[pieceIndex[i]]->move(x, y, boardPoss2, piecesPoss2);
+            update(lastMove, boardPoss2, piecesPoss2);
+            if (piecesPoss2[pieceIndex[i]]->attackers.size() > piecesPoss2[pieceIndex[i]]->defenders.size()) {
+                int dValue = piecesPoss2[pieceIndex[i]]->value, aValue = 0;
+                for (int j = 0; j < piecesPoss2[pieceIndex[i]]->attackers.size(); j++) {
+                    aValue = piecesPoss2[pieceIndex[i]]->attackers[j]->value;
+                }
+                for (int j = 0; j < piecesPoss2[pieceIndex[i]]->defenders.size(); j++) {
+                    dValue = piecesPoss2[pieceIndex[i]]->attackers[j]->value;
+                }
+                if (aValue <= dValue) {
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    shuffle2.push_back(possMoves[i]);
+                    iShuffle2.push_back(pieceIndex[i]);
+                    continue;
+                }
+            } else if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()) {
+                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                update(lastMove, boardPoss2, piecesPoss2);
+                shuffle1.push_back(possMoves[i]);
+                iShuffle1.push_back(pieceIndex[i]);
+                continue;
+            }
+        } 
         if (piecesPoss[pieceIndex[i]]->timesMoved == 0) {
-            shuffle0.push_back(possMoves[i]);
-            iShuffle0.push_back(pieceIndex[i]);
-        } else if (piecesPoss[pieceIndex[i]]->timesMoved == 1) {
+            if (i == possMoves.size()-1) {
+                shuffle3.push_back(possMoves[i]);
+                iShuffle3.push_back(pieceIndex[i]);
+            }
             shuffle1.push_back(possMoves[i]);
             iShuffle1.push_back(pieceIndex[i]);
-        } else if (piecesPoss[pieceIndex[i]]->timesMoved == 2) {
+        } else if (piecesPoss[pieceIndex[i]]->timesMoved == 1) {
+            if (i == possMoves.size()-1) {
+                shuffle3.push_back(possMoves[i]);
+                iShuffle3.push_back(pieceIndex[i]);
+            }
             shuffle2.push_back(possMoves[i]);
             iShuffle2.push_back(pieceIndex[i]);
         } else {
@@ -2565,6 +2393,10 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
     for (int i = 0; i < shuffle3.size(); i++) {
         possMoves.push_back(shuffle3[i]);
         pieceIndex.push_back(iShuffle3[i]);
+    }
+    cout << "Move ranking:\n";
+    for (int i = 0; i < possMoves.size(); i++) {
+        cout << "\t" << i << ". " << possMoves[i] << endl;
     }
 
     for (int i = 0; i < possMoves.size(); i++) {
@@ -2605,7 +2437,10 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 }
             }
         }
-        if (board[charToNum(possMoves[i][2])][letterToNum(possMoves[i][1])] != "") { // Check if Capture
+        if (boardPoss[charToNum(possMoves[i][2])][letterToNum(possMoves[i][1])] != "") { // Check if Capture
+            if (possMove == "") {
+                possMove += numToLetter(piecesPoss[pieceIndex[i]]->posy);
+            }
             possMove += 'x'; // Add capture notation
         }
         possMove += possMoves[i][1]; // Add y position
@@ -2639,3 +2474,4 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
     gameOver = true;
     return "Stalemate";
 }
+
