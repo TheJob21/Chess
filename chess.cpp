@@ -2,9 +2,16 @@
 #include <fstream>
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/time.h>
+#include <chrono>
+#include <ctime>
 #include <time.h>
 #include <string>
 #include <vector>
+using std::chrono::duration_cast;
+using std::chrono::milliseconds;
+using std::chrono::seconds;
+using std::chrono::system_clock;
 using namespace std;
 
 #include "utility.h"
@@ -119,7 +126,7 @@ int main()
                 printBoard(board, filestream);
                 moves[moveCount-1][0] = lastMove = move;
                 _50MoveLimit += 0.5;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
+                if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
@@ -143,7 +150,7 @@ int main()
                 moves[moveCount-1][1] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
                 moveCount++;
                 _50MoveLimit += 0.5;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
+                if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
@@ -168,7 +175,7 @@ int main()
                 // Computer Turn
                 moves[moveCount-1][0] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
                 _50MoveLimit += 0.5;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
+                if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
@@ -225,7 +232,7 @@ int main()
                 }
                 moves[moveCount-1][1] = lastMove = move;
                 _50MoveLimit += 0.5;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
+                if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
@@ -259,7 +266,7 @@ int main()
                 // getline(cin, move);
                 moves[moveCount-1][0] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
                 _50MoveLimit += 0.5;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
+                if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
@@ -294,7 +301,7 @@ int main()
                 // getline(cin, move);
                 moves[moveCount-1][1] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
                 moveCount++;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
+                if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
@@ -357,7 +364,7 @@ int main()
             printBoard(board, filestream);
             moves[moveCount-1][0] = lastMove = move;
             _50MoveLimit += 0.5;
-            if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
+            if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                 _50MoveLimit += 0.5;
             } else {
                 _50MoveLimit = 0;
@@ -406,7 +413,7 @@ int main()
             moves[moveCount-1][1] = lastMove = move;
             moveCount++;
             _50MoveLimit += 0.5;
-            if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
+            if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                 _50MoveLimit += 0.5;
             } else {
                 _50MoveLimit = 0;
@@ -2371,8 +2378,8 @@ bool checkValidKingMove(string lastMove, int king, string (*board)[8], string (*
 }
 
 string generateMove(string lastMove, string move, string (*board)[8], string (*boardPoss)[8], string (*boardPoss2)[8], Piece** pieces, Piece** piecesPoss, Piece** piecesPoss2, char col, bool &gameOver) {
-    vector<string> possMoves, shuffle0, shuffle1, shuffle2, shuffle3;
-    vector<int> pieceIndex, iShuffle0, iShuffle1, iShuffle2, iShuffle3;
+    vector<string> possMoves, priority0, priority1, priority2, priority3, priority4, priority5;
+    vector<int> pieceIndex, ipriority0, ipriority1, ipriority2, ipriority3, ipriority4, ipriority5;
     string possMove;
     if (col == 'W') {
         if (piecesPoss[19]->posx != 8) {
@@ -2473,37 +2480,39 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             addMoves(possMove, 15, piecesPoss, pieceIndex, possMoves);
         }
     }
-
     if (canCastle(lastMove, "0-0-0", board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, col, gameOver)) {
         return "0-0-0";
     } else if (canCastle(lastMove, "0-0", board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, col, gameOver)) {
         return "0-0";
     }
 
+    srand(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count());
     int r = rand();
+    // Prioritize moves
     for (int index = 0; index < possMoves.size(); index++) {
         int x, y, i = (index + r) % possMoves.size();
+        bool assigned = false;
         Piece* temp;
         if (possMoves[i].size() == 3) {
             x = charToNum(possMoves[i][2]), y = letterToNum(possMoves[i][1]);
         } else {
             x = charToNum(possMoves[i][1]), y = letterToNum(possMoves[i][0]);
         }
-        if (boardPoss[x][y] != "") {
+        if (boardPoss[x][y] != "") { // Move is a capture
             temp = findPiece(x, y, boardPoss, piecesPoss, boardPoss[x][y][0]);
-            if (temp->defenders.size() == 0) {
-                shuffle0.push_back(possMoves[i]);
-                iShuffle0.push_back(pieceIndex[i]);
+            if (temp->defenders.size() == 0) { // If attacked piece is undefended
+                priority0.push_back(possMoves[i]);
+                ipriority0.push_back(pieceIndex[i]);
                 continue;
-            } else if (piecesPoss[pieceIndex[i]]->value < temp->value) {
-                shuffle0.push_back(possMoves[i]);
-                iShuffle0.push_back(pieceIndex[i]);
+            } else if (piecesPoss[pieceIndex[i]]->value < temp->value) { // If attacked piece is more valuable than attacking piece
+                priority0.push_back(possMoves[i]);
+                ipriority0.push_back(pieceIndex[i]);
                 continue;
-            } else if (temp->attackers.size() > temp->defenders.size()) {
+            } else if (temp->attackers.size() > temp->defenders.size()) { // If more attackers than defenders
                 int dValue = temp->value, aValue = 0;
-                if (dValue <= piecesPoss[pieceIndex[i]]->value) {
-                    shuffle3.push_back(possMoves[i]);
-                    iShuffle3.push_back(pieceIndex[i]);
+                if (dValue <= piecesPoss[pieceIndex[i]]->value) { // If attacked piece is not more valuable than attacker
+                    priority5.push_back(possMoves[i]);
+                    ipriority5.push_back(pieceIndex[i]);
                     continue;
                 }
                 for (int j = 0; j < temp->attackers.size(); j++) {
@@ -2512,55 +2521,110 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 for (int j = 0; j < temp->defenders.size(); j++) {
                     dValue += temp->defenders[j]->value;
                 }
-                if (dValue > aValue) {
-                    shuffle0.push_back(possMoves[i]);
-                    iShuffle0.push_back(pieceIndex[i]);
+                if (dValue > aValue) { // If total defenders value is greater than total attacker value
+                    priority0.push_back(possMoves[i]);
+                    ipriority0.push_back(pieceIndex[i]);
                     continue;
                 }
+            } else { // Fewer or equal attackers than defenders, and attacker is not more valuable than attacked
+                priority5.push_back(possMoves[i]);
+                ipriority5.push_back(pieceIndex[i]);
+                continue;
             }
         } else {
-            piecesPoss2[pieceIndex[i]]->move(x, y, boardPoss2, piecesPoss2);
+            piecesPoss2[pieceIndex[i]]->move(x, y, boardPoss2, piecesPoss2); // Try out the move
             update(lastMove, boardPoss2, piecesPoss2);
-            if (piecesPoss2[pieceIndex[i]]->attackers.size() > piecesPoss2[pieceIndex[i]]->defenders.size()) {
+            for (int j = 0; j < piecesPoss[pieceIndex[i]]->attackers.size(); j++) {
+                if (piecesPoss[pieceIndex[i]]->attackers[j]->value < piecesPoss[pieceIndex[i]]->value) { // If your piece is attacked by a lesser value piece
+                    for (int k = 0; k < piecesPoss2[pieceIndex[i]]->attackers.size(); k++) {
+                        if (piecesPoss2[pieceIndex[i]]->attackers[k]->value < piecesPoss2[pieceIndex[i]]->value) { // If your piece is still attacked by a lesser value piece after moving
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                            update(lastMove, boardPoss2, piecesPoss2);
+                            priority5.push_back(possMoves[i]);
+                            ipriority5.push_back(pieceIndex[i]);
+                            assigned = true;
+                            break;
+                        }
+                    }
+                    if (assigned) { // move already assigned
+                        break;
+                    }
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority0.push_back(possMoves[i]);
+                    ipriority0.push_back(pieceIndex[i]);
+                    assigned = true;
+                }
+                if (assigned) {
+                    break;
+                }
+            }
+            if (assigned) { // move already assigned
+                continue;
+            }
+            if (piecesPoss2[pieceIndex[i]]->attackers.size() > piecesPoss2[pieceIndex[i]]->defenders.size()) { // More attackers than defenders on new tile
                 int dValue = piecesPoss2[pieceIndex[i]]->value, aValue = 0;
                 for (int j = 0; j < piecesPoss2[pieceIndex[i]]->attackers.size(); j++) {
+                    if (piecesPoss2[pieceIndex[i]]->attackers[j]->value < dValue) {
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        priority5.push_back(possMoves[i]);
+                        ipriority5.push_back(pieceIndex[i]);
+                        continue;
+                    }
                     aValue = piecesPoss2[pieceIndex[i]]->attackers[j]->value;
                 }
                 for (int j = 0; j < piecesPoss2[pieceIndex[i]]->defenders.size(); j++) {
-                    dValue = piecesPoss2[pieceIndex[i]]->attackers[j]->value;
+                    dValue += piecesPoss2[pieceIndex[i]]->defenders[j]->value;
                 }
-                if (aValue <= dValue) {
+                if (aValue >= dValue) {
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    shuffle2.push_back(possMoves[i]);
-                    iShuffle2.push_back(pieceIndex[i]);
+                    priority4.push_back(possMoves[i]);
+                    ipriority4.push_back(pieceIndex[i]);
                     continue;
                 }
+            } else if (piecesPoss2[pieceIndex[i]]->attackers.size() > 0) { // Piece is attacked
+                for (int j = 0; j < piecesPoss2[pieceIndex[i]]->attackers.size(); j++) {
+                    if (piecesPoss2[pieceIndex[i]]->attackers[j]->value < piecesPoss2[pieceIndex[i]]->value) { // Attacker is less valuable
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        priority5.push_back(possMoves[i]);
+                        ipriority5.push_back(pieceIndex[i]);
+                        continue;
+                    }
+                }
+            } else if (piecesPoss2[pieceIndex[i]]->attacking.size() > piecesPoss[pieceIndex[i]]->attacking.size() || piecesPoss2[pieceIndex[i]]->defending.size() > piecesPoss[pieceIndex[i]]->defending.size()) {
+                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                update(lastMove, boardPoss2, piecesPoss2);
+                priority3.push_back(possMoves[i]);
+                ipriority3.push_back(pieceIndex[i]);
+                continue;
             } else if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()) {
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
-                shuffle1.push_back(possMoves[i]);
-                iShuffle1.push_back(pieceIndex[i]);
+                priority3.push_back(possMoves[i]);
+                ipriority3.push_back(pieceIndex[i]);
                 continue;
             } else if (col == 'W') {
                 if (piecesPoss2[15]->inCheck) {
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    shuffle1.push_back(possMoves[i]);
-                    iShuffle1.push_back(pieceIndex[i]);
+                    priority2.push_back(possMoves[i]);
+                    ipriority2.push_back(pieceIndex[i]);
                     continue;
                 } else if (possMoves[i][0] == 'P') {
                     if (possMoves[i][2] == '7' || possMoves[i][2] == '8') {
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(lastMove, boardPoss2, piecesPoss2);
-                        shuffle0.push_back(possMoves[i]);
-                        iShuffle0.push_back(pieceIndex[i]);
+                        priority1.push_back(possMoves[i]);
+                        ipriority1.push_back(pieceIndex[i]);
                         continue;
                     } else if (possMoves[i][2] == '6') {
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(lastMove, boardPoss2, piecesPoss2);
-                        shuffle1.push_back(possMoves[i]);
-                        iShuffle1.push_back(pieceIndex[i]);
+                        priority3.push_back(possMoves[i]);
+                        ipriority3.push_back(pieceIndex[i]);
                         continue;
                     }
                 }
@@ -2568,72 +2632,94 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 if (piecesPoss2[14]->inCheck) {
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    shuffle1.push_back(possMoves[i]);
-                    iShuffle1.push_back(pieceIndex[i]);
+                    priority1.push_back(possMoves[i]);
+                    ipriority1.push_back(pieceIndex[i]);
                     continue;
                 } else if (possMoves[i][0] == 'P') {
                     if (possMoves[i][2] == '2' || possMoves[i][2] == '1') {
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(lastMove, boardPoss2, piecesPoss2);
-                        shuffle0.push_back(possMoves[i]);
-                        iShuffle0.push_back(pieceIndex[i]);
+                        priority0.push_back(possMoves[i]);
+                        ipriority0.push_back(pieceIndex[i]);
                         continue;
                     } else if (possMoves[i][2] == '3') {
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(lastMove, boardPoss2, piecesPoss2);
-                        shuffle1.push_back(possMoves[i]);
-                        iShuffle1.push_back(pieceIndex[i]);
+                        priority1.push_back(possMoves[i]);
+                        ipriority1.push_back(pieceIndex[i]);
                         continue;
                     }
                 }
             }
             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
             update(lastMove, boardPoss2, piecesPoss2);
-        } 
-        if (piecesPoss[pieceIndex[i]]->timesMoved == 0 || piecesPoss[pieceIndex[i]]->timesMoved == 1) {
-            if (i == possMoves.size()-1) {
-                shuffle3.push_back(possMoves[i]);
-                iShuffle3.push_back(pieceIndex[i]);
+        }
+        if (piecesPoss[pieceIndex[i]]->timesMoved == 0) {
+            if (piecesPoss[pieceIndex[i]]->pieceType == 'K') {
+                priority5.push_back(possMoves[i]);
+                ipriority5.push_back(pieceIndex[i]);
+            } else if (piecesPoss[pieceIndex[i]]->pieceType == 'P' || piecesPoss[pieceIndex[i]]->pieceType == 'R' || piecesPoss[pieceIndex[i]]->pieceType == 'Q') {
+                priority1.push_back(possMoves[i]);
+                ipriority1.push_back(pieceIndex[i]);
+            } else {
+                priority0.push_back(possMoves[i]);
+                ipriority0.push_back(pieceIndex[i]);
             }
-            shuffle1.push_back(possMoves[i]);
-            iShuffle1.push_back(pieceIndex[i]);
+        } else if (piecesPoss[pieceIndex[i]]->timesMoved == 1) {
+            if (piecesPoss[pieceIndex[i]]->pieceType == 'K') {
+                priority5.push_back(possMoves[i]);
+                ipriority5.push_back(pieceIndex[i]);
+            } else if (piecesPoss[pieceIndex[i]]->pieceType == 'P') {
+                priority2.push_back(possMoves[i]);
+                ipriority2.push_back(pieceIndex[i]);
+            } else {
+                priority3.push_back(possMoves[i]);
+                ipriority3.push_back(pieceIndex[i]);
+            }
         } else if (piecesPoss[pieceIndex[i]]->timesMoved == 2 || piecesPoss[pieceIndex[i]]->timesMoved == 3) {
-            if (i == possMoves.size()-1) {
-                shuffle3.push_back(possMoves[i]);
-                iShuffle3.push_back(pieceIndex[i]);
+            if (piecesPoss[pieceIndex[i]]->pieceType == 'K' || piecesPoss[pieceIndex[i]]->pieceType == 'P'  || piecesPoss[pieceIndex[i]]->pieceType == 'R' || piecesPoss[pieceIndex[i]]->pieceType == 'Q') {
+                priority5.push_back(possMoves[i]);
+                ipriority5.push_back(pieceIndex[i]);
+            } else {
+                priority4.push_back(possMoves[i]);
+                ipriority4.push_back(pieceIndex[i]);
             }
-            shuffle2.push_back(possMoves[i]);
-            iShuffle2.push_back(pieceIndex[i]);
         } else {
-            shuffle3.push_back(possMoves[i]);
-            iShuffle3.push_back(pieceIndex[i]);
+            priority5.push_back(possMoves[i]);
+            ipriority5.push_back(pieceIndex[i]);
         }
     }
     possMoves.clear();
     pieceIndex.clear();
-    
-    srand(time(0));
-    for (int i = 0; i < shuffle0.size(); i++) {
-        possMoves.push_back(shuffle0[(i+r)%shuffle0.size()]);
-        pieceIndex.push_back(iShuffle0[(i+r)%shuffle0.size()]);
+    r = rand();
+    for (int i = 0; i < priority0.size(); i++) {
+        possMoves.push_back(priority0[(i+r)%priority0.size()]);
+        pieceIndex.push_back(ipriority0[(i+r)%priority0.size()]);
     }
-    for (int i = 0; i < shuffle1.size(); i++) {
-        possMoves.push_back(shuffle1[(i+r)%shuffle1.size()]);
-        pieceIndex.push_back(iShuffle1[(i+r)%shuffle1.size()]);
+    for (int i = 0; i < priority1.size(); i++) {
+        possMoves.push_back(priority1[(i+r)%priority1.size()]);
+        pieceIndex.push_back(ipriority1[(i+r)%priority1.size()]);
     }
-    for (int i = 0; i < shuffle2.size(); i++) {
-        possMoves.push_back(shuffle2[(i+r)%shuffle2.size()]);
-        pieceIndex.push_back(iShuffle2[(i+r)%shuffle2.size()]);
+    for (int i = 0; i < priority2.size(); i++) {
+        possMoves.push_back(priority2[(i+r)%priority2.size()]);
+        pieceIndex.push_back(ipriority2[(i+r)%priority2.size()]);
     }
-    for (int i = 0; i < shuffle3.size(); i++) {
-        possMoves.push_back(shuffle3[(i+r)%shuffle3.size()]);
-        pieceIndex.push_back(iShuffle3[(i+r)%shuffle3.size()]);
+    for (int i = 0; i < priority3.size(); i++) {
+        possMoves.push_back(priority3[(i+r)%priority3.size()]);
+        pieceIndex.push_back(ipriority3[(i+r)%priority3.size()]);
     }
-    // cout << "Move ranking:\n";
-    // for (int i = 0; i < possMoves.size(); i++) {
-    //     cout << "\t" << i << ". " << possMoves[i] << endl;
-    // }
-
+    for (int i = 0; i < priority4.size(); i++) {
+        possMoves.push_back(priority4[(i+r)%priority4.size()]);
+        pieceIndex.push_back(ipriority4[(i+r)%priority4.size()]);
+    }
+    for (int i = 0; i < priority5.size(); i++) {
+        possMoves.push_back(priority5[(i+r)%priority5.size()]);
+        pieceIndex.push_back(ipriority5[(i+r)%priority5.size()]);
+    }
+    cout << "Move ranking:\n";cout << "capture" << endl;
+    for (int i = 0; i < possMoves.size(); i++) {
+        cout << "\t" << i << ". " << possMoves[i] << endl;
+    }
     for (int i = 0; i < possMoves.size(); i++) {
         // cout << "Trying move " << possMoves[i] << " #" << i+1 << " of " << possMoves.size() << endl;
         if (possMoves[i][0] != 'P') { // Check if not pawn piece
