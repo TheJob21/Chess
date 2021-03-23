@@ -165,6 +165,7 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
             }
         } else {
             x = posx+1;
+            y = posy;
             tile.a[0] = x;
             tile.a[1] = y;
             if (board[x][y] == "") {
@@ -215,6 +216,7 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
             }
         } else {
             x = posx-1;
+            y = posy;
             tile.a[0] = x;
             tile.a[1] = y;
             if (board[x][y] == "") {

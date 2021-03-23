@@ -64,6 +64,7 @@ Piece* findPiece(int x, int y, string (*board)[8], Piece** pieces, char col) {
         } else { // King
             return pieces[15];
         }
+        cout << "Black Pawn not found on square " << numToLetter(y) << numToChar(x) << endl;
     } else { // White
         if (board[x][y] != "") {
             if (board[x][y][1] == 'P') { // Pawn

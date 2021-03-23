@@ -188,14 +188,19 @@ int main()
                     cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                 }
                 printBoard(board);
-                cout << "Press enter to continue.";
-                getline(cin, move);
+                // cout << "Press enter to continue.";
+                // getline(cin, move);
                 moves[moveCount-1][0] = lastMove = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     }
                     filestream << moveCount << ". " << lastMove;
+                    for (int i = 0; i < moveCount-1; i++) {
+                        cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    }
+                    cout << moveCount << ". " << lastMove << endl;
+                    printBoard(board);
                     break;
                 }
                 for (int i = 0; i < moveCount-1; i++) {
@@ -203,13 +208,16 @@ int main()
                 }
                 cout << moveCount << ". " << lastMove << endl;
                 printBoard(board);
-                cout << "Press enter to continue.";
-                getline(cin, move);
+                // cout << "Press enter to continue.";
+                // getline(cin, move);
                 moves[moveCount-1][1] = lastMove = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
                 moveCount++;
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    }
+                    for (int i = 0; i < moveCount-1; i++) {
+                        cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     }
                     printBoard(board);
                 }
@@ -2377,7 +2385,7 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             }
         } else {
             piecesPoss2[pieceIndex[i]]->move(x, y, boardPoss2, piecesPoss2);
-            cout << piecesPoss2[pieceIndex[i]]->pieceType << numToLetter(y) << numToChar(x) << "\n";
+            // cout << piecesPoss2[pieceIndex[i]]->pieceType << numToLetter(y) << numToChar(x) << "\n";
             update(lastMove, boardPoss2, piecesPoss2);
             if (piecesPoss2[pieceIndex[i]]->attackers.size() > piecesPoss2[pieceIndex[i]]->defenders.size()) {
                 int dValue = piecesPoss2[pieceIndex[i]]->value, aValue = 0;
@@ -2441,10 +2449,10 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         possMoves.push_back(shuffle3[i]);
         pieceIndex.push_back(iShuffle3[i]);
     }
-    // cout << "Move ranking:\n";
-    // for (int i = 0; i < possMoves.size(); i++) {
-    //     cout << "\t" << i << ". " << possMoves[i] << endl;
-    // }
+    cout << "Move ranking:\n";
+    for (int i = 0; i < possMoves.size(); i++) {
+        cout << "\t" << i << ". " << possMoves[i] << endl;
+    }
 
     for (int i = 0; i < possMoves.size(); i++) {
         // cout << "Trying move " << possMoves[i] << " #" << i+1 << " of " << possMoves.size() << endl;
@@ -2492,13 +2500,33 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         }
         possMove += possMoves[i][1]; // Add y position
         possMove += possMoves[i][2]; // Add x position
+        bool prom = false;
+        if (col == 'W' && piecesPoss[pieceIndex[i]]->pieceType == 'P' && possMoves[i][2] == '8') {
+            promote(col, 'Q', pieceIndex[i], boardPoss, piecesPoss);
+            update(lastMove, boardPoss, piecesPoss);
+            possMove += 'Q';
+            prom = true;
+        } else if (col == 'B' && piecesPoss[pieceIndex[i]]->pieceType == 'P' && possMoves[i][2] == '1') {
+            promote(col, 'Q', pieceIndex[i], boardPoss, piecesPoss);
+            update(lastMove, boardPoss, piecesPoss);
+            possMove += 'Q';
+            prom = true;
+        }
         piecesPoss[pieceIndex[i]]->move(charToNum(possMoves[i][2]), letterToNum(possMoves[i][1]), boardPoss, piecesPoss);
         update(lastMove, boardPoss, piecesPoss);
         if (badCheck(boardPoss, piecesPoss, col)) { // Validate move doesn't put yourself in check
+            if (prom) {
+                promote(col, 'P', pieceIndex[i], boardPoss, piecesPoss);   
+            }
             copyBoard(board, boardPoss, pieces, piecesPoss);
             update(lastMove, boardPoss, piecesPoss);
             continue; // Try next move possibility
         } else if (check(boardPoss, piecesPoss, col)) { // Check if Check
+            if (prom) {
+                promote(col, 'Q', pieceIndex[i], boardPoss2, piecesPoss2);   
+            }
+            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+            update(lastMove, boardPoss2, piecesPoss2);
             if (checkmate(lastMove, boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) { // Check if Checkmate
                 gameOver = true;
                 possMove += '#';
@@ -2508,9 +2536,18 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 possMove += '+';
             }
         } else if (stalemate(lastMove, boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) { // Check if stalemate
+            if (prom) {
+                promote(col, 'P', pieceIndex[i], boardPoss, piecesPoss);   
+            }
             copyBoard(board, boardPoss, pieces, piecesPoss);
             update(lastMove, boardPoss, piecesPoss);
             continue; // Try next move possibility
+        }
+        if (prom) {
+            promote(col, 'Q', pieceIndex[i], board, pieces);
+            if (piecesPoss2[pieceIndex[i]]->pieceType != 'Q') {
+                promote(col, 'Q', pieceIndex[i], boardPoss2, piecesPoss2);
+            }
         }
         copyBoard(boardPoss, board, piecesPoss, pieces);
         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
