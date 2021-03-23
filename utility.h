@@ -26,4 +26,6 @@ void setBoard(string (*)[8], Piece**);
 void printBoard(string (*)[8]);
 void addMoves(string, int, Piece**, vector<int> &, vector<string> &);
 void print(const string, ostream &);
+void check3Reps(vector<vector<Int2>>, bool &, ostream &);
+void copyPos(vector<vector<Int2>> &, Piece**);
 #endif

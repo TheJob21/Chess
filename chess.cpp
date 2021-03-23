@@ -40,6 +40,7 @@ bool checkValidKingMove(string, int, string (*)[8], string (*)[8], Piece**, Piec
 bool validateMove(string, string, string (*)[8], string (*)[8], string (*)[8], Piece**, Piece**, Piece** , char, bool &);
 bool castle(string, string, string (*)[8], string (*)[8], string (*)[8], Piece**, Piece**, Piece** , char, bool &);
 string generateMove(string, string, string (*)[8], string (*)[8], string (*)[8], Piece**, Piece**, Piece** , char, bool &);
+bool canCastle(string, string, string (*)[8], string (*)[8], string (*)[8], Piece**, Piece**, Piece**, char, bool &);
 
 int main()
 {
@@ -58,6 +59,7 @@ int main()
     Piece **piecesPoss = new Piece*[32];
     Piece **piecesPoss2 = new Piece*[32];
     Piece **prevPieces = new Piece*[32];
+    vector<vector<Int2>> everyPos;
     setBoard(board, pieces);
     update(lastMove, board, pieces);
     setBoard(boardPoss, piecesPoss);
@@ -65,6 +67,7 @@ int main()
     setBoard(boardPoss2, piecesPoss2);
     update(lastMove, boardPoss2, piecesPoss2);
     setBoard(prevBoard, prevPieces);
+    copyPos(everyPos, pieces);
     coh = computerOrHuman(coh);
     if (coh == 'c') {
         col = blackOrWhite(col);
@@ -79,7 +82,8 @@ int main()
                 for (int i = 0; i < moveCount-1; i++) {
                     cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                 }
-                printBoard(board);
+                printBoard(board, cout);
+                printBoard(board, filestream);
                 cout << moveCount << ". ";
                 cin >> move;
                 isValid = false;
@@ -107,23 +111,27 @@ int main()
                         }
                     }
                 }
-                printBoard(board);
+                printBoard(board, cout);
+                printBoard(board, filestream);
                 moves[moveCount-1][0] = lastMove = move;
                 _50MoveLimit += 0.5;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
                 }
                 if (_50MoveLimit >= 50) {
                     gameOver = true;
+                    filestream << "50 move limit reached. Stalemate!\n";
                     cout << "50 move limit reached. Stalemate!\n";
                 }
+                copyPos(everyPos, pieces);
+                check3Reps(everyPos, gameOver, filestream);
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     }
-                    filestream << moveCount << ". " << move;
+                    filestream << moveCount << ". " << lastMove << endl;
                     break;
                 }
                 bool isValid = false;
@@ -131,20 +139,24 @@ int main()
                 moves[moveCount-1][1] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
                 moveCount++;
                 _50MoveLimit += 0.5;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
                 }
                 if (_50MoveLimit >= 50) {
                     gameOver = true;
+                    filestream << "50 move limit reached. Stalemate!\n";
                     cout << "50 move limit reached. Stalemate!\n";
                 }
+                copyPos(everyPos, pieces);
+                check3Reps(everyPos, gameOver, filestream);
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     }
-                    printBoard(board);
+                    printBoard(board, cout);
+                    printBoard(board, filestream);
                 }
             }
         } else if (col == 'w') {
@@ -152,29 +164,34 @@ int main()
                 // Computer Turn
                 moves[moveCount-1][0] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
                 _50MoveLimit += 0.5;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
                 }
                 if (_50MoveLimit >= 50) {
                     gameOver = true;
+                    filestream << "50 move limit reached. Stalemate!\n";
                     cout << "50 move limit reached. Stalemate!\n";
                 }
+                copyPos(everyPos, pieces);
+                check3Reps(everyPos, gameOver, filestream);
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     }
-                    filestream << moveCount << ". " << move;
+                    filestream << moveCount << ". " << lastMove << endl;
                     break;
                 }
-                printBoard(board);
+                printBoard(board, cout);
+                printBoard(board, filestream);
                 // Human Turn
                 cout << endl;
                 for (int i = 0; i < moveCount-1; i++) {
                     cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                 }
-                printBoard(board);
+                printBoard(board, cout);
+                printBoard(board, filestream);
                 cout << moveCount << ". " << lastMove << ", ";
                 cin >> move;
                 isValid = false;
@@ -204,20 +221,24 @@ int main()
                 }
                 moves[moveCount-1][1] = lastMove = move;
                 _50MoveLimit += 0.5;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
                 }
                 if (_50MoveLimit >= 50) {
                     gameOver = true;
+                    filestream << "50 move limit reached. Stalemate!\n";
                     cout << "50 move limit reached. Stalemate!\n";
                 }
+                copyPos(everyPos, pieces);
+                check3Reps(everyPos, gameOver, filestream);
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     }
-                    printBoard(board);
+                    printBoard(board, cout);
+                    printBoard(board, filestream);
                 }
                 bool isValid = false;
                 moveCount++;
@@ -228,50 +249,59 @@ int main()
                 for (int i = 0; i < moveCount-1; i++) {
                     cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                 }
-                printBoard(board);
+                printBoard(board, cout);
+                printBoard(board, filestream);
                 // cout << "Press enter to continue.";
                 // getline(cin, move);
                 moves[moveCount-1][0] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
                 _50MoveLimit += 0.5;
-                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
                 }
                 if (_50MoveLimit >= 50) {
                     gameOver = true;
+                    filestream << "50 move limit reached. Stalemate!\n";
                     cout << "50 move limit reached. Stalemate!\n";
                 }
+                copyPos(everyPos, pieces);
+                check3Reps(everyPos, gameOver, filestream);
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     }
-                    filestream << moveCount << ". " << lastMove;
+                    filestream << moveCount << ". " << lastMove << endl;
                     for (int i = 0; i < moveCount-1; i++) {
                         cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     }
                     cout << moveCount << ". " << lastMove << endl;
-                    printBoard(board);
+                    printBoard(board, cout);
+                    printBoard(board, filestream);
                     break;
                 }
                 for (int i = 0; i < moveCount-1; i++) {
                     cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                 }
                 cout << moveCount << ". " << lastMove << endl;
-                printBoard(board);
+                printBoard(board, cout);
+                printBoard(board, filestream);
                 // cout << "Press enter to continue.";
                 // getline(cin, move);
                 moves[moveCount-1][1] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
                 moveCount++;
-                if (move[0] = 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+                if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
                 } else {
                     _50MoveLimit = 0;
                 }
                 if (_50MoveLimit >= 50) {
                     gameOver = true;
+                    filestream << "50 move limit reached. Stalemate!\n";
                     cout << "50 move limit reached. Stalemate!\n";
                 }
+                copyPos(everyPos, pieces);
+                check3Reps(everyPos, gameOver, filestream);
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
@@ -279,7 +309,8 @@ int main()
                     for (int i = 0; i < moveCount-1; i++) {
                         cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     }
-                    printBoard(board);
+                    printBoard(board, cout);
+                    printBoard(board, filestream);
                 }
             }
         }
@@ -289,7 +320,8 @@ int main()
             for (int i = 0; i < moveCount-1; i++) {
                 cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
             }
-            printBoard(board);
+            printBoard(board, cout);
+            printBoard(board, filestream);
             cout << moveCount << ". ";
             cin >> move;
             isValid = false;
@@ -317,18 +349,22 @@ int main()
                     }
                 }
             }
-            printBoard(board);
+            printBoard(board, cout);
+            printBoard(board, filestream);
             moves[moveCount-1][0] = lastMove = move;
             _50MoveLimit += 0.5;
-            if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+            if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
                 _50MoveLimit += 0.5;
             } else {
                 _50MoveLimit = 0;
             }
             if (_50MoveLimit >= 50) {
                 gameOver = true;
+                filestream << "50 move limit reached. Stalemate!\n";
                 cout << "50 move limit reached. Stalemate!\n";
             }
+            copyPos(everyPos, pieces);
+            check3Reps(everyPos, gameOver, filestream);
             if (gameOver) {
                 for (int i = 0; i < moveCount-1; i++) {
                     filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
@@ -366,20 +402,24 @@ int main()
             moves[moveCount-1][1] = lastMove = move;
             moveCount++;
             _50MoveLimit += 0.5;
-            if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' || move.find('x') != string::npos) {
+            if (move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0' && move.find('x') != string::npos) {
                 _50MoveLimit += 0.5;
             } else {
                 _50MoveLimit = 0;
             }
             if (_50MoveLimit >= 50) {
                 gameOver = true;
+                filestream << "50 move limit reached. Stalemate!\n";
                 cout << "50 move limit reached. Stalemate!\n";
             }
+            copyPos(everyPos, pieces);
+            check3Reps(everyPos, gameOver, filestream);
             if (gameOver) {
                 for (int i = 0; i < moveCount-1; i++) {
                     filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                 }
-                printBoard(board);
+                printBoard(board, cout);
+                printBoard(board, filestream);
             }
         }
     }
@@ -2430,6 +2470,12 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         }
     }
 
+    if (canCastle(lastMove, "0-0-0", board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, col, gameOver)) {
+        return "0-0-0";
+    } else if (canCastle(lastMove, "0-0", board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, col, gameOver)) {
+        return "0-0";
+    }
+
     for (int i = 0; i < possMoves.size(); i++) {
         int x, y;
         Piece* temp;
@@ -2441,6 +2487,10 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         if (boardPoss[x][y] != "") {
             temp = findPiece(x, y, boardPoss, piecesPoss, boardPoss[x][y][0]);
             if (temp->defenders.size() == 0) {
+                shuffle0.push_back(possMoves[i]);
+                iShuffle0.push_back(pieceIndex[i]);
+                continue;
+            } else if (piecesPoss[pieceIndex[i]]->value < temp->value) {
                 shuffle0.push_back(possMoves[i]);
                 iShuffle0.push_back(pieceIndex[i]);
                 continue;
@@ -2487,6 +2537,50 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 shuffle1.push_back(possMoves[i]);
                 iShuffle1.push_back(pieceIndex[i]);
                 continue;
+            } else if (col == 'W') {
+                if (piecesPoss2[15]->inCheck) {
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    shuffle1.push_back(possMoves[i]);
+                    iShuffle1.push_back(pieceIndex[i]);
+                    continue;
+                } else if (possMoves[i][0] == 'P') {
+                    if (possMoves[i][2] == '7' || possMoves[i][2] == '8') {
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        shuffle0.push_back(possMoves[i]);
+                        iShuffle0.push_back(pieceIndex[i]);
+                        continue;
+                    } else if (possMoves[i][2] == '6') {
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        shuffle1.push_back(possMoves[i]);
+                        iShuffle1.push_back(pieceIndex[i]);
+                        continue;
+                    }
+                }
+            } else if (col == 'B') {
+                if (piecesPoss2[14]->inCheck) {
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    shuffle1.push_back(possMoves[i]);
+                    iShuffle1.push_back(pieceIndex[i]);
+                    continue;
+                } else if (possMoves[i][0] == 'P') {
+                    if (possMoves[i][2] == '2' || possMoves[i][2] == '1') {
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        shuffle0.push_back(possMoves[i]);
+                        iShuffle0.push_back(pieceIndex[i]);
+                        continue;
+                    } else if (possMoves[i][2] == '3') {
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        shuffle1.push_back(possMoves[i]);
+                        iShuffle1.push_back(pieceIndex[i]);
+                        continue;
+                    }
+                }
             }
             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
             update(lastMove, boardPoss2, piecesPoss2);
@@ -2636,4 +2730,117 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
     }
     gameOver = true;
     return "Stalemate";
+}
+
+bool canCastle(string lastMove, string move, string (*board)[8], string (*boardPoss)[8], string (*boardPoss2)[8], Piece** pieces, Piece** piecesPoss, Piece** piecesPoss2, char col, bool &gameOver) {
+    int king, kr, qr, rkSq;
+    if (col == 'W') {
+        king = 14;
+        kr = 1;
+        qr = 0;
+        rkSq = 0; 
+    } else {
+        king = 15;
+        kr = 3;
+        qr = 2;
+        rkSq = 7;
+    }
+    if (!pieces[king]->inCheck) { // Make sure king isn't in check
+        if (move == "0-0") { // King side Castle
+            if (pieces[kr]->posx != 8) { // Check rook isn't captured
+                if (pieces[kr]->timesMoved < 1 && pieces[king]->timesMoved < 1) { // Make sure king and rook haven't move before
+                    if (piecesPoss[king]->moveIsValid(rkSq, 5, boardPoss)) {
+                        piecesPoss[king]->move(rkSq, 5, boardPoss, piecesPoss);
+                        update(lastMove, boardPoss, piecesPoss);
+                        if (!piecesPoss[king]->inCheck) {
+                            if (piecesPoss[king]->moveIsValid(rkSq, 6, boardPoss)) {
+                                piecesPoss[king]->move(rkSq, 6, boardPoss, piecesPoss);
+                                update(lastMove, boardPoss, piecesPoss);
+                                if (!piecesPoss[king]->inCheck) { // Success
+                                    piecesPoss[kr]->move(rkSq, 5, boardPoss, piecesPoss);
+                                    update(lastMove, boardPoss, piecesPoss);
+                                    copyBoard(boardPoss, board, piecesPoss, pieces);
+                                    update(lastMove, board, pieces);
+                                    return true;
+                                } else {
+                                    copyBoard(board, boardPoss, pieces, piecesPoss);
+                                    update(lastMove, boardPoss, piecesPoss);
+                                    return false;
+                                }
+                            } else {
+                                copyBoard(board, boardPoss, pieces, piecesPoss);
+                                update(lastMove, boardPoss, piecesPoss);
+                                return false;
+                            }
+                        } else {
+                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                            update(lastMove, boardPoss, piecesPoss);
+                            return false;
+                        }
+                    } else {
+                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                        update(lastMove, boardPoss, piecesPoss);
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else if (move == "0-0-0") { // Queen side castle
+            if (pieces[qr]->posx != 8) { // Check rook isn't captured
+                if (pieces[qr]->timesMoved < 1 && pieces[king]->timesMoved < 1) { // Make sure king and rook haven't move before
+                    if (piecesPoss[king]->moveIsValid(rkSq, 3, boardPoss)) {
+                        piecesPoss[king]->move(rkSq, 3, boardPoss, piecesPoss);
+                        update(lastMove, boardPoss, piecesPoss);
+                        if (!piecesPoss[king]->inCheck) {
+                            if (piecesPoss[king]->moveIsValid(rkSq, 2, boardPoss)) {
+                                piecesPoss[king]->move(rkSq, 2, boardPoss, piecesPoss);
+                                update(lastMove, boardPoss, piecesPoss);
+                                if (!piecesPoss[king]->inCheck) {
+                                    if (piecesPoss[qr]->moveIsValid(rkSq, 1, boardPoss)) { // Success
+                                        piecesPoss[qr]->move(rkSq, 3, boardPoss, piecesPoss);
+                                        update(lastMove, boardPoss, piecesPoss);
+                                        copyBoard(boardPoss, board, piecesPoss, pieces);
+                                        update(lastMove, board, pieces);
+                                        return true;
+                                        
+                                    } else {
+                                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                                        update(lastMove, boardPoss, piecesPoss);
+                                        return false;
+                                    }
+                                } else {
+                                    copyBoard(board, boardPoss, pieces, piecesPoss);
+                                    update(lastMove, boardPoss, piecesPoss);
+                                    return false;
+                                }
+                            } else {
+                                copyBoard(board, boardPoss, pieces, piecesPoss);
+                                update(lastMove, boardPoss, piecesPoss);
+                                return false;
+                            }
+                        } else {
+                            copyBoard(board, boardPoss, pieces, piecesPoss);
+                            update(lastMove, boardPoss, piecesPoss);
+                            return false;
+                        }
+                    } else {
+                        copyBoard(board, boardPoss, pieces, piecesPoss);
+                        update(lastMove, boardPoss, piecesPoss);
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
 }

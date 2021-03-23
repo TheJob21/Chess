@@ -463,25 +463,20 @@ void setBoard(string (*board)[8], Piece** pieces) {
 
 }
 
-void printBoard(string (*board)[8]) {
-    cout << "  ________________________\n";
+void printBoard(string (*board)[8], ostream & output) {
+    output << "  ________________________\n";
     for (int i = 7; i >= 0; i--) {
-        cout << i+1 << " ";
+        output << i+1 << " ";
         for (int j = 0; j < 8; j++) {
             if (board[i][j] != "") {
-                cout << "|" << board[i][j] << "";
+                output << "|" << board[i][j] << "";
             } else {
-                cout << "|__";
+                output << "|__";
             }
         }
-        cout << "|\n";
+        output << "|\n";
     }
-    cout << "   a  b  c  d  e  f  g  h\n";
-}
-
-void print(const string str, ostream & output)
-{
-    output << str;
+    output << "   a  b  c  d  e  f  g  h\n";
 }
 
 void addMoves(string possMove, int i, Piece** piecesPoss, vector<int> &pieceIndex, vector<string> &possMoves) {
@@ -493,4 +488,41 @@ void addMoves(string possMove, int i, Piece** piecesPoss, vector<int> &pieceInde
         pieceIndex.push_back(i);
         possMoves.push_back(tempMove);
     }
+}
+
+void check3Reps(vector<vector<Int2>> everyPos, bool &gameOver, ostream &filestream) {
+    for (int i = 0; i < everyPos.size(); i++) {
+        int _3Limit = 1;
+        for (int j = i+1; j < everyPos.size(); j++) {
+            for (int k = 0; k < 32; k++) {
+                if (everyPos[i][k].a[0] == everyPos[j][k].a[0] && everyPos[i][k].a[1] == everyPos[j][k].a[1]) {
+                    continue;
+                } else {
+                    _3Limit--;
+                    break;
+                }
+            }
+            _3Limit++;
+            if (_3Limit >= 3) {
+                gameOver = true;
+                filestream << "Threefold Repetition rule reached. Stalemate!\n";
+                cout << "Threefold Repetition rule reached. Stalemate!\n";
+                break;
+            }
+        }
+        if (gameOver) {
+            break;
+        }
+    }
+}
+
+void copyPos(vector<vector<Int2>> &everyPos, Piece** pieces) {
+    vector<Int2> pos;
+    for (int i = 0; i < 32; i++) {
+        Int2 p;
+        p.a[0] = pieces[i]->posx;
+        p.a[1] = pieces[i]->posy;
+        pos.push_back(p);
+    }
+    everyPos.push_back(pos);
 }
