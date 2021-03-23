@@ -170,7 +170,7 @@ int main()
                     printBoard(board, filestream);
                 }
             }
-        } else if (col == 'w') {
+        } else if (col == 'b') {
             while (!gameOver) {
                 // Computer Turn
                 moves[moveCount-1][0] = lastMove = move = generateMove(lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
