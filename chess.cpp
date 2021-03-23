@@ -1,5 +1,8 @@
 #include <iostream>
 #include <fstream>
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
 #include <string>
 #include <vector>
 using namespace std;
@@ -44,6 +47,7 @@ bool canCastle(string, string, string (*)[8], string (*)[8], string (*)[8], Piec
 
 int main()
 {
+    srand(time(0));
     ofstream filestream("GameRecord.out");
     bool gameOver = false, isValid;
     char col, coh;
@@ -2476,8 +2480,9 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         return "0-0";
     }
 
-    for (int i = 0; i < possMoves.size(); i++) {
-        int x, y;
+    int r = rand();
+    for (int index = 0; index < possMoves.size(); index++) {
+        int x, y, i = (index + r) % possMoves.size();
         Piece* temp;
         if (possMoves[i].size() == 3) {
             x = charToNum(possMoves[i][2]), y = letterToNum(possMoves[i][1]);
@@ -2585,14 +2590,14 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
             update(lastMove, boardPoss2, piecesPoss2);
         } 
-        if (piecesPoss[pieceIndex[i]]->timesMoved == 0) {
+        if (piecesPoss[pieceIndex[i]]->timesMoved == 0 || piecesPoss[pieceIndex[i]]->timesMoved == 1) {
             if (i == possMoves.size()-1) {
                 shuffle3.push_back(possMoves[i]);
                 iShuffle3.push_back(pieceIndex[i]);
             }
             shuffle1.push_back(possMoves[i]);
             iShuffle1.push_back(pieceIndex[i]);
-        } else if (piecesPoss[pieceIndex[i]]->timesMoved == 1) {
+        } else if (piecesPoss[pieceIndex[i]]->timesMoved == 2 || piecesPoss[pieceIndex[i]]->timesMoved == 3) {
             if (i == possMoves.size()-1) {
                 shuffle3.push_back(possMoves[i]);
                 iShuffle3.push_back(pieceIndex[i]);
@@ -2606,21 +2611,23 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
     }
     possMoves.clear();
     pieceIndex.clear();
+    
+    srand(time(0));
     for (int i = 0; i < shuffle0.size(); i++) {
-        possMoves.push_back(shuffle0[i]);
-        pieceIndex.push_back(iShuffle0[i]);
+        possMoves.push_back(shuffle0[(i+r)%shuffle0.size()]);
+        pieceIndex.push_back(iShuffle0[(i+r)%shuffle0.size()]);
     }
     for (int i = 0; i < shuffle1.size(); i++) {
-        possMoves.push_back(shuffle1[i]);
-        pieceIndex.push_back(iShuffle1[i]);
+        possMoves.push_back(shuffle1[(i+r)%shuffle1.size()]);
+        pieceIndex.push_back(iShuffle1[(i+r)%shuffle1.size()]);
     }
     for (int i = 0; i < shuffle2.size(); i++) {
-        possMoves.push_back(shuffle2[i]);
-        pieceIndex.push_back(iShuffle2[i]);
+        possMoves.push_back(shuffle2[(i+r)%shuffle2.size()]);
+        pieceIndex.push_back(iShuffle2[(i+r)%shuffle2.size()]);
     }
     for (int i = 0; i < shuffle3.size(); i++) {
-        possMoves.push_back(shuffle3[i]);
-        pieceIndex.push_back(iShuffle3[i]);
+        possMoves.push_back(shuffle3[(i+r)%shuffle3.size()]);
+        pieceIndex.push_back(iShuffle3[(i+r)%shuffle3.size()]);
     }
     // cout << "Move ranking:\n";
     // for (int i = 0; i < possMoves.size(); i++) {
