@@ -526,3 +526,23 @@ void copyPos(vector<vector<Int2>> &everyPos, Piece** pieces) {
     }
     everyPos.push_back(pos);
 }
+
+void prioritizeByValue(Piece* piece, int i, string msg, vector<string> possMoves, vector<int> pieceIndex, vector<string> &priority1, vector<string> &priority2, vector<string> &priority3, vector<string> &priority4, vector<int> &ipriority1, vector<int> &ipriority2, vector<int> &ipriority3, vector<int> &ipriority4) {
+    if (piece->value == 9) {
+        cout << msg << ", priority 1\n";
+        priority1.push_back(possMoves[i]);
+        ipriority1.push_back(pieceIndex[i]);
+    } else if (piece->value == 5) {
+        cout <<  msg << ", priority 2\n";
+        priority2.push_back(possMoves[i]);
+        ipriority2.push_back(pieceIndex[i]);
+    } else if (piece->value == 3) {
+        cout <<  msg << ", priority 3\n";
+        priority3.push_back(possMoves[i]);
+        ipriority3.push_back(pieceIndex[i]);
+    } else {
+        cout <<  msg << ", priority 4\n";
+        priority4.push_back(possMoves[i]);
+        ipriority4.push_back(pieceIndex[i]);
+    }  
+}

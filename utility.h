@@ -28,4 +28,5 @@ void addMoves(string, int, Piece**, vector<int> &, vector<string> &);
 void print(const string, ostream &);
 void check3Reps(vector<vector<Int2>>, bool &, ostream &);
 void copyPos(vector<vector<Int2>> &, Piece**);
+void prioritizeByValue(Piece*, int, string, vector<string>, vector<int>, vector<string> &, vector<string> &, vector<string> &, vector<string> &, vector<int> &, vector<int> &, vector<int> &, vector<int> &);
 #endif

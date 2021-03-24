@@ -2378,124 +2378,110 @@ bool checkValidKingMove(string lastMove, int king, string (*board)[8], string (*
 }
 
 string generateMove(string lastMove, string move, string (*board)[8], string (*boardPoss)[8], string (*boardPoss2)[8], Piece** pieces, Piece** piecesPoss, Piece** piecesPoss2, char col, bool &gameOver) {
-    vector<string> possMoves, priority0, priority1, priority2, priority3, priority4, priority5, priority6, priority7;
-    vector<int> pieceIndex, ipriority0, ipriority1, ipriority2, ipriority3, ipriority4, ipriority5, ipriority6, ipriority7;
+    vector<string> possMoves, priority0, priority1, priority2, priority3, priority4, priority5, priority6, priority7, priority8, priority9;
+    vector<int> myPcsI, pieceIndex, ipriority0, ipriority1, ipriority2, ipriority3, ipriority4, ipriority5, ipriority6, ipriority7, ipriority8, ipriority9;
     string possMove;
     if (col == 'W') {
-        if (piecesPoss[19]->posx != 8) {
-            addMoves(possMove, 19, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[20]->posx != 8) {
-            addMoves(possMove, 20, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[4]->posx != 8) {
-            addMoves(possMove, 4, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[5]->posx != 8) {
-            addMoves(possMove, 5, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[8]->posx != 8) {
-            addMoves(possMove, 8, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[9]->posx != 8) {
-            addMoves(possMove, 9, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[12]->posx != 8) {
-            addMoves(possMove, 12, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[16]->posx != 8) {
-            addMoves(possMove, 16, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[17]->posx != 8) {
-            addMoves(possMove, 17, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[18]->posx != 8) {
-            addMoves(possMove, 18, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[21]->posx != 8) {
-            addMoves(possMove, 21, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[22]->posx != 8) {
-            addMoves(possMove, 22, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[23]->posx != 8) {
-            addMoves(possMove, 23, piecesPoss, pieceIndex, possMoves);
-        }
         if (piecesPoss[0]->posx != 8) {
+            myPcsI.push_back(0);
             addMoves(possMove, 0, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[1]->posx != 8) {
+            myPcsI.push_back(1);
             addMoves(possMove, 1, piecesPoss, pieceIndex, possMoves);
         }
+        if (piecesPoss[4]->posx != 8) {
+            myPcsI.push_back(4);
+            addMoves(possMove, 4, piecesPoss, pieceIndex, possMoves);
+        } 
+        if (piecesPoss[5]->posx != 8) {
+            myPcsI.push_back(5);
+            addMoves(possMove, 5, piecesPoss, pieceIndex, possMoves);
+        }
+        if (piecesPoss[8]->posx != 8) {
+            myPcsI.push_back(8);
+            addMoves(possMove, 8, piecesPoss, pieceIndex, possMoves);
+        } 
+        if (piecesPoss[9]->posx != 8) {
+            myPcsI.push_back(9);
+            addMoves(possMove, 9, piecesPoss, pieceIndex, possMoves);
+        }
+        if (piecesPoss[12]->posx != 8) {
+            myPcsI.push_back(12);
+            addMoves(possMove, 12, piecesPoss, pieceIndex, possMoves);
+        } 
         if (piecesPoss[14]->posx != 8) {
+            myPcsI.push_back(14);
             addMoves(possMove, 14, piecesPoss, pieceIndex, possMoves);
         }
+        for (int i = 16; i < 24; i++) {
+            if (piecesPoss[i]->posx != 8) {
+                myPcsI.push_back(i);
+                addMoves(possMove, i, piecesPoss, pieceIndex, possMoves);
+            }
+        }
     } else {
-        if (piecesPoss[27]->posx != 8) {
-            addMoves(possMove, 27, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[28]->posx != 8) {
-            addMoves(possMove, 28, piecesPoss, pieceIndex, possMoves);
-        }  
-        if (piecesPoss[6]->posx != 8) {
-            addMoves(possMove, 6, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[7]->posx != 8) {
-            addMoves(possMove, 7, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[10]->posx != 8) {
-            addMoves(possMove, 10, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[11]->posx != 8) {
-            addMoves(possMove, 11, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[13]->posx != 8) {
-            addMoves(possMove, 13, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[24]->posx != 8) {
-            addMoves(possMove, 24, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[25]->posx != 8) {
-            addMoves(possMove, 25, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[26]->posx != 8) {
-            addMoves(possMove, 26, piecesPoss, pieceIndex, possMoves);
-        }
-        if (piecesPoss[29]->posx != 8) {
-            addMoves(possMove, 29, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[30]->posx != 8) {
-            addMoves(possMove, 30, piecesPoss, pieceIndex, possMoves);
-        } 
-        if (piecesPoss[31]->posx != 8) {
-            addMoves(possMove, 31, piecesPoss, pieceIndex, possMoves);
-        }
         if (piecesPoss[2]->posx != 8) {
+            myPcsI.push_back(2);
             addMoves(possMove, 2, piecesPoss, pieceIndex, possMoves);
         }
         if (piecesPoss[3]->posx != 8) {
+            myPcsI.push_back(3);
             addMoves(possMove, 3, piecesPoss, pieceIndex, possMoves);
         }
+        if (piecesPoss[6]->posx != 8) {
+            myPcsI.push_back(6);
+            addMoves(possMove, 6, piecesPoss, pieceIndex, possMoves);
+        } 
+        if (piecesPoss[7]->posx != 8) {
+            myPcsI.push_back(7);
+            addMoves(possMove, 7, piecesPoss, pieceIndex, possMoves);
+        }
+        if (piecesPoss[10]->posx != 8) {
+            myPcsI.push_back(10);
+            addMoves(possMove, 10, piecesPoss, pieceIndex, possMoves);
+        } 
+        if (piecesPoss[11]->posx != 8) {
+            myPcsI.push_back(11);
+            addMoves(possMove, 11, piecesPoss, pieceIndex, possMoves);
+        }
+        if (piecesPoss[13]->posx != 8) {
+            myPcsI.push_back(13);
+            addMoves(possMove, 13, piecesPoss, pieceIndex, possMoves);
+        } 
         if (piecesPoss[15]->posx != 8) {
+            myPcsI.push_back(15);
             addMoves(possMove, 15, piecesPoss, pieceIndex, possMoves);
+        }
+        for (int i = 24; i < 32; i++) {
+            if (piecesPoss[i]->posx != 8) {
+                myPcsI.push_back(i);
+                addMoves(possMove, i, piecesPoss, pieceIndex, possMoves);
+            }
         }
     }
     if (canCastle(lastMove, "0-0-0", board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, col, gameOver)) {
-        return "0-0-0";
+        possMoves.push_back("0-0-0");
+        pieceIndex.push_back(33);
     } else if (canCastle(lastMove, "0-0", board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, col, gameOver)) {
-        return "0-0";
+        possMoves.push_back("0-0");
+        pieceIndex.push_back(33);
     }
 
     srand(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count());
     int r = rand();
     // Prioritize moves
-    cout << "Total Moves: " << possMoves.size() << endl;
+    cout << "Total Possible Moves: " << possMoves.size() << endl;
     for (int index = 0; index < possMoves.size(); index++) {
         int x, y, i = (index + r) % possMoves.size();
         bool assigned = false;
         cout << "\t" << index+1 << " " << possMoves[i] << ": ";
         Piece* temp;
-        if (possMoves[i].size() == 3) {
+        if (possMoves[i][0] == '0') {
+            priority5.push_back(possMoves[i]);
+            ipriority5.push_back(pieceIndex[i]);
+            continue;
+        }else if (possMoves[i].size() == 3) {
             x = charToNum(possMoves[i][2]), y = letterToNum(possMoves[i][1]);
         } else {
             x = charToNum(possMoves[i][1]), y = letterToNum(possMoves[i][0]);
@@ -2529,44 +2515,109 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         update(lastMove, boardPoss2, piecesPoss2);
         piecesPoss2[pieceIndex[i]]->move(x, y, boardPoss2, piecesPoss2); // Try out the move
         update(lastMove, boardPoss2, piecesPoss2);
-        for (int j = 0; j < piecesPoss[pieceIndex[i]]->defending.size(); j++) {
-            if (piecesPoss[pieceIndex[i]]->defending[j]->attackers.size() >= piecesPoss[pieceIndex[i]]->defending[j]->defenders.size()) { // Move protects undefended or underdefended piece
-                cout << "Currently defending attacked piece, priority 6\n";
-                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                update(lastMove, boardPoss2, piecesPoss2);
-                priority6.push_back(possMoves[i]);
-                ipriority6.push_back(pieceIndex[i]);
-                assigned = true;
-                break;
+        int inDangerBefore = 0, inDangerAfter = 0;
+        for (int j = 0; j < myPcsI.size(); j++) {
+            if (piecesPoss[myPcsI[j]]->attackers.size() > 0 && piecesPoss[myPcsI[j]]->defenders.size() == 0) {
+                inDangerBefore += piecesPoss[myPcsI[j]]->value;
+            } else if (piecesPoss[myPcsI[j]]->attackers.size() > piecesPoss[myPcsI[j]]->defenders.size()) {
+                int dValue = piecesPoss[myPcsI[j]]->value, aValue = 0, mostVal = 0;
+                bool accounted = false;
+                for (int k = 0; k < piecesPoss[myPcsI[j]]->attackers.size(); k++) {
+                    if (piecesPoss[myPcsI[j]]->attackers[k]->value < dValue) {
+                        inDangerBefore += piecesPoss[myPcsI[j]]->value;
+                        accounted = true;
+                        break;
+                    } else {
+                        aValue += piecesPoss[myPcsI[j]]->attackers[k]->value;
+                        if (piecesPoss[myPcsI[j]]->attackers[k]->value > mostVal) {
+                            mostVal = piecesPoss[myPcsI[j]]->attackers[k]->value;
+                        }
+                    }
+                }
+                if (accounted) {
+                    continue;
+                }
+                for (int k = 0; k < piecesPoss[myPcsI[j]]->defenders.size(); k++) {
+                    dValue += piecesPoss[myPcsI[j]]->attackers[k]->value;
+                }
+                aValue -= mostVal;
+                if (dValue > aValue) {
+                    inDangerBefore += piecesPoss[myPcsI[j]]->value;
+                }
+            } else if (piecesPoss[myPcsI[j]]->attackers.size() > 0 && piecesPoss[myPcsI[j]]->defenders.size() > 0) {
+                for (int k = 0; k < piecesPoss[myPcsI[j]]->attackers.size(); k++) {
+                    if (piecesPoss[myPcsI[j]]->attackers[k]->value < piecesPoss[myPcsI[j]]->value) {
+                        inDangerBefore += piecesPoss[myPcsI[j]]->value;
+                        break;
+                    }
+                }
             }
         }
-        if (assigned) {
+        for (int j = 0; j < myPcsI.size(); j++) {
+            if (piecesPoss2[myPcsI[j]]->attackers.size() > 0 && piecesPoss2[myPcsI[j]]->defenders.size() == 0) {
+                inDangerAfter += piecesPoss2[myPcsI[j]]->value;
+            } else if (piecesPoss2[myPcsI[j]]->attackers.size() > piecesPoss2[myPcsI[j]]->defenders.size()) {
+                int dValue = piecesPoss2[myPcsI[j]]->value, aValue = 0, mostVal = 0;
+                bool accounted = false;
+                for (int k = 0; k < piecesPoss2[myPcsI[j]]->attackers.size(); k++) {
+                    if (piecesPoss2[myPcsI[j]]->attackers[k]->value < dValue) {
+                        inDangerAfter += piecesPoss2[myPcsI[j]]->value;
+                        accounted = true;
+                        break;
+                    } else {
+                        aValue += piecesPoss2[myPcsI[j]]->attackers[k]->value;
+                        if (piecesPoss2[myPcsI[j]]->attackers[k]->value > mostVal) {
+                            mostVal = piecesPoss2[myPcsI[j]]->attackers[k]->value;
+                        }
+                    }
+                }
+                if (accounted) {
+                    continue;
+                }
+                for (int k = 0; k < piecesPoss2[myPcsI[j]]->defenders.size(); k++) {
+                    dValue += piecesPoss2[myPcsI[j]]->attackers[k]->value;
+                }
+                aValue -= mostVal;
+                if (dValue > aValue) {
+                    inDangerAfter += piecesPoss2[myPcsI[j]]->value;
+                }
+            } else if (piecesPoss2[myPcsI[j]]->attackers.size() > 0 && piecesPoss2[myPcsI[j]]->defenders.size() > 0) {
+                for (int k = 0; k < piecesPoss[myPcsI[j]]->attackers.size(); k++) {
+                    if (piecesPoss2[myPcsI[j]]->attackers[k]->value < piecesPoss2[myPcsI[j]]->value) {
+                        inDangerAfter += piecesPoss2[myPcsI[j]]->value;
+                        break;
+                    }
+                }
+            }
+        }
+        if (inDangerAfter > inDangerBefore) {
+            cout << "Move endangers more pieces or more valuable pieces, priority 9\n";
+            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+            update(lastMove, boardPoss2, piecesPoss2);
+            priority9.push_back(possMoves[i]);
+            ipriority9.push_back(pieceIndex[i]);
             continue;
         }
         if (boardPoss[x][y] != "") { // Move is a capture
             temp = findPiece(x, y, boardPoss, piecesPoss, boardPoss[x][y][0]);
             if (temp->defenders.size() == 0) { // If attacked piece is undefended
-                cout << "undefended attack, priority 2\n";
+                prioritizeByValue(temp, i, "Undefended attack", possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
-                priority2.push_back(possMoves[i]);
-                ipriority2.push_back(pieceIndex[i]);
                 continue;
             } else if (piecesPoss[pieceIndex[i]]->value < temp->value) { // If attacked piece is more valuable than attacking piece
-                cout << "defndr less/equal val to atckr, priority 2\n";
+                prioritizeByValue(temp, i, "defndr less/equal val to atckr", possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
-                priority2.push_back(possMoves[i]);
-                ipriority2.push_back(pieceIndex[i]);
                 continue;
             } else if (temp->attackers.size() > temp->defenders.size()) { // If more attackers than defenders
                 int dValue = temp->value, aValue = 0;
                 if (dValue <= piecesPoss[pieceIndex[i]]->value) { // If attacked piece is not more valuable than attacker
-                    cout << "more atckrs than defndrs, defndr less/equal val to atckr, priority 2\n";
+                    cout << "more atckrs than defndrs, defndr less/equal val to atckr, priority 8\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    priority6.push_back(possMoves[i]);
-                    ipriority6.push_back(pieceIndex[i]);
+                    priority8.push_back(possMoves[i]);
+                    ipriority8.push_back(pieceIndex[i]);
                     continue;
                 }
                 for (int j = 0; j < temp->attackers.size(); j++) {
@@ -2576,19 +2627,17 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                     dValue += temp->defenders[j]->value;
                 }
                 if (dValue > aValue) { // If total defenders value is greater than total attacker value
-                    cout << "more atckrs than defndrs, defndrs value greater than atckrs, priority 2\n";
+                    prioritizeByValue(temp, i, "more atckrs than defndrs, defndrs value greater than atckrs", possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    priority2.push_back(possMoves[i]);
-                    ipriority2.push_back(pieceIndex[i]);
                     continue;
                 }
             } else { // Fewer or equal attackers than defenders, and attacker is not more valuable than attacked
-                cout << "Not enough attackers to capture, priority 7\n";
+                cout << "Not enough attackers to capture, priority 9\n";
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
-                priority7.push_back(possMoves[i]);
-                ipriority7.push_back(pieceIndex[i]);
+                priority9.push_back(possMoves[i]);
+                ipriority9.push_back(pieceIndex[i]);
                 continue;
             }
         } else {
@@ -2596,11 +2645,11 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 int dValue = piecesPoss2[pieceIndex[i]]->value, aValue = 0;
                 for (int j = 0; j < piecesPoss2[pieceIndex[i]]->attackers.size(); j++) {
                     if (piecesPoss2[pieceIndex[i]]->attackers[j]->value < dValue) {
-                        cout << "Attacker is less valuable, priority 7\n";
+                        cout << "Attacker is less valuable, priority 9\n";
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(lastMove, boardPoss2, piecesPoss2);
-                        priority7.push_back(possMoves[i]);
-                        ipriority7.push_back(pieceIndex[i]);
+                        priority9.push_back(possMoves[i]);
+                        ipriority9.push_back(pieceIndex[i]);
                         assigned = true;
                         break;
                     }
@@ -2613,18 +2662,18 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                     dValue += piecesPoss2[pieceIndex[i]]->defenders[j]->value;
                 }
                 if (aValue < dValue) {
-                    cout << "Attackers are less valuable than defenders, priority 7\n";
+                    cout << "Attackers are less valuable than defenders, priority 9\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    priority7.push_back(possMoves[i]);
-                    ipriority7.push_back(pieceIndex[i]);
+                    priority9.push_back(possMoves[i]);
+                    ipriority9.push_back(pieceIndex[i]);
                     continue;
                 } else {
-                    cout << "Attackers are not less valuable than defenders, priority 6\n";
+                    cout << "Attackers are not less valuable than defenders, priority 8\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    priority6.push_back(possMoves[i]);
-                    ipriority6.push_back(pieceIndex[i]);
+                    priority8.push_back(possMoves[i]);
+                    ipriority8.push_back(pieceIndex[i]);
                     continue;
                 }
             }
@@ -2632,11 +2681,11 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 if (piecesPoss[pieceIndex[i]]->attackers[j]->value < piecesPoss[pieceIndex[i]]->value) { // If your piece is attacked by a lesser value piece
                     for (int k = 0; k < piecesPoss2[pieceIndex[i]]->attackers.size(); k++) {
                         if (piecesPoss2[pieceIndex[i]]->attackers[k]->value < piecesPoss2[pieceIndex[i]]->value) { // If your piece is still attacked by a lesser value piece after moving
-                            cout << "Move from danger to danger, priority 7\n";
+                            cout << "Move from danger to danger, priority 9\n";
                             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                             update(lastMove, boardPoss2, piecesPoss2);
-                            priority7.push_back(possMoves[i]);
-                            ipriority7.push_back(pieceIndex[i]);
+                            priority9.push_back(possMoves[i]);
+                            ipriority9.push_back(pieceIndex[i]);
                             assigned = true;
                             break;
                         }
@@ -2644,11 +2693,9 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                     if (assigned) { // move already assigned
                         break;
                     }
-                    cout << "Move to safety, priority 1\n";
+                    prioritizeByValue(piecesPoss[pieceIndex[i]], i, "Move to safety", possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    priority1.push_back(possMoves[i]);
-                    ipriority1.push_back(pieceIndex[i]);
                     assigned = true;
                 }
                 if (assigned) {
@@ -2660,11 +2707,11 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             } else if (piecesPoss2[pieceIndex[i]]->attackers.size() > 0) { // If moved, piece is attacked
                 for (int j = 0; j < piecesPoss2[pieceIndex[i]]->attackers.size(); j++) {
                     if (piecesPoss2[pieceIndex[i]]->attackers[j]->value < piecesPoss2[pieceIndex[i]]->value) { // Attacker is less valuable
-                        cout << "Attacker is less valuable, priority 7\n";
+                        cout << "Attacker is less valuable, priority 9\n";
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(lastMove, boardPoss2, piecesPoss2);
-                        priority7.push_back(possMoves[i]);
-                        ipriority7.push_back(pieceIndex[i]);
+                        priority9.push_back(possMoves[i]);
+                        ipriority9.push_back(pieceIndex[i]);
                         assigned = true;
                         break;
                     }
@@ -2673,15 +2720,15 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                     continue;
                 }
             }
-            for (int j = 0; j < piecesPoss2[pieceIndex[i]]->defending.size(); j++) {
-                if (piecesPoss2[pieceIndex[i]]->defending[j]->attackers.size() == piecesPoss2[pieceIndex[i]]->defending[j]->defenders.size()) { // Move protects undefended or underdefended piece
-                    cout << "Defends attacked piece, priority 2\n";
-                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                    update(lastMove, boardPoss2, piecesPoss2);
-                    priority2.push_back(possMoves[i]);
-                    ipriority2.push_back(pieceIndex[i]);
-                    assigned = true;
-                    break;
+            if (inDangerAfter < inDangerBefore) {
+                for (int j = 0; j < piecesPoss2[pieceIndex[i]]->defending.size(); j++) {
+                    if (piecesPoss2[pieceIndex[i]]->defending[j]->attackers.size() == piecesPoss2[pieceIndex[i]]->defending[j]->defenders.size()) { // Move protects undefended or underdefended piece
+                        prioritizeByValue(piecesPoss2[pieceIndex[i]]->defending[j], i, "Defends attacked piece", possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        assigned = true;
+                        break;
+                    }
                 }
             }
             if (assigned) {
@@ -2689,153 +2736,165 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             }
             if (((x == 4 && (y == 3 || y == 4)) || (x== 3 && (y == 3 || y == 4)))) { // Move is a power square
                 if (piecesPoss2[pieceIndex[i]]->pieceType == 'P') {
-                    cout << "Move is a power square, priority 3\n";
+                    cout << "Move is a power square, priority 5\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    priority3.push_back(possMoves[i]);
-                    ipriority3.push_back(pieceIndex[i]);
+                    priority5.push_back(possMoves[i]);
+                    ipriority5.push_back(pieceIndex[i]);
                     continue;
                 } else if (piecesPoss2[pieceIndex[i]]->pieceType == 'N') {
-                    cout << "Move is a power square, priority 4\n";
-                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                    update(lastMove, boardPoss2, piecesPoss2);
-                    priority4.push_back(possMoves[i]);
-                    ipriority4.push_back(pieceIndex[i]);
-                    continue;
-                }
-            } else if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()) { // Move increases board coverage
-                if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()+4) {
-                    if (piecesPoss2[pieceIndex[i]]->pieceType == 'Q') {
-                        cout << "Increases queen's covered tiles by 5+, priority 4\n";
-                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                        update(lastMove, boardPoss2, piecesPoss2);
-                        priority4.push_back(possMoves[i]);
-                        ipriority4.push_back(pieceIndex[i]);
-                        continue;
-                    }
-                    cout << "Increases covered tiles by 5+, priority 3\n";
-                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                    update(lastMove, boardPoss2, piecesPoss2);
-                    priority2.push_back(possMoves[i]);
-                    ipriority2.push_back(pieceIndex[i]);
-                    continue;
-                } else if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()+2) {
-                    if (piecesPoss[pieceIndex[i]]->pieceType == 'K') {
-                        if (piecesPoss[pieceIndex[i]]->timesMoved == 0) {
-                            cout << "Move increases king coverage before he's moved, priority 7\n";
-                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                            update(lastMove, boardPoss2, piecesPoss2);
-                            priority7.push_back(possMoves[i]);
-                            ipriority7.push_back(pieceIndex[i]);
-                            continue;
-                        } else {
-                            cout << "Move increases king coverage after he's moved, priority 6\n";
-                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                            update(lastMove, boardPoss2, piecesPoss2);
-                            priority6.push_back(possMoves[i]);
-                            ipriority6.push_back(pieceIndex[i]);
-                            continue;
-                        }
-                    } else if (piecesPoss2[pieceIndex[i]]->pieceType == 'Q') {
-                        cout << "Increases queen's covered tiles by 3-4, priority 5\n";
-                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                        update(lastMove, boardPoss2, piecesPoss2);
-                        priority5.push_back(possMoves[i]);
-                        ipriority5.push_back(pieceIndex[i]);
-                        continue;
-                    } else {
-                        cout << "Increases covered tiles by 3-4, priority 4\n";
-                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                        update(lastMove, boardPoss2, piecesPoss2);
-                        priority3.push_back(possMoves[i]);
-                        ipriority3.push_back(pieceIndex[i]);
-                        continue;
-                    }
-                } else {
-                    cout << "Increases covered tiles by 1-2, priority 5\n";
-                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                    update(lastMove, boardPoss2, piecesPoss2);
-                    priority4.push_back(possMoves[i]);
-                    ipriority4.push_back(pieceIndex[i]);
-                    continue;
-                }
-            } else if ((x == 5 && (y >= 2 || y <= 5)) || (x== 2 && (y >= 2 || y <= 5)) || (x== 3 && (y == 2 || y == 5)) || (x== 4 && (y == 2 || y == 5))) { // Move is a power square
-                if (piecesPoss[pieceIndex[i]]->pieceType != 'K') {
-                    cout << "Move is close to center, priority 4\n";
-                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                    update(lastMove, boardPoss2, piecesPoss2);
-                    priority4.push_back(possMoves[i]);
-                    ipriority4.push_back(pieceIndex[i]);
-                    continue;
-                } else if (piecesPoss[pieceIndex[i]]->pieceType != 'B') {
-                    cout << "Move is close to center, priority 3\n";
-                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                    update(lastMove, boardPoss2, piecesPoss2);
-                    priority3.push_back(possMoves[i]);
-                    ipriority3.push_back(pieceIndex[i]);
-                    continue;
-                } else {
-                    cout << "Move king close to center, priority 6\n";
+                    cout << "Move is a power square, priority 6\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
                     priority6.push_back(possMoves[i]);
                     ipriority6.push_back(pieceIndex[i]);
                     continue;
                 }
+            } else if (((x == 3 || x == 4) && (y == 2 || y == 5 || y == 1 || y == 6) )) { // Move is bishop opener
+                if (piecesPoss[pieceIndex[i]]->pieceType == 'B' && piecesPoss[pieceIndex[i]]->timesMoved == 0) {
+                    cout << "Move is close to center, priority 5\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority5.push_back(possMoves[i]);
+                    ipriority5.push_back(pieceIndex[i]);
+                    continue;
+                }
+            } else if ((x == 2 && (y == 3 || y == 4)) || (x == 5 && (y == 3 || y == 4))) { // Move is bishop opener
+                if (piecesPoss[pieceIndex[i]]->pieceType == 'B' && piecesPoss[pieceIndex[i]]->timesMoved == 0) {
+                    cout << "Move is close to center, priority 6\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority6.push_back(possMoves[i]);
+                    ipriority6.push_back(pieceIndex[i]);
+                    continue;
+                }
+            } 
+            if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()) { // Move increases board coverage
+                if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()+4) {
+                    if (piecesPoss2[pieceIndex[i]]->pieceType == 'Q') {
+                        cout << "Increases queen's covered tiles by 5+, priority 6\n";
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        priority6.push_back(possMoves[i]);
+                        ipriority6.push_back(pieceIndex[i]);
+                        continue;
+                    }
+                    cout << "Increases covered tiles by 5+, priority 5\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority5.push_back(possMoves[i]);
+                    ipriority5.push_back(pieceIndex[i]);
+                    continue;
+                } else if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()+2) {
+                    if (piecesPoss[pieceIndex[i]]->pieceType == 'K') {
+                        if (piecesPoss[pieceIndex[i]]->timesMoved == 0) {
+                            cout << "Move increases king coverage before he's moved, priority 9\n";
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                            update(lastMove, boardPoss2, piecesPoss2);
+                            priority9.push_back(possMoves[i]);
+                            ipriority9.push_back(pieceIndex[i]);
+                            continue;
+                        } else {
+                            cout << "Move increases king coverage after he's moved, priority 8\n";
+                            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                            update(lastMove, boardPoss2, piecesPoss2);
+                            priority8.push_back(possMoves[i]);
+                            ipriority8.push_back(pieceIndex[i]);
+                            continue;
+                        }
+                    } else if (piecesPoss2[pieceIndex[i]]->pieceType == 'Q') {
+                        cout << "Increases queen's covered tiles by 3-4, priority 7\n";
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        priority7.push_back(possMoves[i]);
+                        ipriority7.push_back(pieceIndex[i]);
+                        continue;
+                    } else {
+                        cout << "Increases covered tiles by 3-4, priority 6\n";
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        priority6.push_back(possMoves[i]);
+                        ipriority6.push_back(pieceIndex[i]);
+                        continue;
+                    }
+                } else {
+                    cout << "Increases covered tiles by 1-2, priority 7\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority7.push_back(possMoves[i]);
+                    ipriority7.push_back(pieceIndex[i]);
+                    continue;
+                }
+            } else if ((x <= 5 && x >= 2) && (y >= 2 && y <= 5)) { // Move is close to center
+                if (piecesPoss[pieceIndex[i]]->pieceType != 'K') {
+                    cout << "Move is close to center, priority 6\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority6.push_back(possMoves[i]);
+                    ipriority6.push_back(pieceIndex[i]);
+                    continue;
+                } else {
+                    cout << "Move king close to center, priority 8\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority8.push_back(possMoves[i]);
+                    ipriority8.push_back(pieceIndex[i]);
+                    continue;
+                }
             } else if (piecesPoss2[pieceIndex[i]]->attacking.size() > piecesPoss[pieceIndex[i]]->attacking.size() || piecesPoss2[pieceIndex[i]]->defending.size() > piecesPoss[pieceIndex[i]]->defending.size()) {
-                cout << "Increases attackers/defenders, priority 5\n";
+                cout << "Increases attackers/defenders, priority 7\n";
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
-                priority5.push_back(possMoves[i]);
-                ipriority5.push_back(pieceIndex[i]);
+                priority7.push_back(possMoves[i]);
+                ipriority7.push_back(pieceIndex[i]);
                 continue;
             } else if (col == 'W') {
                 if (piecesPoss2[15]->inCheck) {
-                    cout << "Places opponent in check, priority 4\n";
+                    cout << "Places opponent in check, priority 6\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    priority4.push_back(possMoves[i]);
-                    ipriority4.push_back(pieceIndex[i]);
+                    priority6.push_back(possMoves[i]);
+                    ipriority6.push_back(pieceIndex[i]);
                     continue;
                 } else if (possMoves[i][0] == 'P') {
                     if (possMoves[i][2] == '7' || possMoves[i][2] == '8') {
-                        cout << "Pawn close to promotion, priority 3\n";
-                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                        update(lastMove, boardPoss2, piecesPoss2);
-                        priority3.push_back(possMoves[i]);
-                        ipriority3.push_back(pieceIndex[i]);
-                        continue;
-                    } else if (possMoves[i][2] == '6') {
                         cout << "Pawn close to promotion, priority 5\n";
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(lastMove, boardPoss2, piecesPoss2);
                         priority5.push_back(possMoves[i]);
                         ipriority5.push_back(pieceIndex[i]);
+                        continue;
+                    } else if (possMoves[i][2] == '6') {
+                        cout << "Pawn close to promotion, priority 7\n";
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        priority7.push_back(possMoves[i]);
+                        ipriority7.push_back(pieceIndex[i]);
                         continue;
                     }
                 }
             } else if (col == 'B') {
                 if (piecesPoss2[14]->inCheck) {
-                    cout << "Places opponent in check, priority 4\n";
+                    cout << "Places opponent in check, priority 6\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
-                    priority4.push_back(possMoves[i]);
-                    ipriority4.push_back(pieceIndex[i]);
+                    priority6.push_back(possMoves[i]);
+                    ipriority6.push_back(pieceIndex[i]);
                     continue;
                 } else if (possMoves[i][0] == 'P') {
                     if (possMoves[i][2] == '2' || possMoves[i][2] == '1') {
-                        cout << "Pawn close to promotion, priority 3\n";
-                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                        update(lastMove, boardPoss2, piecesPoss2);
-                        priority3.push_back(possMoves[i]);
-                        ipriority3.push_back(pieceIndex[i]);
-                        continue;
-                    } else if (possMoves[i][2] == '3') {
                         cout << "Pawn close to promotion, priority 5\n";
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                         update(lastMove, boardPoss2, piecesPoss2);
                         priority5.push_back(possMoves[i]);
                         ipriority5.push_back(pieceIndex[i]);
+                        continue;
+                    } else if (possMoves[i][2] == '3') {
+                        cout << "Pawn close to promotion, priority 7\n";
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        priority7.push_back(possMoves[i]);
+                        ipriority7.push_back(pieceIndex[i]);
                         continue;
                     }
                 }
@@ -2843,40 +2902,30 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
             update(lastMove, boardPoss2, piecesPoss2);
         }
-        if (piecesPoss[pieceIndex[i]]->timesMoved == 0) {
+        if (piecesPoss[pieceIndex[i]]->timesMoved == 0 || piecesPoss[pieceIndex[i]]->timesMoved == 1) {
             if (piecesPoss[pieceIndex[i]]->pieceType == 'K' || piecesPoss[pieceIndex[i]]->pieceType == 'R') {
-                cout << "Rook/King haven't moved, priority 7\n";
+                cout << "Rook/King have moved 0-1 time, priority 9\n";
+                priority9.push_back(possMoves[i]);
+                ipriority9.push_back(pieceIndex[i]);
+            } else {
+                cout << "Bishop/Knight/Queen/Pawn have moved 0-1 time, priority 7\n";
                 priority7.push_back(possMoves[i]);
                 ipriority7.push_back(pieceIndex[i]);
-            } else {
-                cout << "Bishop/Knight/Queen/Pawn haven't moved, priority 4\n";
-                priority4.push_back(possMoves[i]);
-                ipriority4.push_back(pieceIndex[i]);
-            }
-        } else if (piecesPoss[pieceIndex[i]]->timesMoved == 1) {
-            if (piecesPoss[pieceIndex[i]]->pieceType == 'K') {
-                cout << "King has only moved once, priority 7\n";
-                priority7.push_back(possMoves[i]);
-                ipriority7.push_back(pieceIndex[i]);
-            } else {
-                cout << "Bishop/Knight/Queen/Pawn have only moved once, priority 5\n";
-                priority5.push_back(possMoves[i]);
-                ipriority5.push_back(pieceIndex[i]);
             }
         } else if (piecesPoss[pieceIndex[i]]->timesMoved == 2 || piecesPoss[pieceIndex[i]]->timesMoved == 3) {
             if (piecesPoss[pieceIndex[i]]->pieceType == 'K' || piecesPoss[pieceIndex[i]]->pieceType == 'P'  || piecesPoss[pieceIndex[i]]->pieceType == 'R' || piecesPoss[pieceIndex[i]]->pieceType == 'Q') {
-                cout << "King/Pawn/Rook/Queen have moved 2-3 times, priority 7\n";
-                priority7.push_back(possMoves[i]);
-                ipriority7.push_back(pieceIndex[i]);
+                cout << "King/Pawn/Rook/Queen have moved 2-3 times, priority 9\n";
+                priority9.push_back(possMoves[i]);
+                ipriority9.push_back(pieceIndex[i]);
             } else {
-                cout << "Bishop/Knight have moved 2-3 times, priority 6\n";
-                priority6.push_back(possMoves[i]);
-                ipriority6.push_back(pieceIndex[i]);
+                cout << "Bishop/Knight have moved 2-3 times, priority 8\n";
+                priority8.push_back(possMoves[i]);
+                ipriority8.push_back(pieceIndex[i]);
             }
         } else {
-            cout << "Else, priority 7\n";
-            priority7.push_back(possMoves[i]);
-            ipriority7.push_back(pieceIndex[i]);
+            cout << "Else, priority 9\n";
+            priority9.push_back(possMoves[i]);
+            ipriority9.push_back(pieceIndex[i]);
         }
     }
     possMoves.clear();
@@ -2923,13 +2972,52 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         pieceIndex.push_back(ipriority7[(i+r)%priority7.size()]);
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 7" << endl;
     }
-    // cout << "Move ranking:\n";
-    // for (int i = 0; i < possMoves.size(); i++) {
-    //     cout << "\t" << i << ". " << possMoves[i] << endl;
-    // }
+    for (int i = 0; i < priority8.size(); i++) {
+        possMoves.push_back(priority8[(i+r)%priority8.size()]);
+        pieceIndex.push_back(ipriority8[(i+r)%priority8.size()]);
+        cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 8" << endl;
+    }
+    for (int i = 0; i < priority9.size(); i++) {
+        possMoves.push_back(priority9[(i+r)%priority9.size()]);
+        pieceIndex.push_back(ipriority9[(i+r)%priority9.size()]);
+        cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 9" << endl;
+    }
+    // Validate moves in order of priority, then move
     for (int i = 0; i < possMoves.size(); i++) {
         // cout << "Trying move " << possMoves[i] << " #" << i+1 << " of " << possMoves.size() << endl;
-        if (possMoves[i][0] != 'P') { // Check if not pawn piece
+        int king, kr, qr, rkSq;
+        if (possMoves[i][0] == '0') {
+            if (col == 'W') {
+                king = 14;
+                kr = 1;
+                qr = 0;
+                rkSq = 0; 
+            } else {
+                king = 15;
+                kr = 3;
+                qr = 2;
+                rkSq = 7;
+            }
+            if (possMoves[i] == "0-0") {
+                piecesPoss[king]->move(rkSq, 6, boardPoss, piecesPoss);
+                piecesPoss[kr]->move(rkSq, 5, boardPoss, piecesPoss);
+                update(lastMove, boardPoss, piecesPoss);
+                copyBoard(boardPoss, board, piecesPoss, pieces);
+                update(lastMove, board, pieces);
+                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                update(lastMove, boardPoss2, piecesPoss2);
+                return possMoves[i];
+            } else if (possMoves[i] == "0-0-0") {
+                piecesPoss[king]->move(rkSq, 2, boardPoss, piecesPoss);
+                piecesPoss[qr]->move(rkSq, 3, boardPoss, piecesPoss);
+                update(lastMove, boardPoss, piecesPoss);
+                copyBoard(boardPoss, board, piecesPoss, pieces);
+                update(lastMove, board, pieces);
+                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                update(lastMove, boardPoss2, piecesPoss2);
+                return possMoves[i];
+            }
+        } else if (possMoves[i][0] != 'P') { // Check if not pawn piece
             possMove = possMoves[i][0];
         } else {
             possMove = "";
@@ -3057,10 +3145,8 @@ bool canCastle(string lastMove, string move, string (*board)[8], string (*boardP
                                 piecesPoss[king]->move(rkSq, 6, boardPoss, piecesPoss);
                                 update(lastMove, boardPoss, piecesPoss);
                                 if (!piecesPoss[king]->inCheck) { // Success
-                                    piecesPoss[kr]->move(rkSq, 5, boardPoss, piecesPoss);
+                                    copyBoard(board, boardPoss, pieces, piecesPoss);
                                     update(lastMove, boardPoss, piecesPoss);
-                                    copyBoard(boardPoss, board, piecesPoss, pieces);
-                                    update(lastMove, board, pieces);
                                     return true;
                                 } else {
                                     copyBoard(board, boardPoss, pieces, piecesPoss);
@@ -3100,10 +3186,8 @@ bool canCastle(string lastMove, string move, string (*board)[8], string (*boardP
                                 update(lastMove, boardPoss, piecesPoss);
                                 if (!piecesPoss[king]->inCheck) {
                                     if (piecesPoss[qr]->moveIsValid(rkSq, 1, boardPoss)) { // Success
-                                        piecesPoss[qr]->move(rkSq, 3, boardPoss, piecesPoss);
+                                        copyBoard(board, boardPoss, pieces, piecesPoss);
                                         update(lastMove, boardPoss, piecesPoss);
-                                        copyBoard(boardPoss, board, piecesPoss, pieces);
-                                        update(lastMove, board, pieces);
                                         return true;
                                         
                                     } else {
