@@ -2306,19 +2306,16 @@ bool checkmate(string lastMove, string (*board)[8], string (*board1)[8], Piece**
 }
 
 bool checkForBlock(string lastMove, int x, int y, string (*board)[8], string (*board1)[8], Piece** pieces, Piece** pieces1, char col) {
-    vector<Piece*> temp;
     for (int i = 0; i < 32; i++) {
         if (pieces1[i]->color != col) {
             if (i == 14 || i == 15) {
                 continue;
-            } else if (pieces1[i]->pieceType == 'P') {
-                temp.push_back(pieces1[i]);
             } else {
-                for (int j = 0; j < pieces1[i]->coveredTiles.size(); j++) {
-                    if (pieces1[i]->coveredTiles[j].a[0] == x && pieces1[i]->coveredTiles[j].a[1] == y) {
-                        pieces1[i]->move(x,y, board1, pieces1);
+                for (int j = 0; j < pieces1[i]->moveableTiles.size(); j++) {
+                    if (pieces1[i]->moveableTiles[j].a[0] == x && pieces1[i]->moveableTiles[j].a[1] == y) {
+                        pieces1[i]->move(x, y, board1, pieces1);
                         update(lastMove, board1, pieces1);
-                        if (!badCheck(board1, pieces1, pieces[i]->color)) {
+                        if (!badCheck(board1, pieces1, pieces1[i]->color)) {
                             copyBoard(board, board1, pieces, pieces1);
                             return true;
                         }
@@ -2328,51 +2325,18 @@ bool checkForBlock(string lastMove, int x, int y, string (*board)[8], string (*b
             }
         } 
     }
-    for (int i = 0; i < temp.size(); i++) {
-        for (int j = 0; j < temp[i]->moveableTiles.size(); j++) {
-            if (temp[i]->moveableTiles[j].a[0] == x && temp[i]->moveableTiles[j].a[1] == y) {
-                temp[i]->move(x,y, board1, pieces1);
-                update(lastMove, board1, pieces1);
-                if (!badCheck(board1, pieces1, pieces[i]->color)) {
-                    copyBoard(board, board1, pieces, pieces1);
-                    return true;
-                }
-                copyBoard(board, board1, pieces, pieces1);
-            }
-        }
-    }
     return false;
 }
 
 bool checkValidKingMove(string lastMove, int king, string (*board)[8], string (*board1)[8], Piece** pieces, Piece** pieces1, char col) {
-    for (int i = pieces1[king]->posx-1; i <= pieces1[king]->posx+1; i++) {
-        for (int j = pieces1[king]->posy-1; j <= pieces1[king]->posy+1; j++) {
-            if (i == pieces1[king]->posx && j == pieces1[king]->posy) {
-                continue;
-            } else {
-                if (i >=0 && i <= 7 && j >=0 && j <= 7) {
-                    if (board1[i][j] != "") {
-                        if (board1[i][j][0] != pieces1[king]->color) {
-                            pieces1[king]->move(i, j, board1, pieces1);
-                            update(lastMove, board1, pieces1);
-                            if (!badCheck(board1, pieces1, pieces1[king]->color)) {
-                                copyBoard(board, board1, pieces, pieces1);
-                                return true;
-                            }
-                            copyBoard(board, board1, pieces, pieces1);
-                        }
-                    } else {
-                        pieces1[king]->move(i, j, board1, pieces1);
-                        update(lastMove, board1, pieces1);
-                        if (!badCheck(board1, pieces1, pieces1[king]->color)) {
-                            copyBoard(board, board1, pieces, pieces1);
-                            return true;
-                        }
-                        copyBoard(board, board1, pieces, pieces1);
-                    }
-                }
-            }
+    for (int i = 0 ; i < pieces1[king]->moveableTiles.size(); i++) {
+        pieces1[king]->move(pieces1[king]->moveableTiles[i].a[0], pieces1[king]->moveableTiles[i].a[1], board1, pieces1);
+        update(lastMove, board1, pieces1);
+        if (!badCheck(board1, pieces1, pieces1[king]->color)) {
+            copyBoard(board, board1, pieces, pieces1);
+            return true;
         }
+        copyBoard(board, board1, pieces, pieces1);
     }
     return false;
 }
@@ -2473,7 +2437,7 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
     // Prioritize moves
     cout << "Total Possible Moves: " << possMoves.size() << endl;
     for (int index = 0; index < possMoves.size(); index++) {
-        int x, y, i = (index + r) % possMoves.size();
+        int x, y, king, i = (index + r) % possMoves.size();
         bool assigned = false;
         cout << "\t" << index+1 << " " << possMoves[i] << ": ";
         Piece* temp;
@@ -2489,6 +2453,7 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
         update(lastMove, boardPoss2, piecesPoss2);
         if (col == 'W') {
+            king = 14;
             if (piecesPoss2[15]->inCheck) {
                 if (checkmate(lastMove, boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                     cout << "Places opponent in checkmate, priority 0\n";
@@ -2500,6 +2465,7 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 }
             }
         } else if (col == 'B') {
+            king = 15;
             if (piecesPoss2[14]->inCheck) {
                 if (checkmate(lastMove, boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
                     cout << "Places opponent in checkmate, priority 0\n";
@@ -2632,6 +2598,13 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                     update(lastMove, boardPoss2, piecesPoss2);
                     continue;
                 }
+            } else if (piecesPoss[pieceIndex[i]]->value == temp->value) { // Move would be a trade
+                cout << "Trade pieces, priority 7\n";
+                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                update(lastMove, boardPoss2, piecesPoss2);
+                priority7.push_back(possMoves[i]);
+                ipriority7.push_back(pieceIndex[i]);
+                continue;
             } else { // Fewer or equal attackers than defenders, and attacker is not more valuable than attacked
                 cout << "Not enough attackers to capture, priority 9\n";
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -2827,7 +2800,7 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 }
             } else if ((x <= 5 && x >= 2) && (y >= 2 && y <= 5)) { // Move is close to center
                 if (piecesPoss[pieceIndex[i]]->pieceType != 'K') {
-                    cout << "Move is close to center, priority 6\n";
+                    cout << "Move is close to center, priority 7\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
                     priority6.push_back(possMoves[i]);
@@ -2903,8 +2876,8 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             update(lastMove, boardPoss2, piecesPoss2);
         }
         if (piecesPoss[pieceIndex[i]]->timesMoved == 0 || piecesPoss[pieceIndex[i]]->timesMoved == 1) {
-            if (piecesPoss[pieceIndex[i]]->pieceType == 'K' || piecesPoss[pieceIndex[i]]->pieceType == 'R') {
-                cout << "Rook/King have moved 0-1 time, priority 9\n";
+            if (piecesPoss[pieceIndex[i]]->pieceType == 'K' || (piecesPoss[pieceIndex[i]]->pieceType == 'R' && piecesPoss[king]->timesMoved == 0)) {
+                cout << "Rook/King have moved 0-1 time, priority 8\n";
                 priority9.push_back(possMoves[i]);
                 ipriority9.push_back(pieceIndex[i]);
             } else {
@@ -2914,7 +2887,7 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             }
         } else if (piecesPoss[pieceIndex[i]]->timesMoved == 2 || piecesPoss[pieceIndex[i]]->timesMoved == 3) {
             if (piecesPoss[pieceIndex[i]]->pieceType == 'K' || piecesPoss[pieceIndex[i]]->pieceType == 'P'  || piecesPoss[pieceIndex[i]]->pieceType == 'R' || piecesPoss[pieceIndex[i]]->pieceType == 'Q') {
-                cout << "King/Pawn/Rook/Queen have moved 2-3 times, priority 9\n";
+                cout << "King/Pawn/Rook/Queen have moved 2-3 times, priority 8\n";
                 priority9.push_back(possMoves[i]);
                 ipriority9.push_back(pieceIndex[i]);
             } else {
@@ -3075,6 +3048,11 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         }
         piecesPoss[pieceIndex[i]]->move(charToNum(possMoves[i][2]), letterToNum(possMoves[i][1]), boardPoss, piecesPoss);
         update(lastMove, boardPoss, piecesPoss);
+        if (prom) {
+            promote(col, 'Q', pieceIndex[i], boardPoss2, piecesPoss2);   
+        }
+        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+        update(lastMove, boardPoss2, piecesPoss2);
         if (badCheck(boardPoss, piecesPoss, col)) { // Validate move doesn't put yourself in check
             if (prom) {
                 promote(col, 'P', pieceIndex[i], boardPoss, piecesPoss);   
@@ -3083,11 +3061,6 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
             update(lastMove, boardPoss, piecesPoss);
             continue; // Try next move possibility
         } else if (check(boardPoss, piecesPoss, col)) { // Check if Check
-            if (prom) {
-                promote(col, 'Q', pieceIndex[i], boardPoss2, piecesPoss2);   
-            }
-            copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-            update(lastMove, boardPoss2, piecesPoss2);
             if (checkmate(lastMove, boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) { // Check if Checkmate
                 gameOver = true;
                 possMove += '#';
