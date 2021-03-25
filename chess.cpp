@@ -2326,11 +2326,11 @@ bool checkForBlock(string lastMove, int x, int y, string (*board)[8], string (*b
                         update(lastMove, board1, pieces1);
                         if (!badCheck(board1, pieces1, pieces1[i]->color)) {
                             copyBoard(board, board1, pieces, pieces1);
-                            update(board1, pieces1);
+                            update(lastMove, board1, pieces1);
                             return true;
                         }
                         copyBoard(board, board1, pieces, pieces1);
-                        update(board1, pieces1);
+                        update(lastMove, board1, pieces1);
                     }
                 }
             }
@@ -2615,8 +2615,8 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 }
                 for (int j = 0; j < temp->attackers.size(); j++) {
                     aValue += temp->attackers[j]->value;
-                    if (piecesPoss2[myPcsI[j]]->attackers[k]->value > mostVal) {
-                        mostVal = piecesPoss2[myPcsI[j]]->attackers[k]->value;
+                    if (temp->attackers[j]->value > mostVal) {
+                        mostVal = temp->attackers[j]->value;
                     }
                 }
                 for (int j = 0; j < temp->defenders.size(); j++) {
