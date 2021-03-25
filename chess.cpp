@@ -2576,11 +2576,27 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
         if (boardPoss[x][y] != "") { // Move is a capture
             temp = findPiece(x, y, boardPoss, piecesPoss, boardPoss[x][y][0]);
             if (temp->defenders.size() == 0) { // If attacked piece is undefended
+                if (inDangerAfter-temp->value > inDangerBefore) {
+                    cout << "Move endangers more pieces or more valuable pieces, priority 9\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority9.push_back(possMoves[i]);
+                    ipriority9.push_back(pieceIndex[i]);
+                    continue;
+                }
                 prioritizeByValue(temp, i, "Undefended attack", possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
                 continue;
             } else if (piecesPoss[pieceIndex[i]]->value < temp->value) { // If attacked piece is more valuable than attacking piece
+                if (inDangerAfter-temp->value > inDangerBefore) {
+                    cout << "Move endangers more pieces or more valuable pieces, priority 9\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority9.push_back(possMoves[i]);
+                    ipriority9.push_back(pieceIndex[i]);
+                    continue;
+                }
                 prioritizeByValue(temp, i, "defndr less/equal val to atckr", possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
