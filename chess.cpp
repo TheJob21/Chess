@@ -2326,9 +2326,11 @@ bool checkForBlock(string lastMove, int x, int y, string (*board)[8], string (*b
                         update(lastMove, board1, pieces1);
                         if (!badCheck(board1, pieces1, pieces1[i]->color)) {
                             copyBoard(board, board1, pieces, pieces1);
+                            update(board1, pieces1);
                             return true;
                         }
                         copyBoard(board, board1, pieces, pieces1);
+                        update(board1, pieces1);
                     }
                 }
             }
@@ -2602,7 +2604,7 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 update(lastMove, boardPoss2, piecesPoss2);
                 continue;
             } else if (temp->attackers.size() > temp->defenders.size()) { // If more attackers than defenders
-                int dValue = temp->value, aValue = 0;
+                int dValue = temp->value, aValue = 0, mostVal = 0;
                 if (dValue <= piecesPoss[pieceIndex[i]]->value) { // If attacked piece is not more valuable than attacker
                     cout << "more atckrs than defndrs, defndr less/equal val to atckr, priority 8\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -2613,11 +2615,14 @@ string generateMove(string lastMove, string move, string (*board)[8], string (*b
                 }
                 for (int j = 0; j < temp->attackers.size(); j++) {
                     aValue += temp->attackers[j]->value;
+                    if (piecesPoss2[myPcsI[j]]->attackers[k]->value > mostVal) {
+                        mostVal = piecesPoss2[myPcsI[j]]->attackers[k]->value;
+                    }
                 }
                 for (int j = 0; j < temp->defenders.size(); j++) {
                     dValue += temp->defenders[j]->value;
                 }
-                if (dValue > aValue) { // If total defenders value is greater than total attacker value
+                if (dValue > aValue-mostVal) { // If total defenders value is greater than total attacker value
                     prioritizeByValue(temp, i, "more atckrs than defndrs, defndrs value greater than atckrs", possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
