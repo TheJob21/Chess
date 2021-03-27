@@ -58,6 +58,7 @@ bool Piece::addCoveredTile(int x, int y, string(*board)[8], Piece** pieces) {
     Int2 tile;
     tile.a[0] = x;
     tile.a[1] = y;
+    
     coveredTiles.push_back(tile);
     if (board[x][y] != "") {        
         // cout << x << ", " << y << " " << board[x][y][0] << endl;
