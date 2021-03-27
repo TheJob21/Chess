@@ -2278,7 +2278,7 @@ bool checkmate(string lastMove, string (*board)[8], string (*board1)[8], Piece**
                     }
                     return true;
                 } else { // Queen is in 'h1' direction of king
-                    while (y > pieces[king]->posx) { 
+                    while (y > pieces[king]->posy) { 
                         if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                             return false;
                         }
@@ -2455,6 +2455,8 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 update(lastMove, boardPoss, piecesPoss);
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
+                cout << "Places yourself in check, illegal\n";
+                fstream << "Places yourself in check, illegal\n";
                 continue;
             } else if (piecesPoss2[15]->inCheck) {
                 if (checkmate(lastMove, boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
@@ -2476,6 +2478,8 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 update(lastMove, boardPoss, piecesPoss);
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
+                cout << "Places yourself in check, illegal\n";
+                fstream << "Places yourself in check, illegal\n";
                 continue;
             } else if (piecesPoss2[14]->inCheck) {
                 if (checkmate(lastMove, boardPoss, boardPoss2, piecesPoss, piecesPoss2, col)) {
@@ -2589,7 +2593,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 }
                 aValue -= mostVal;
                 if (dValue > aValue) {
-                    inDangerAfter += dValue-aValue;
+                    inDangerAfter += piecesPoss2[myPcsI[j]]->value;
                 }
             } else if (piecesPoss2[myPcsI[j]]->attackers.size() > 0 && piecesPoss2[myPcsI[j]]->attackers.size() == piecesPoss2[myPcsI[j]]->defenders.size()) { // Equal defenders to attackers
                 int dValue = piecesPoss2[myPcsI[j]]->value, aValue = 0, mostVal = 0;
@@ -2669,7 +2673,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                     continue;
                 }
                 if (inDangerAfter < inDangerBefore) {
-                    prioritizeByValue(temp->value+inDangerBefore-inDangerAfter, i, "Undefended attack", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
+                    prioritizeByValue(temp->value+inDangerBefore-inDangerAfter, i, "defndr less/equal val to atckr", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
                     continue;
@@ -2680,15 +2684,15 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 continue;
             } else if (temp->attackers.size() > temp->defenders.size()) { // If more attackers than defenders
                 int dValue = temp->value, aValue = 0, mostVal = 0;
-                if (dValue <= piecesPoss[pieceIndex[i]]->value) { // If attacked piece is not more valuable than attacker
-                    fstream << "more atckrs than defndrs, defndr less/equal val to atckr, priority 8\n";
-                    cout << "more atckrs than defndrs, defndr less/equal val to atckr, priority 8\n";
-                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                    update(lastMove, boardPoss2, piecesPoss2);
-                    priority8.push_back(possMoves[i]);
-                    ipriority8.push_back(pieceIndex[i]);
-                    continue;
-                }
+                // if (dValue <= piecesPoss[pieceIndex[i]]->value) { // If attacked piece is not more valuable than attacker
+                //     fstream << "more atckrs than defndrs, defndr less/equal val to atckr, priority 8\n";
+                //     cout << "more atckrs than defndrs, defndr less/equal val to atckr, priority 8\n";
+                //     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                //     update(lastMove, boardPoss2, piecesPoss2);
+                //     priority8.push_back(possMoves[i]);
+                //     ipriority8.push_back(pieceIndex[i]);
+                //     continue;
+                // }
                 for (int j = 0; j < temp->attackers.size(); j++) {
                     aValue += temp->attackers[j]->value;
                     if (temp->attackers[j]->value > mostVal) {
@@ -2697,6 +2701,21 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 }
                 for (int j = 0; j < temp->defenders.size(); j++) {
                     dValue += temp->defenders[j]->value;
+                }
+                if (inDangerAfter-temp->value > inDangerBefore) {
+                    fstream << "Move endangers more pieces or more valuable pieces, priority 9\n";
+                    cout << "Move endangers more pieces or more valuable pieces, priority 9\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority9.push_back(possMoves[i]);
+                    ipriority9.push_back(pieceIndex[i]);
+                    continue;
+                }
+                if (inDangerAfter < inDangerBefore) {
+                    prioritizeByValue(temp->value+inDangerBefore-inDangerAfter, i, "Undefended danger-relief attack", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    continue;
                 }
                 if (dValue > aValue-mostVal) { // If total defenders value is greater than total attacker value
                     prioritizeByValue(dValue-aValue-mostVal, i, "more atckrs than defndrs, defndrs value greater than atckrs", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
@@ -2738,6 +2757,15 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 continue;
             }
             if (inDangerAfter < inDangerBefore) {
+                if (piecesPoss[pieceIndex[i]]->pieceType == 'K' && piecesPoss[pieceIndex[i]]->timesMoved == 0) {
+                    cout << "King loses castling ability to reduce danger, priority 5\n";
+                    fstream << "King loses castling ability to reduce danger, priority 5\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority5.push_back(possMoves[i]);
+                    ipriority5.push_back(pieceIndex[i]);
+                    continue;
+                }
                 int z = inDangerBefore-inDangerAfter;
                 prioritizeByValue(z, i, z+"points saved", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
