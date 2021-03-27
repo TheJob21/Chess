@@ -82,8 +82,10 @@ int main()
         if (col == 'w') {
             while (!gameOver) {
                 // Human Turn
+                filestream << endl;
                 cout << endl;
                 for (int i = 0; i < moveCount-1; i++) {
+                    filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                 }
                 printBoard(board, cout);
@@ -115,8 +117,16 @@ int main()
                         }
                     }
                 }
+                filestream << endl;
+                cout << endl;
+                for (int i = 0; i < moveCount-1; i++) {
+                    filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                }
                 printBoard(board, cout);
                 printBoard(board, filestream);
+                filestream << moveCount << ". " << lastMove << endl;
+                cout << moveCount << ". " << lastMove << endl;
                 moves[moveCount-1][0] = lastMove = move;
                 _50MoveLimit += 0.5;
                 if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
@@ -169,6 +179,14 @@ int main()
         } else if (col == 'b') {
             while (!gameOver) {
                 // Computer Turn
+                printBoard(board, cout);
+                printBoard(board, filestream);
+                cout << endl;
+                filestream << endl;
+                for (int i = 0; i < moveCount-1; i++) {
+                    filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                }
                 moves[moveCount-1][0] = lastMove = move = generateMove(filestream, lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
                 _50MoveLimit += 0.5;
                 if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
@@ -196,16 +214,17 @@ int main()
                     printBoard(board, filestream);
                     break;
                 }
-                printBoard(board, cout);
-                printBoard(board, filestream);
                 // Human Turn
                 cout << endl;
+                filestream << endl;
                 for (int i = 0; i < moveCount-1; i++) {
+                    filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                 }
                 printBoard(board, cout);
                 printBoard(board, filestream);
                 cout << moveCount << ". " << lastMove << ", ";
+                filestream << moveCount << ". " << lastMove << ", ";
                 cin >> move;
                 isValid = false;
                 while (!isValid) {
@@ -258,9 +277,10 @@ int main()
             }
         } else { // computer vs computer
             while (!gameOver) {
-                cout << endl;
+                filestream << endl;
                 for (int i = 0; i < moveCount-1; i++) {
                     cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                    filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                 }
                 printBoard(board, cout);
                 printBoard(board, filestream);
@@ -294,8 +314,10 @@ int main()
                     break;
                 }
                 for (int i = 0; i < moveCount-1; i++) {
+                    filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                 }
+                filestream << moveCount << ". " << lastMove << endl;
                 cout << moveCount << ". " << lastMove << endl;
                 printBoard(board, cout);
                 printBoard(board, filestream);
