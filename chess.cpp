@@ -2174,7 +2174,7 @@ bool checkmate(string lastMove, string (*board)[8], string (*board1)[8], Piece**
                     }
                     return true;
                 } else { // Bishop is in 'h1' direction of king
-                    while (y > pieces[king]->posx) { 
+                    while (y > pieces[king]->posy) { 
                         if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                             return false;
                         }
