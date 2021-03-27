@@ -5,7 +5,7 @@ King::King(int x, int y, char col) {
     posy = y;
     color = col;
     pieceType = 'K';
-    value = 100;
+    value = 0;
     timesMoved = 0;
 }
 

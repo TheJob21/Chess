@@ -2598,7 +2598,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
             } else if (piecesPoss2[myPcsI[j]]->attackers.size() > 0 && piecesPoss2[myPcsI[j]]->attackers.size() == piecesPoss2[myPcsI[j]]->defenders.size()) { // Equal defenders to attackers
                 int dValue = piecesPoss2[myPcsI[j]]->value, aValue = 0, mostVal = 0;
                 bool accounted = false;
-                for (int k = 0; k < piecesPoss[myPcsI[j]]->attackers.size(); k++) {
+                for (int k = 0; k < piecesPoss2[myPcsI[j]]->attackers.size(); k++) {
                     if (piecesPoss2[myPcsI[j]]->attackers[k]->value < dValue) {
                         inDangerAfter += dValue-piecesPoss2[myPcsI[j]]->attackers[k]->value;
                         accounted = true;
@@ -2767,7 +2767,9 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                     continue;
                 }
                 int z = inDangerBefore-inDangerAfter;
-                prioritizeByValue(z, i, z+"points saved", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
+                
+                string msg = to_string(z)+" points saved";
+                prioritizeByValue(z, i, msg, fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4);
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
                 continue;
@@ -2865,7 +2867,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 ipriority8.push_back(pieceIndex[i]);
                 continue;
             }
-            if (((x == 4 && (y == 3 || y == 4)) || (x== 3 && (y == 3 || y == 4)))) { // Move is a power square
+            if (((x == 4 && (y == 3 || y == 4)) || (x == 3 && (y == 3 || y == 4)))) { // Move is a power square
                 if (piecesPoss2[pieceIndex[i]]->pieceType == 'P') {
                     fstream << "Move is a power square, priority 5\n";
                     cout << "Move is a power square, priority 5\n";
