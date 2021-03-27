@@ -2628,7 +2628,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 }
             }
         }
-        if (piecesPoss[pieceIndex[i]]->pieceType == 'P') { // If piece is pawn, check en passant
+        if (piecesPoss[pieceIndex[i]]->pieceType == 'P' && boardPoss[x][y] == "") { // If piece is pawn, check en passant
             if (piecesPoss[pieceIndex[i]]->posy != y) {
                 enPassant = true;
                 temp = findPiece(piecesPoss[pieceIndex[i]]->posx, y, boardPoss, piecesPoss, boardPoss[piecesPoss[pieceIndex[i]]->posx][y][0]);
