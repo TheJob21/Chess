@@ -125,9 +125,9 @@ int main()
                 }
                 printBoard(board, cout);
                 printBoard(board, filestream);
+                moves[moveCount-1][0] = lastMove = move;
                 filestream << moveCount << ". " << lastMove << endl;
                 cout << moveCount << ". " << lastMove << endl;
-                moves[moveCount-1][0] = lastMove = move;
                 _50MoveLimit += 0.5;
                 if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
@@ -2550,7 +2550,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 }
                 aValue -= mostVal;
                 if (dValue > aValue) {
-                    inDangerBefore += dValue-aValue;
+                    inDangerBefore += piecesPoss[myPcsI[j]]->value;
                 }
             } else if (piecesPoss[myPcsI[j]]->attackers.size() > 0 && piecesPoss[myPcsI[j]]->attackers.size() == piecesPoss[myPcsI[j]]->defenders.size()) { // Equal defenders to attackers
                 int dValue = piecesPoss[myPcsI[j]]->value, aValue = 0, mostVal = 0;
