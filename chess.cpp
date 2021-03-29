@@ -144,8 +144,12 @@ int main()
                 if (gameOver) {
                     for (int i = 0; i < moveCount-1; i++) {
                         filestream << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
+                        cout << i+1 << ". " << moves[i][0] << ", " << moves[i][1] << endl;
                     }
+                    cout << moveCount << ". " << lastMove << endl;
                     filestream << moveCount << ". " << lastMove << endl;
+                    printBoard(board, cout);
+                    printBoard(board, filestream);
                     break;
                 }
                 bool isValid = false;
