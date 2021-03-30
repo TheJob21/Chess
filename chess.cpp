@@ -2710,15 +2710,6 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 continue;
             } else if (temp->attackers.size() > temp->defenders.size()) { // If more attackers than defenders
                 int dValue = temp->value, aValue = 0, mostVal = 0;
-                // if (dValue <= piecesPoss[pieceIndex[i]]->value) { // If attacked piece is not more valuable than attacker
-                //     fstream << "more atckrs than defndrs, defndr less/equal val to atckr, priority 16\n";
-                //     cout << "more atckrs than defndrs, defndr less/equal val to atckr, priority 16\n";
-                //     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                //     update(lastMove, boardPoss2, piecesPoss2);
-                //     priority16.push_back(possMoves[i]);
-                //     ipriority16.push_back(pieceIndex[i]);
-                //     continue;
-                // }
                 for (int j = 0; j < temp->attackers.size(); j++) {
                     aValue += temp->attackers[j]->value;
                     if (temp->attackers[j]->value > mostVal) {
@@ -3098,8 +3089,8 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
             if (piecesPoss[pieceIndex[i]]->pieceType == 'K' || (piecesPoss[pieceIndex[i]]->pieceType == 'R' && piecesPoss[king]->timesMoved == 0)) {
                 fstream << "Rook/King have moved 0-1 time, priority 16\n";
                 cout << "Rook/King have moved 0-1 time, priority 16\n";
-                priority17.push_back(possMoves[i]);
-                ipriority17.push_back(pieceIndex[i]);
+                priority16.push_back(possMoves[i]);
+                ipriority16.push_back(pieceIndex[i]);
             } else {
                 fstream << "Bishop/Knight/Queen/Pawn have moved 0-1 time, priority 15\n";
                 cout << "Bishop/Knight/Queen/Pawn have moved 0-1 time, priority 15\n";
@@ -3110,8 +3101,8 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
             if (piecesPoss[pieceIndex[i]]->pieceType == 'K' || piecesPoss[pieceIndex[i]]->pieceType == 'P'  || piecesPoss[pieceIndex[i]]->pieceType == 'R' || piecesPoss[pieceIndex[i]]->pieceType == 'Q') {
                 fstream << "King/Pawn/Rook/Queen have moved 2-3 times, priority 16\n";
                 cout << "King/Pawn/Rook/Queen have moved 2-3 times, priority 16\n";
-                priority17.push_back(possMoves[i]);
-                ipriority17.push_back(pieceIndex[i]);
+                priority16.push_back(possMoves[i]);
+                ipriority16.push_back(pieceIndex[i]);
             } else {
                 fstream << "Bishop/Knight have moved 2-3 times, priority 16\n";
                 cout << "Bishop/Knight have moved 2-3 times, priority 16\n";
