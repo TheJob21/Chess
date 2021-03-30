@@ -2875,9 +2875,9 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                     continue;
                 }
             }
-            if (piecesPoss2[pieceIndex[i]]->pieceType == 'N' && ((piecesPoss2[pieceIndex[i]]->posx == 3 || piecesPoss2[pieceIndex[i]]->posx == 4) && (piecesPoss2[pieceIndex[i]]->posy == 3 || piecesPoss2[pieceIndex[i]]->posy == 4))) {
+            if (piecesPoss2[pieceIndex[i]]->pieceType == 'N' && ((piecesPoss[pieceIndex[i]]->posx == 3 || piecesPoss[pieceIndex[i]]->posx == 4) && (piecesPoss[pieceIndex[i]]->posy == 3 || piecesPoss[pieceIndex[i]]->posy == 4))) {
                 fstream << "Move is away from power square, priority 16\n";
-                cout << "Move is away power square, priority 16\n";
+                cout << "Move is away from power square, priority 16\n";
                 copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                 update(lastMove, boardPoss2, piecesPoss2);
                 priority16.push_back(possMoves[i]);
