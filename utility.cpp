@@ -541,26 +541,66 @@ bool badCheck(string (*board)[8], Piece** pieces, char col) {
     }
 }
 
-void prioritizeByValue(int value, int i, string msg, ostream &fstream, vector<string> possMoves, vector<int> pieceIndex, vector<string> &priority1, vector<string> &priority2, vector<string> &priority3, vector<string> &priority4, vector<int> &ipriority1, vector<int> &ipriority2, vector<int> &ipriority3, vector<int> &ipriority4) {
-    if (value > 5) {
+void prioritizeByValue(int value, int i, string msg, ostream &fstream, vector<string> possMoves, vector<int> pieceIndex, vector<string> &priority1, vector<string> &priority2, vector<string> &priority3, vector<string> &priority4, vector<int> &ipriority1, vector<int> &ipriority2, vector<int> &ipriority3, vector<int> &ipriority4, vector<string> &priority5, vector<string> &priority6, vector<string> &priority7, vector<string> &priority8, vector<int> &ipriority5, vector<int> &ipriority6, vector<int> &ipriority7, vector<int> &ipriority8, vector<string> &priority9, vector<string> &priority10, vector<string> &priority11, vector<string> &priority12, vector<int> &ipriority9, vector<int> &ipriority10, vector<int> &ipriority11, vector<int> &ipriority12) {
+    if (value > 11) {
         fstream << msg << ", priority 1\n";
         cout << msg << ", priority 1\n";
         priority1.push_back(possMoves[i]);
         ipriority1.push_back(pieceIndex[i]);
-    } else if (value > 3) {
+    } else if (value > 10) {
         fstream <<  msg << ", priority 2\n";
         cout <<  msg << ", priority 2\n";
         priority2.push_back(possMoves[i]);
         ipriority2.push_back(pieceIndex[i]);
-    } else if (value > 1) {
+    } else if (value > 9) {
         fstream <<  msg << ", priority 3\n";
         cout <<  msg << ", priority 3\n";
         priority3.push_back(possMoves[i]);
         ipriority3.push_back(pieceIndex[i]);
-    } else {
+    } else if (value > 8) {
         fstream <<  msg << ", priority 4\n";
         cout <<  msg << ", priority 4\n";
         priority4.push_back(possMoves[i]);
         ipriority4.push_back(pieceIndex[i]);
+    } else if (value > 7) {
+        fstream <<  msg << ", priority 5\n";
+        cout <<  msg << ", priority 5\n";
+        priority5.push_back(possMoves[i]);
+        ipriority5.push_back(pieceIndex[i]);
+    } else if (value > 6) {
+        fstream <<  msg << ", priority 6\n";
+        cout <<  msg << ", priority 6\n";
+        priority6.push_back(possMoves[i]);
+        ipriority6.push_back(pieceIndex[i]);
+    } else if (value > 5) {
+        fstream <<  msg << ", priority 7\n";
+        cout <<  msg << ", priority 7\n";
+        priority7.push_back(possMoves[i]);
+        ipriority7.push_back(pieceIndex[i]);
+    } else if (value > 4) {
+        fstream <<  msg << ", priority 8\n";
+        cout <<  msg << ", priority 8\n";
+        priority8.push_back(possMoves[i]);
+        ipriority8.push_back(pieceIndex[i]);
+    } else if (value > 3) {
+        fstream <<  msg << ", priority 9\n";
+        cout <<  msg << ", priority 9\n";
+        priority9.push_back(possMoves[i]);
+        ipriority9.push_back(pieceIndex[i]);
+    } else if (value > 2) {
+        fstream <<  msg << ", priority 10\n";
+        cout <<  msg << ", priority 10\n";
+        priority10.push_back(possMoves[i]);
+        ipriority10.push_back(pieceIndex[i]);
+    } else if (value > 1) {
+        fstream <<  msg << ", priority 11\n";
+        cout <<  msg << ", priority 11\n";
+        priority11.push_back(possMoves[i]);
+        ipriority11.push_back(pieceIndex[i]);
+    } else {
+        fstream <<  msg << ", priority 12\n";
+        cout <<  msg << ", priority 12\n";
+        priority12.push_back(possMoves[i]);
+        ipriority12.push_back(pieceIndex[i]);
     } 
 }
