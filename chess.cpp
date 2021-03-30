@@ -3080,7 +3080,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
             copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
             update(lastMove, boardPoss2, piecesPoss2);
         }
-        if (piecesPoss[pieceIndex[i]]->pieceType == 'N' && ((x == 0 || x == 7) || (y == 0 || y == 7))) {
+        if ((piecesPoss[pieceIndex[i]]->pieceType == 'N' || piecesPoss[pieceIndex[i]]->pieceType == 'B') && ((x == 0 || x == 7) || (y == 0 || y == 7))) {
             fstream << "Moves knight to the edge, priority 16\n";
             cout << "Moves knight to the edge, priority 16\n";
             priority16.push_back(possMoves[i]);
