@@ -126,6 +126,9 @@ int main()
                 printBoard(board, cout);
                 printBoard(board, filestream);
                 moves[moveCount-1][0] = lastMove = move;
+                update(lastMove, board, pieces);
+                update(lastMove, boardPoss, piecesPoss);
+                update(lastMove, boardPoss2, piecesPoss2);
                 filestream << moveCount << ". " << lastMove << endl;
                 cout << moveCount << ". " << lastMove << endl;
                 _50MoveLimit += 0.5;
@@ -256,6 +259,9 @@ int main()
                     }
                 }
                 moves[moveCount-1][1] = lastMove = move;
+                update(lastMove, board, pieces);
+                update(lastMove, boardPoss, piecesPoss);
+                update(lastMove, boardPoss2, piecesPoss2);
                 _50MoveLimit += 0.5;
                 if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
@@ -291,6 +297,9 @@ int main()
                 // cout << "Press enter to continue.";
                 // getline(cin, move);
                 moves[moveCount-1][0] = lastMove = move = generateMove(filestream, lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'W', gameOver);
+                update(lastMove, board, pieces);
+                update(lastMove, boardPoss, piecesPoss);
+                update(lastMove, boardPoss2, piecesPoss2);
                 _50MoveLimit += 0.5;
                 if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
@@ -328,6 +337,9 @@ int main()
                 // cout << "Press enter to continue.";
                 // getline(cin, move);
                 moves[moveCount-1][1] = lastMove = move = generateMove(filestream, lastMove, move, board, boardPoss, boardPoss2, pieces, piecesPoss, piecesPoss2, 'B', gameOver);
+                update(lastMove, board, pieces);
+                update(lastMove, boardPoss, piecesPoss);
+                update(lastMove, boardPoss2, piecesPoss2);
                 moveCount++;
                 if ((move[0] == 'R' || move[0] == 'N' || move[0] == 'B' || move[0] == 'Q' || move[0] == 'K' || move[0] == '0') && move.find('x') != string::npos) {
                     _50MoveLimit += 0.5;
