@@ -132,6 +132,8 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
                     temp = findPiece(posx, y, board, pieces, 'B');
                     if (lastMove.size() == 2 && letterToNum(lastMove[0]) == y && charToNum(lastMove[1]) == posx && temp->timesMoved == 1) {
                         moveableTiles.push_back(tile);
+                        temp->attackers.push_back(this);
+                        attacking.push_back(temp); 
                     }
                 }
             }
@@ -141,10 +143,15 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
         if (x <= 7 && y <= 7) { // a-a8 direction
             addCoveredTile(x, y, board, pieces);
             if (board[x][y] == "" && posx == 4) { // Check En Passant
+                cout << "attacked tile is empty and pawn is on en passant row\n";
                 if (board[posx][y] != "" && board[posx][y][0] != color && board[posx][y][1] == 'P') {
+                    cout << "Enemy pawn is on adjacent space and is opposite color\n";
                     temp = findPiece(posx, y, board, pieces, 'B');
                     if (lastMove.size() == 2 && letterToNum(lastMove[0]) == y && charToNum(lastMove[1]) == posx && temp->timesMoved == 1) {
+                        cout << "Last move was to the square occupied by the enemy pawn\n";
                         moveableTiles.push_back(tile);
+                        temp->attackers.push_back(this);
+                        attacking.push_back(temp); 
                     }
                 }
             }
@@ -183,6 +190,8 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
                     temp = findPiece(posx, y, board, pieces, 'W');
                     if (lastMove.size() == 2 && letterToNum(lastMove[0]) == y && charToNum(lastMove[1]) == posx && temp->timesMoved == 1) {
                         moveableTiles.push_back(tile);
+                        temp->attackers.push_back(this);
+                        attacking.push_back(temp); 
                     }
                 }
             }
@@ -196,6 +205,8 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
                     temp = findPiece(posx, y, board, pieces, 'W');
                     if (lastMove.size() == 2 && letterToNum(lastMove[0]) == y && charToNum(lastMove[1]) == posx && temp->timesMoved == 1) {
                         moveableTiles.push_back(tile);
+                        temp->attackers.push_back(this);
+                        attacking.push_back(temp); 
                     }
                 }
             }

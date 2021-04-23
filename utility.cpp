@@ -541,6 +541,45 @@ bool badCheck(string (*board)[8], Piece** pieces, char col) {
     }
 }
 
+void sort(vector<string> &priority, vector<int> &ipriority, Piece** piecesPoss, int king) {
+    vector<string> good, bad;
+    vector<int> igood, ibad;
+    int x, y;
+    for (int i = 0; i < priority.size(); i++) {
+        if (priority[i].size() == 3) {
+            x = charToNum(priority[i][2]), y = letterToNum(priority[i][1]);
+        } else {
+            x = charToNum(priority[i][1]), y = letterToNum(priority[i][0]);
+        }
+        if ((priority[i][0] == 'N' || priority[i][0] == 'B' || priority[i][0] == 'Q') && ((x == 0 || x == 7) || (y == 0 || y == 7))) {
+            bad.push_back(priority[i]);
+            ibad.push_back(ipriority[i]);
+        } else if ((priority[i][0] == 'K' || priority[i][0] == 'R') && (piecesPoss[ipriority[i]]->timesMoved == 0 && piecesPoss[king]->timesMoved == 0)) {
+            bad.push_back(priority[i]);
+            ibad.push_back(ipriority[i]);
+        } else if (priority[i][0] == 'N' && ((piecesPoss[ipriority[i]]->posx == 3 || piecesPoss[ipriority[i]]->posx == 4) && (piecesPoss[ipriority[i]]->posy == 3 || piecesPoss[ipriority[i]]->posy == 4))) {
+            bad.push_back(priority[i]);
+            ibad.push_back(ipriority[i]);
+        } else if ((x <= 5 && x >= 2) && (y >= 2 && y <= 5) && priority[i][0] == 'K') { // Move is close to center
+            bad.push_back(priority[i]);
+            ibad.push_back(ipriority[i]);
+        } else {
+            good.push_back(priority[i]);
+            igood.push_back(ipriority[i]);
+        }
+    }
+    priority.clear();
+    ipriority.clear();
+    for (int i = 0; i < good.size(); i++) {
+        priority.push_back(good[i]);
+        ipriority.push_back(igood[i]);
+    }
+    for (int i = 0; i < bad.size(); i++) {
+        priority.push_back(bad[i]);
+        ipriority.push_back(ibad[i]);
+    }
+}
+
 void prioritizeByValue(int value, int i, string msg, ostream &fstream, vector<string> possMoves, vector<int> pieceIndex, vector<string> &priority1, vector<string> &priority2, vector<string> &priority3, vector<string> &priority4, vector<int> &ipriority1, vector<int> &ipriority2, vector<int> &ipriority3, vector<int> &ipriority4, vector<string> &priority5, vector<string> &priority6, vector<string> &priority7, vector<string> &priority8, vector<int> &ipriority5, vector<int> &ipriority6, vector<int> &ipriority7, vector<int> &ipriority8, vector<string> &priority9, vector<string> &priority10, vector<string> &priority11, vector<string> &priority12, vector<int> &ipriority9, vector<int> &ipriority10, vector<int> &ipriority11, vector<int> &ipriority12) {
     if (value > 11) {
         fstream << msg << ", priority 1\n";

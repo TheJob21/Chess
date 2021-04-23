@@ -2451,12 +2451,12 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
     }
 
     srand(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count());
-    int r = rand();
+    int r = rand(), king;
     // Prioritize moves
     fstream << "Total Possible Moves: " << possMoves.size() << endl;
     cout << "Total Possible Moves: " << possMoves.size() << endl;
     for (int index = 0; index < possMoves.size(); index++) {
-        int x, y, king, i = (index + r) % possMoves.size();
+        int x, y, i = (index + r) % possMoves.size();
         bool assigned = false, enPassant = false;
         fstream << "\t" << index+1 << " " << possMoves[i] << ": ";
         cout << "\t" << index+1 << " " << possMoves[i] << ": ";
@@ -2465,7 +2465,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
             priority13.push_back(possMoves[i]);
             ipriority13.push_back(pieceIndex[i]);
             continue;
-        }else if (possMoves[i].size() == 3) {
+        } else if (possMoves[i].size() == 3) {
             x = charToNum(possMoves[i][2]), y = letterToNum(possMoves[i][1]);
         } else {
             x = charToNum(possMoves[i][1]), y = letterToNum(possMoves[i][0]);
@@ -3081,8 +3081,8 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
             update(lastMove, boardPoss2, piecesPoss2);
         }
         if ((piecesPoss[pieceIndex[i]]->pieceType == 'N' || piecesPoss[pieceIndex[i]]->pieceType == 'B') && ((x == 0 || x == 7) || (y == 0 || y == 7))) {
-            fstream << "Moves knight to the edge, priority 16\n";
-            cout << "Moves knight to the edge, priority 16\n";
+            fstream << "Moves knight/bishop to the edge, priority 16\n";
+            cout << "Moves knight/bishop to the edge, priority 16\n";
             priority16.push_back(possMoves[i]);
             ipriority16.push_back(pieceIndex[i]);
         } else if (piecesPoss[pieceIndex[i]]->timesMoved == 0 || piecesPoss[pieceIndex[i]]->timesMoved == 1) {
@@ -3127,75 +3127,87 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
         fstream << "\t" << i << ". " << possMoves.back() << " Priority 0" << endl;
         cout << "\t" << i << ". " << possMoves.back() << " Priority 0" << endl;
     }
+    sort(priority1, ipriority1, piecesPoss, king);
     for (int i = 0; i < priority1.size(); i++) {
-        possMoves.push_back(priority1[(i+r)%priority1.size()]);
-        pieceIndex.push_back(ipriority1[(i+r)%priority1.size()]);
+        possMoves.push_back(priority1[i]);
+        pieceIndex.push_back(ipriority1[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 1" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 1" << endl;
     }
+    sort(priority2, ipriority2, piecesPoss, king);
     for (int i = 0; i < priority2.size(); i++) {
-        possMoves.push_back(priority2[(i+r)%priority2.size()]);
-        pieceIndex.push_back(ipriority2[(i+r)%priority2.size()]);
+        possMoves.push_back(priority2[i]);
+        pieceIndex.push_back(ipriority2[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 2" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 2" << endl;
     }
+    sort(priority3, ipriority3, piecesPoss, king);
     for (int i = 0; i < priority3.size(); i++) {
-        possMoves.push_back(priority3[(i+r)%priority3.size()]);
-        pieceIndex.push_back(ipriority3[(i+r)%priority3.size()]);
+        possMoves.push_back(priority3[i]);
+        pieceIndex.push_back(ipriority3[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 3" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 3" << endl;
     }
+    sort(priority4, ipriority4, piecesPoss, king);
     for (int i = 0; i < priority4.size(); i++) {
-        possMoves.push_back(priority4[(i+r)%priority4.size()]);
-        pieceIndex.push_back(ipriority4[(i+r)%priority4.size()]);
+        possMoves.push_back(priority4[i]);
+        pieceIndex.push_back(ipriority4[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 4" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 4" << endl;
     }
+    sort(priority5, ipriority5, piecesPoss, king);
     for (int i = 0; i < priority5.size(); i++) {
-        possMoves.push_back(priority5[(i+r)%priority5.size()]);
-        pieceIndex.push_back(ipriority5[(i+r)%priority5.size()]);
+        possMoves.push_back(priority5[i]);
+        pieceIndex.push_back(ipriority5[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 5" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 5" << endl;
     }
+    sort(priority6, ipriority6, piecesPoss, king);
     for (int i = 0; i < priority6.size(); i++) {
-        possMoves.push_back(priority6[(i+r)%priority6.size()]);
-        pieceIndex.push_back(ipriority6[(i+r)%priority6.size()]);
+        possMoves.push_back(priority6[i]);
+        pieceIndex.push_back(ipriority6[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 6" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 6" << endl;
     }
+    sort(priority7, ipriority7, piecesPoss, king);
     for (int i = 0; i < priority7.size(); i++) {
-        possMoves.push_back(priority7[(i+r)%priority7.size()]);
-        pieceIndex.push_back(ipriority7[(i+r)%priority7.size()]);
+        possMoves.push_back(priority7[i]);
+        pieceIndex.push_back(ipriority7[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 7" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 7" << endl;
     }
+    sort(priority8, ipriority8, piecesPoss, king);
     for (int i = 0; i < priority8.size(); i++) {
-        possMoves.push_back(priority8[(i+r)%priority8.size()]);
-        pieceIndex.push_back(ipriority8[(i+r)%priority8.size()]);
+        possMoves.push_back(priority8[i]);
+        pieceIndex.push_back(ipriority8[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 8" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 8" << endl;
     }
+    sort(priority9, ipriority9, piecesPoss, king);
     for (int i = 0; i < priority9.size(); i++) {
-        possMoves.push_back(priority9[(i+r)%priority9.size()]);
-        pieceIndex.push_back(ipriority9[(i+r)%priority9.size()]);
+        possMoves.push_back(priority9[i]);
+        pieceIndex.push_back(ipriority9[i]);
         fstream << "\t" << i << ". " << possMoves.back() << " Priority 9" << endl;
         cout << "\t" << i << ". " << possMoves.back() << " Priority 9" << endl;
     }
+    sort(priority10, ipriority10, piecesPoss, king);
     for (int i = 0; i < priority10.size(); i++) {
-        possMoves.push_back(priority10[(i+r)%priority10.size()]);
-        pieceIndex.push_back(ipriority10[(i+r)%priority10.size()]);
+        possMoves.push_back(priority10[i]);
+        pieceIndex.push_back(ipriority10[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 10" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 10" << endl;
     }
+    sort(priority11, ipriority11, piecesPoss, king);
     for (int i = 0; i < priority11.size(); i++) {
-        possMoves.push_back(priority11[(i+r)%priority11.size()]);
-        pieceIndex.push_back(ipriority11[(i+r)%priority11.size()]);
+        possMoves.push_back(priority11[i]);
+        pieceIndex.push_back(ipriority11[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 11" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 11" << endl;
     }
+    sort(priority12, ipriority12, piecesPoss, king);
     for (int i = 0; i < priority12.size(); i++) {
-        possMoves.push_back(priority12[(i+r)%priority12.size()]);
-        pieceIndex.push_back(ipriority12[(i+r)%priority12.size()]);
+        possMoves.push_back(priority12[i]);
+        pieceIndex.push_back(ipriority12[i]);
         fstream << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 12" << endl;
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 12" << endl;
     }
