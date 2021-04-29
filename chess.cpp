@@ -2090,244 +2090,236 @@ bool checkmate(string lastMove, string (*board)[8], string (*board1)[8], Piece**
     } else {
         king = 14;
     }
-    if (pieces[king]->attackers.size() == 2) { // double check
-        if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) { // Check for valid king moves or captures
+    if (pieces[king]->attackers[0]->pieceType == 'P') { // Pawn attacker
+        x = pieces[king]->attackers[0]->posx;
+        y = pieces[king]->attackers[0]->posy;
+        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
             return false;
-        } else { // Checkmate
-            return true;
-        } 
-    } else { // regular check
-        if (pieces[king]->attackers[0]->pieceType == 'P') { // Pawn attacker
-            x = pieces[king]->attackers[0]->posx;
-            y = pieces[king]->attackers[0]->posy;
-            if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                return false;
+        }
+        if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+            return false;
+        }
+        return true;
+    } else if (pieces[king]->attackers[0]->pieceType == 'R') { // Rook attacker
+        x = pieces[king]->attackers[0]->posx;
+        y = pieces[king]->attackers[0]->posy;
+        if (x == pieces[king]->posx) { // Rook is on same rank
+            if (y < pieces[king]->posy) { // Rook is in 'a' direction of king
+                while (y < pieces[king]->posy) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    y++;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
+            } else { // Rook is in 'h' direction of king
+                while (y > pieces[king]->posy) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    y--;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
             }
-            if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                return false;
+        } else { // Rook is on same file
+            if (x < pieces[king]->posx) { // Rook is in '1' direction of king
+                while (x < pieces[king]->posx) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    x++;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
+            } else { // Rook is in '8' direction of king
+                while (x > pieces[king]->posx) { 
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    x--;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
             }
-            return true;
-        } else if (pieces[king]->attackers[0]->pieceType == 'R') { // Rook attacker
-            x = pieces[king]->attackers[0]->posx;
-            y = pieces[king]->attackers[0]->posy;
-            if (x == pieces[king]->posx) { // Rook is on same rank
-                if (y < pieces[king]->posy) { // Rook is in 'a' direction of king
-                    while (y < pieces[king]->posy) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        y++;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+        }
+    } else if (pieces[king]->attackers[0]->pieceType == 'N') { // Knight attacker
+        x = pieces[king]->attackers[0]->posx;
+        y = pieces[king]->attackers[0]->posy;
+        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+            return false;
+        }
+        if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+            return false;
+        }
+        return true;
+    } else if (pieces[king]->attackers[0]->pieceType == 'B') { // Bishop attacker
+        x = pieces[king]->attackers[0]->posx;
+        y = pieces[king]->attackers[0]->posy;
+        if (x > pieces[king]->posx) {
+            if (y > pieces[king]->posy) { // Bishop is in 'h8' direction of king
+                while (y > pieces[king]->posy) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                         return false;
                     }
-                    return true;
-                } else { // Rook is in 'h' direction of king
-                    while (y > pieces[king]->posy) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        y--;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
+                    x--;
+                    y--;
                 }
-            } else { // Rook is on same file
-                if (x < pieces[king]->posx) { // Rook is in '1' direction of king
-                    while (x < pieces[king]->posx) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x++;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
-                } else { // Rook is in '8' direction of king
-                    while (x > pieces[king]->posx) { 
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x--;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
                 }
+                return true;
+            } else { // Bishop is in 'a8' direction of king
+                while (y < pieces[king]->posy) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    x--;
+                    y++;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
             }
-        } else if (pieces[king]->attackers[0]->pieceType == 'N') { // Knight attacker
-            x = pieces[king]->attackers[0]->posx;
-            y = pieces[king]->attackers[0]->posy;
-            if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                return false;
+        } else { 
+            if (y < pieces[king]->posy) { // Bishop is in 'a1' direction of king
+                while (y < pieces[king]->posy) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    x++;
+                    y++;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
+            } else { // Bishop is in 'h1' direction of king
+                while (y > pieces[king]->posy) { 
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    x++;
+                    y--;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
             }
-            if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                return false;
+        }
+    } else { // Queen attacker
+        x = pieces[king]->attackers[0]->posx;
+        y = pieces[king]->attackers[0]->posy;
+        if (x == pieces[king]->posx) { // Queen is on same rank
+            if (y < pieces[king]->posy) { // Queen is in 'a' direction of king
+                while (y < pieces[king]->posy) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    y++;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
+            } else { // Queen is in 'h' direction of king
+                while (y > pieces[king]->posy) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    y--;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
             }
-            return true;
-        } else if (pieces[king]->attackers[0]->pieceType == 'B') { // Bishop attacker
-            x = pieces[king]->attackers[0]->posx;
-            y = pieces[king]->attackers[0]->posy;
-            if (x > pieces[king]->posx) {
-                if (y > pieces[king]->posy) { // Bishop is in 'h8' direction of king
-                    while (y > pieces[king]->posy) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x--;
-                        y--;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+        } else if (y == pieces[king]->posy) { // Queen is on same file
+            if (x < pieces[king]->posx) { // Queen is in '1' direction of king
+                while (x < pieces[king]->posx) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                         return false;
                     }
-                    return true;
-                } else { // Bishop is in 'a8' direction of king
-                    while (y < pieces[king]->posy) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x--;
-                        y++;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
+                    x++;
                 }
-            } else { 
-                if (y < pieces[king]->posy) { // Bishop is in 'a1' direction of king
-                    while (y < pieces[king]->posy) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x++;
-                        y++;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
-                } else { // Bishop is in 'h1' direction of king
-                    while (y > pieces[king]->posy) { 
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x++;
-                        y--;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
                 }
+                return true;
+            } else { // Queen is in '8' direction of king
+                while (x > pieces[king]->posx) { 
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    x--;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
             }
-        } else { // Queen attacker
-            x = pieces[king]->attackers[0]->posx;
-            y = pieces[king]->attackers[0]->posy;
-            if (x == pieces[king]->posx) { // Queen is on same rank
-                if (y < pieces[king]->posy) { // Queen is in 'a' direction of king
-                    while (y < pieces[king]->posy) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        y++;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+        } else if (x > pieces[king]->posx) {
+            if (y > pieces[king]->posy) { // Queen is in 'h8' direction of king
+                while (y > pieces[king]->posy) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                         return false;
                     }
-                    return true;
-                } else { // Queen is in 'h' direction of king
-                    while (y > pieces[king]->posy) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        y--;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
+                    x--;
+                    y--;
                 }
-            } else if (y == pieces[king]->posy) { // Queen is on same file
-                if (x < pieces[king]->posx) { // Queen is in '1' direction of king
-                    while (x < pieces[king]->posx) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x++;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
-                } else { // Queen is in '8' direction of king
-                    while (x > pieces[king]->posx) { 
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x--;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
                 }
-            } else if (x > pieces[king]->posx) {
-                if (y > pieces[king]->posy) { // Queen is in 'h8' direction of king
-                    while (y > pieces[king]->posy) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x--;
-                        y--;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                return true;
+            } else { // Queen is in 'a8' direction of king
+                while (y < pieces[king]->posy) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
                         return false;
                     }
-                    return true;
-                } else { // Queen is in 'a8' direction of king
-                    while (y < pieces[king]->posy) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x--;
-                        y++;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
+                    x--;
+                    y++;
                 }
-            } else { 
-                if (y < pieces[king]->posy) { // Queen is in 'a1' direction of king
-                    while (y < pieces[king]->posy) {
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x++;
-                        y++;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
-                } else { // Queen is in 'h1' direction of king
-                    while (y > pieces[king]->posy) { 
-                        if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
-                            return false;
-                        }
-                        x++;
-                        y--;
-                    }
-                    if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
-                        return false;
-                    }
-                    return true;
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
                 }
+                return true;
+            }
+        } else { 
+            if (y < pieces[king]->posy) { // Queen is in 'a1' direction of king
+                while (y < pieces[king]->posy) {
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    x++;
+                    y++;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
+            } else { // Queen is in 'h1' direction of king
+                while (y > pieces[king]->posy) { 
+                    if (checkForBlock(lastMove, x, y, board, board1, pieces, pieces1, col)) { // Piece can block, not checkmate
+                        return false;
+                    }
+                    x++;
+                    y--;
+                }
+                if (checkValidKingMove(lastMove, king, board, board1, pieces, pieces1, col)) {
+                    return false;
+                }
+                return true;
             }
         }
     }
