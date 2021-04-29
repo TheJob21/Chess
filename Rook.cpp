@@ -133,7 +133,7 @@ void Rook::move(int x, int y, string (*board)[8], Piece **pieces) {
     timesMoved++;
 }
 
-void Rook::rookStack(string (*board)[8], Piece** pieces, int x, int y, int i) {
+bool Rook::rookStack(string (*board)[8], Piece** pieces, int x, int y, int i) {
     Piece* temp;
     if (board[x][y] != "") {        
         temp = findPiece(x, y, board, pieces, board[x][y][0]);
@@ -142,32 +142,47 @@ void Rook::rookStack(string (*board)[8], Piece** pieces, int x, int y, int i) {
             defending.push_back(temp);
             if (temp->pieceType == 'R' || temp->pieceType == 'Q') {
                 if (i == 0) {
+                    x--;
                     while (x >= 0) {
-                        rookStack(board, pieces, x, y, i);
+                        if (rookStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         x--;
                     }
                 } else if (i == 1) {
+                    x++;
                     while (x <= 7) {
-                        rookStack(board, pieces, x, y, i);
+                        if (rookStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         x++;
                     }
                 } else if (i == 2) {
+                    y--;
                     while (y >= 0) {
-                        rookStack(board, pieces, x, y, i);
+                        if (rookStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         y--;
                     }
                 } else {
+                    y++;
                     while (y <= 7) {
-                        rookStack(board, pieces, x, y, i);
+                        if (rookStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         y++;
                     }
                 }
             }
+            return true;
         } else {
             temp->attackers.push_back(this);
             attacking.push_back(temp); 
+            return true;
         }
     }
+    return false;
 }
 
 void Rook::update(string lastMove, string (*board)[8], Piece** pieces) {
@@ -184,8 +199,11 @@ void Rook::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'R' || temp->pieceType == 'Q') {
+                    x--;
                     while (x >= 0) {
-                        rookStack(board, pieces, x, y, 0);
+                        if (rookStack(board, pieces, x, y, 0)) {
+                            break;
+                        }
                         x--;
                     }
                 }
@@ -214,8 +232,11 @@ void Rook::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'R' || temp->pieceType == 'Q') {
+                    x++;
                     while (x <= 7) {
-                        rookStack(board, pieces, x, y, 1);
+                        if (rookStack(board, pieces, x, y, 1)) {
+                            break;
+                        }
                         x++;
                     }
                 }
@@ -245,8 +266,11 @@ void Rook::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'R' || temp->pieceType == 'Q') {
+                    y--;
                     while (y >= 0) {
-                        rookStack(board, pieces, x, y, 2);
+                        if (rookStack(board, pieces, x, y, 2)) {
+                            break;
+                        }
                         y--;
                     }
                 }
@@ -275,8 +299,11 @@ void Rook::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'R' || temp->pieceType == 'Q') {
+                    y++;
                     while (y <= 7) {
-                        rookStack(board, pieces, x, y, 3);
+                        if (rookStack(board, pieces, x, y, 3)) {
+                            break;
+                        }
                         y++;
                     }
                 }

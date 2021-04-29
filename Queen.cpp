@@ -59,7 +59,7 @@ void Queen::move(int x, int y, string (*board)[8], Piece** pieces) {
     timesMoved++;
 }
 
-void Queen::bishopStack(string (*board)[8], Piece** pieces, int x, int y, int i) {
+bool Queen::bishopStack(string (*board)[8], Piece** pieces, int x, int y, int i) {
     Piece* temp;
     if (board[x][y] != "") {        
         temp = findPiece(x, y, board, pieces, board[x][y][0]);
@@ -68,39 +68,58 @@ void Queen::bishopStack(string (*board)[8], Piece** pieces, int x, int y, int i)
             defending.push_back(temp);
             if (temp->pieceType == 'B' || temp->pieceType == 'Q') {
                 if (i == 0) {
+                    x--;
+                    y--;
                     while (x >= 0 && y >= 0) { // a1 direction
-                        bishopStack(board, pieces, x, y, i);
+                        if (bishopStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         x--;
                         y--;
                     }
                 } else if (i == 1) {
+                    x++;
+                    y--;
                     while (x <= 7 && y >= 0) { // a1 direction
-                        bishopStack(board, pieces, x, y, i);
+                        if (bishopStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         x++;
                         y--;
                     }
                 } else if (i == 2) {
+                    x--;
+                    y++;
                     while (x >= 0 && y <= 7) { // a1 direction
-                        bishopStack(board, pieces, x, y, i);
+                        if (bishopStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         x--;
                         y++;
                     }
                 } else {
+                    x++;
+                    y++;
                     while (x <= 7 && y <= 7) { // a1 direction
-                        bishopStack(board, pieces, x, y, i);
+                        if (bishopStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         x++;
                         y++;
                     }
                 }
             }
+            return true;
         } else {
             temp->attackers.push_back(this);
-            attacking.push_back(temp); 
+            attacking.push_back(temp);
+            return true;
         }
     }
+    return false;
 }
 
-void Queen::rookStack(string (*board)[8], Piece** pieces, int x, int y, int i) {
+bool Queen::rookStack(string (*board)[8], Piece** pieces, int x, int y, int i) {
     Piece* temp;
     if (board[x][y] != "") {        
         temp = findPiece(x, y, board, pieces, board[x][y][0]);
@@ -109,32 +128,47 @@ void Queen::rookStack(string (*board)[8], Piece** pieces, int x, int y, int i) {
             defending.push_back(temp);
             if (temp->pieceType == 'R' || temp->pieceType == 'Q') {
                 if (i == 0) {
+                    x--;
                     while (x >= 0) {
-                        rookStack(board, pieces, x, y, i);
+                        if (rookStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         x--;
                     }
                 } else if (i == 1) {
+                    x++;
                     while (x <= 7) {
-                        rookStack(board, pieces, x, y, i);
+                        if (rookStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         x++;
                     }
                 } else if (i == 2) {
+                    y--;
                     while (y >= 0) {
-                        rookStack(board, pieces, x, y, i);
+                        if (rookStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         y--;
                     }
                 } else {
+                    y++;
                     while (y <= 7) {
-                        rookStack(board, pieces, x, y, i);
+                        if (rookStack(board, pieces, x, y, i)) {
+                            break;
+                        }
                         y++;
                     }
                 }
             }
+            return true;
         } else {
             temp->attackers.push_back(this);
             attacking.push_back(temp); 
+            return true;
         }
     }
+    return false;
 }
 
 void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
@@ -151,8 +185,11 @@ void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'R' || temp->pieceType == 'Q') {
+                    x--;
                     while (x >= 0) {
-                        rookStack(board, pieces, x, y, 0);
+                        if (rookStack(board, pieces, x, y, 0)) {
+                            break;
+                        }
                         x--;
                     }
                 }
@@ -181,8 +218,11 @@ void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'R' || temp->pieceType == 'Q') {
+                    x++;
                     while (x <= 7) {
-                        rookStack(board, pieces, x, y, 1);
+                        if (rookStack(board, pieces, x, y, 1)) {
+                            break;
+                        }
                         x++;
                     }
                 }
@@ -212,8 +252,11 @@ void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'R' || temp->pieceType == 'Q') {
+                    y--;
                     while (y >= 0) {
-                        rookStack(board, pieces, x, y, 2);
+                        if (rookStack(board, pieces, x, y, 2)) {
+                            break;
+                        }
                         y--;
                     }
                 }
@@ -242,8 +285,11 @@ void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'R' || temp->pieceType == 'Q') {
+                    y++;
                     while (y <= 7) {
-                        rookStack(board, pieces, x, y, 3);
+                        if (rookStack(board, pieces, x, y, 3)) {
+                            break;
+                        }
                         y++;
                     }
                 }
@@ -273,8 +319,12 @@ void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'B' || temp->pieceType == 'Q') {
+                    x--; 
+                    y--;
                     while (x >= 0 && y >= 0) {
-                        bishopStack(board, pieces, x, y, 0);
+                        if (bishopStack(board, pieces, x, y, 0)) {
+                            break;
+                        }
                         x--;
                         y--;
                     }
@@ -306,8 +356,12 @@ void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'B' || temp->pieceType == 'Q') {
+                    x++;
+                    y--;
                     while (x <= 7 && y >= 0) {
-                        bishopStack(board, pieces, x, y, 1);
+                        if (bishopStack(board, pieces, x, y, 1)) {
+                            break;
+                        }
                         x++;
                         y--;
                     }
@@ -339,8 +393,12 @@ void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'B' || temp->pieceType == 'Q') {
+                    x--;
+                    y++;
                     while (x >= 0 && y <= 7) {
-                        bishopStack(board, pieces, x, y, 2);
+                        if (bishopStack(board, pieces, x, y, 2)) {
+                            break;
+                        }
                         x--;
                         y++;
                     }
@@ -372,8 +430,12 @@ void Queen::update(string lastMove, string (*board)[8], Piece** pieces) {
                 temp->defenders.push_back(this);
                 defending.push_back(temp);
                 if (temp->pieceType == 'B' || temp->pieceType == 'Q') {
+                    x++;
+                    y++;
                     while (x <= 7 && y <= 7) {
-                        bishopStack(board, pieces, x, y, 3);
+                        if (bishopStack(board, pieces, x, y, 3)) {
+                            break;
+                        }
                         x++;
                         y++;
                     }
