@@ -2662,15 +2662,42 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 }
             }
         }
-        if (piecesPoss[pieceIndex[i]]->pieceType == 'P' && boardPoss[x][y] == "") { // If piece is pawn, check en passant
-            if (piecesPoss[pieceIndex[i]]->posy != y) {
-                enPassant = true;
-                temp = findPiece(piecesPoss[pieceIndex[i]]->posx, y, boardPoss, piecesPoss, boardPoss[piecesPoss[pieceIndex[i]]->posx][y][0]);
-            }
+        if (piecesPoss[pieceIndex[i]]->pieceType == 'P' && boardPoss[x][y] == "" && piecesPoss[pieceIndex[i]]->posy != y) { // If piece is pawn, check en passant
+            enPassant = true;
+            temp = findPiece(piecesPoss[pieceIndex[i]]->posx, y, boardPoss, piecesPoss, boardPoss[piecesPoss[pieceIndex[i]]->posx][y][0]);
         }
         if (boardPoss[x][y] != "" || enPassant) { // Move is a capture
             if (!enPassant) {
                 temp = findPiece(x, y, boardPoss, piecesPoss, boardPoss[x][y][0]);
+            } else {
+                if (inDangerAfter-1 > inDangerBefore) {
+                    fstream << "Move endangers more pieces or more valuable pieces, priority 17\n";
+                    cout << "Move endangers more pieces or more valuable pieces, priority 17\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority17.push_back(possMoves[i]);
+                    ipriority17.push_back(pieceIndex[i]);
+                    continue;
+                }
+                if (inDangerAfter < inDangerBefore) {
+                    prioritizeByValue(temp->value+inDangerBefore-inDangerAfter, i, "Undefended danger-relief attack", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4, priority5, priority6, priority7, priority8, ipriority5, ipriority6, ipriority7, ipriority8, priority9, priority10, priority11, priority12, ipriority9, ipriority10, ipriority11, ipriority12);
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    continue;
+                }
+                if (inDangerAfter-1 == inDangerBefore) {
+                    fstream << "Move is a trade, priority 13\n";
+                    cout << "Move is a trade, priority 13\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority13.push_back(possMoves[i]);
+                    ipriority13.push_back(pieceIndex[i]);
+                    continue;
+                }
+                prioritizeByValue(temp->value, i, "Undefended attack", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4, priority5, priority6, priority7, priority8, ipriority5, ipriority6, ipriority7, ipriority8, priority9, priority10, priority11, priority12, ipriority9, ipriority10, ipriority11, ipriority12);
+                copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                update(lastMove, boardPoss2, piecesPoss2);
+                continue;
             }
             if (temp->defenders.size() == 0) { // If attacked piece is undefended
                 if (inDangerAfter-temp->value > inDangerBefore) {
