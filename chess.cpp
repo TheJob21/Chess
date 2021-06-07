@@ -2974,7 +2974,25 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                     continue;
                 } else if (col == 'W') {
                 if (piecesPoss2[15]->inCheck) {
-                    fstream << "Places opponent in check, priority 14\n";
+                    for (int j = 0; j < piecesPoss2[pieceIndex[i]]->attacking.size(); j++) {
+                        if (piecesPoss2[pieceIndex[i]]->attacking[j]->pieceType != 'K') {
+                            if (piecesPoss2[pieceIndex[i]]->attacking[j]->defenders.size() == 0) {
+                                prioritizeByValue(piecesPoss2[pieceIndex[i]]->attacking[j]->value, i, "Forks King and undefended piece", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4, priority5, priority6, priority7, priority8, ipriority5, ipriority6, ipriority7, ipriority8, priority9, priority10, priority11, priority12, ipriority9, ipriority10, ipriority11, ipriority12);
+                                assigned = true;
+                                break;
+                            } else if (piecesPoss2[pieceIndex[i]]->attacking[j]->value > piecesPoss2[pieceIndex[i]]->value) {
+                                prioritizeByValue(piecesPoss2[pieceIndex[i]]->attacking[j]->value-piecesPoss2[pieceIndex[i]]->value, i, "Forks King and less valuable piece", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4, priority5, priority6, priority7, priority8, ipriority5, ipriority6, ipriority7, ipriority8, priority9, priority10, priority11, priority12, ipriority9, ipriority10, ipriority11, ipriority12);
+                                assigned = true;
+                                break;
+                            } // Eventually be good to check for value of all defending/attacking pieces
+                        }
+                    }
+                    if (assigned) {
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        continue;
+                    }
+		    fstream << "Places opponent in check, priority 14\n";
                     cout << "Places opponent in check, priority 14\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
@@ -3002,7 +3020,25 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                 }
             } else if (col == 'B') {
                 if (piecesPoss2[14]->inCheck) {
-                    fstream << "Places opponent in check, priority 14\n";
+                    for (int j = 0; j < piecesPoss2[pieceIndex[i]]->attacking.size(); j++) {
+                        if (piecesPoss2[pieceIndex[i]]->attacking[j]->pieceType != 'K') {
+                            if (piecesPoss2[pieceIndex[i]]->attacking[j]->defenders.size() == 0) {
+                                prioritizeByValue(piecesPoss2[pieceIndex[i]]->attacking[j]->value, i, "Forks King and undefended piece", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4, priority5, priority6, priority7, priority8, ipriority5, ipriority6, ipriority7, ipriority8, priority9, priority10, priority11, priority12, ipriority9, ipriority10, ipriority11, ipriority12);
+                                assigned = true;
+                                break;
+                            } else if (piecesPoss2[pieceIndex[i]]->attacking[j]->value > piecesPoss2[pieceIndex[i]]->value) {
+                                prioritizeByValue(piecesPoss2[pieceIndex[i]]->attacking[j]->value-piecesPoss2[pieceIndex[i]]->value, i, "Forks King and less valuable piece", fstream, possMoves, pieceIndex, priority1, priority2, priority3, priority4, ipriority1, ipriority2, ipriority3, ipriority4, priority5, priority6, priority7, priority8, ipriority5, ipriority6, ipriority7, ipriority8, priority9, priority10, priority11, priority12, ipriority9, ipriority10, ipriority11, ipriority12);
+                                assigned = true;
+                                break;
+                            } // Eventually be good to check for value of all defending/attacking pieces
+                        }
+                    }
+                    if (assigned) {
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        continue;
+                    }
+		    fstream << "Places opponent in check, priority 14\n";
                     cout << "Places opponent in check, priority 14\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
@@ -3273,6 +3309,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
         cout << "\t" << possMoves.size() << ". " << possMoves.back() << " Priority 17" << endl;
     }
     // Validate moves in order of priority, then move
+    string staleForced;	
     for (int i = 0; i < possMoves.size(); i++) {
         // cout << "Trying move " << possMoves[i] << " #" << i+1 << " of " << possMoves.size() << endl;
         int king, kr, qr, rkSq;
@@ -3394,6 +3431,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
             }
             copyBoard(board, boardPoss, pieces, piecesPoss);
             update(lastMove, boardPoss, piecesPoss);
+	    staleForced = possMove;
             continue; // Try next move possibility
         }
         if (prom) {
@@ -3409,7 +3447,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
         return possMove;
     }
     gameOver = true;
-    return "Stalemate";
+    return staleForced;
 }
 
 bool canCastle(string lastMove, string move, string (*board)[8], string (*boardPoss)[8], string (*boardPoss2)[8], Piece** pieces, Piece** piecesPoss, Piece** piecesPoss2, char col, bool &gameOver) {
