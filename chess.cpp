@@ -2466,6 +2466,8 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
         cout << "\t" << index+1 << " " << possMoves[i] << ": ";
         Piece* temp;
         if (possMoves[i][0] == '0') {
+            fstream << "That's a good trick, priority 13\n";
+            cout << "That's a good trick, priority 13\n";
             priority13.push_back(possMoves[i]);
             ipriority13.push_back(pieceIndex[i]);
             continue;
