@@ -110,8 +110,12 @@ void Pawn::move(int x, int y, string (*board)[8], Piece** pieces) {
     posy = y;
     capture(x, y, color, board, pieces);
     if (color == 'W') { // Move White
+        if (x == 6)
+            value = 7;
         board[x][y] = "WP";
     } else { // Move Black
+        if (x == 2)
+            value = 7;
         board[x][y] = "BP";
     }
     timesMoved++;
@@ -170,6 +174,7 @@ void Pawn::update(string lastMove, string (*board)[8], Piece** pieces) {
         } else {
             x = posx+1;
             y = posy;
+
             tile.a[0] = x;
             tile.a[1] = y;
             if (board[x][y] == "") {

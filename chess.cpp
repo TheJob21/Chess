@@ -2956,25 +2956,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                     continue;
                 }
             } 
-            if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()) { // Move increases board coverage
-                if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()+4) {
-                    if (piecesPoss2[pieceIndex[i]]->pieceType == 'Q') {
-                        fstream << "Increases queen's covered tiles by 5+, priority 14\n";
-                        cout << "Increases queen's covered tiles by 5+, priority 14\n";
-                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                        update(lastMove, boardPoss2, piecesPoss2);
-                        priority14.push_back(possMoves[i]);
-                        ipriority14.push_back(pieceIndex[i]);
-                        continue;
-                    }
-                    fstream << "Increases covered tiles by 5+, priority 13\n";
-                    cout << "Increases covered tiles by 5+, priority 13\n";
-                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
-                    update(lastMove, boardPoss2, piecesPoss2);
-                    priority13.push_back(possMoves[i]);
-                    ipriority13.push_back(pieceIndex[i]);
-                    continue;
-                } else if (col == 'W') {
+            if (col == 'W') {
                 if (piecesPoss2[15]->inCheck) {
                     for (int j = 0; j < piecesPoss2[pieceIndex[i]]->attacking.size(); j++) {
                         if (piecesPoss2[pieceIndex[i]]->attacking[j]->pieceType != 'K') {
@@ -2994,7 +2976,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                         update(lastMove, boardPoss2, piecesPoss2);
                         continue;
                     }
-		    fstream << "Places opponent in check, priority 14\n";
+                    fstream << "Places opponent in check, priority 14\n";
                     cout << "Places opponent in check, priority 14\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
@@ -3002,7 +2984,15 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                     ipriority14.push_back(pieceIndex[i]);
                     continue;
                 } else if (possMoves[i][0] == 'P') {
-                    if (possMoves[i][2] == '7' || possMoves[i][2] == '8') {
+                    if (possMoves[i][2] == '8') {
+                        fstream << "Pawn promotion, priority 4\n";
+                        cout << "Pawn promotion, priority 4\n";
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        priority4.push_back(possMoves[i]);
+                        ipriority4.push_back(pieceIndex[i]);
+                        continue;
+                    } else if (possMoves[i][2] == '7') {
                         fstream << "Pawn close to promotion, priority 13\n";
                         cout << "Pawn close to promotion, priority 13\n";
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -3040,7 +3030,7 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                         update(lastMove, boardPoss2, piecesPoss2);
                         continue;
                     }
-		    fstream << "Places opponent in check, priority 14\n";
+                    fstream << "Places opponent in check, priority 14\n";
                     cout << "Places opponent in check, priority 14\n";
                     copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
                     update(lastMove, boardPoss2, piecesPoss2);
@@ -3048,7 +3038,15 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                     ipriority14.push_back(pieceIndex[i]);
                     continue;
                 } else if (possMoves[i][0] == 'P') {
-                    if (possMoves[i][2] == '2' || possMoves[i][2] == '1') {
+                    if (possMoves[i][2] == '1') {
+                        fstream << "Pawn promotion, priority 4\n";
+                        cout << "Pawn promotion, priority 4\n";
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        priority4.push_back(possMoves[i]);
+                        ipriority4.push_back(pieceIndex[i]);
+                        continue;
+                    } else if (possMoves[i][2] == '2') {
                         fstream << "Pawn close to promotion, priority 13\n";
                         cout << "Pawn close to promotion, priority 13\n";
                         copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
@@ -3066,7 +3064,27 @@ string generateMove(ostream &fstream, string lastMove, string move, string (*boa
                         continue;
                     }
                 }
-            } else if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()+2) {
+            } 
+            if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()) { // Move increases board coverage
+                if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()+4) {
+                    if (piecesPoss2[pieceIndex[i]]->pieceType == 'Q') {
+                        fstream << "Increases queen's covered tiles by 5+, priority 14\n";
+                        cout << "Increases queen's covered tiles by 5+, priority 14\n";
+                        copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                        update(lastMove, boardPoss2, piecesPoss2);
+                        priority14.push_back(possMoves[i]);
+                        ipriority14.push_back(pieceIndex[i]);
+                        continue;
+                    }
+                    fstream << "Increases covered tiles by 5+, priority 13\n";
+                    cout << "Increases covered tiles by 5+, priority 13\n";
+                    copyBoard(boardPoss, boardPoss2, piecesPoss, piecesPoss2);
+                    update(lastMove, boardPoss2, piecesPoss2);
+                    priority13.push_back(possMoves[i]);
+                    ipriority13.push_back(pieceIndex[i]);
+                    continue;
+                }
+                else if (piecesPoss2[pieceIndex[i]]->coveredTiles.size() > piecesPoss[pieceIndex[i]]->coveredTiles.size()+2) {
                     if (piecesPoss[pieceIndex[i]]->pieceType == 'K') {
                         if (piecesPoss[pieceIndex[i]]->timesMoved == 0) {
                             fstream << "Move increases king coverage before he's moved, priority 17\n";
